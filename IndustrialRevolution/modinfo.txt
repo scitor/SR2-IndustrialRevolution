@@ -1,0 +1,9 @@
+	Name: IndustrialRevolution
+	Compatibility: 200
+	Description: <<
+		This mod makes civilian transport ships more important.
+
+		- Resource import relies directly on arriving trade ships
+		  When trade ships are being shot down, the connection they re-
+		  present will be disabled until the next ship actually arrives.
+	>>
