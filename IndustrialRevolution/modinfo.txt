@@ -1,5 +1,6 @@
 	Name: IndustrialRevolution
 	Compatibility: 200
+	Derives From: SR2 Community Patch
 	Description: <<
 		This mod makes civilian transport ships more important.
 
