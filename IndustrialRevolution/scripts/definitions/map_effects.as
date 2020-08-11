@@ -886,6 +886,29 @@ class MakeAsteroid : MapHook {
 		}
 
 		roid.initMesh();
+
+		// add more roids
+		int cargoLeft = cargo_amount.fromRange();
+		// shards always ore
+		auto@ oreType = getCargoType("Ore");
+
+		if(oreType !is null)
+		while (cargoLeft > 0) {
+			int shardCargo = cargoLeft;
+			// divide in cargo_amount.min/2 chunks (shards) or take rest (<min)
+			if (cargoLeft > cargo_amount.decimal)
+				shardCargo = randomi(cargo_amount.decimal/2, cargoLeft/2);
+
+			vec3d shardOffset = random3d(roid.radius * 2, roid.radius * 30);
+			Asteroid@ shard = createAsteroid(pos + shardOffset, system.object, delay=true);
+			shard.orbitAround(system.position);
+			shard.orbitSpin(randomd(20.0, 60.0));
+			@current = shard;
+			shard.addCargo(oreType.id, shardCargo);
+			shard.initMesh();
+
+			cargoLeft -= shardCargo;
+		}
 	}
 #section all
 };
@@ -936,6 +959,31 @@ class MakeAsteroidBelt : MapHook {
 			}
 
 			roid.initMesh();
+
+			// add more roids
+			int cargoLeft = cargo_amount.fromRange();
+			// shards always ore
+			auto@ oreType = getCargoType("Ore");
+			// defaults to +-150
+			double scaledOffset = roid.radius * 30;
+
+			if(oreType !is null)
+			while (cargoLeft > 0) {
+				int shardCargo = cargoLeft;
+				// divide in cargo_amount.min/2 chunks (shards) or take rest (<min)
+				if (cargoLeft > cargo_amount.decimal)
+					shardCargo = randomi(cargo_amount.decimal, cargoLeft/2);
+
+				vec3d shardOffset = random3d(roid.radius * 2, roid.radius * 30);
+				Asteroid@ shard = createAsteroid(pos + shardOffset, system.object, delay=true);
+				shard.orbitAround(system.position);
+				shard.orbitSpin(randomd(20.0, 60.0));
+				@current = shard;
+				shard.addCargo(oreType.id, shardCargo);
+				shard.initMesh();
+
+				cargoLeft -= shardCargo;
+			}
 		}
 	}
 #section all
