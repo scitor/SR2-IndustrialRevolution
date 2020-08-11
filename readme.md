@@ -22,6 +22,7 @@ This mod makes civilian transport ships more important.
 - civilians (from a foreign empire) are enemies too for AI (colony ships apparently too)
 
 # todo (ideas)
+- add Statuses to Asteroids (so we can stop hack-disabling the resource manually)
 - only spawn customs office if there's actual export to that system
     - add upgrades (through planet buildings or orbitals)
       currently they start MAX size, they could start min and be upgraded in steps
@@ -33,7 +34,7 @@ This mod makes civilian transport ships more important.
     - maybe add upgrades (planet buildings or orbitals)
 - ask Dalo about global ore trickery (maybe can port from RS)
     - more ore requirements (it's easier to get)
-- add Statuses to Asteroids (so we can stop hack-disabling the resource manually)
 - change AI to care for all this (prob no pirates for them or fake ones)
 - add inter-trade-station traffic as tech (for more income, maybe inter-empire as treaty, check treaty code functionality)
 - complete rewrite of civilian navigation is needed, to be more readable. (currently one messy if-cascade)
+- fix ships heading for dead stations

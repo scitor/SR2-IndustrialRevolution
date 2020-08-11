@@ -1275,7 +1275,7 @@ tidy class RegionObjects : Component_RegionObjects, Savable {
 					vec3d pos = system.position + (other.object.position - system.position).normalized(system.radius * 0.85);
 					bool createStation = true;
 					for(uint p = 0, pcnt = stationPoss.length; p < pcnt; ++p) {
-						if(pos.distanceTo(stationPoss[p]) < STATION_MAX_RAD * STATION_MAX_RAD * 5) {
+						if(pos.distanceToSQ(stationPoss[p]) < STATION_MAX_RAD * STATION_MAX_RAD * 5) {
 							createStation = false;
 							break;
 						}
@@ -1289,7 +1289,7 @@ tidy class RegionObjects : Component_RegionObjects, Savable {
 						angle += twopi / double(ecnt-1) * (e+1);
 						pos.x += cos(angle) * STATION_MAX_RAD * 2;
 						pos.z += sin(angle) * STATION_MAX_RAD * 2;
-						pos.y += system.position.y;
+						pos.y += system.position.y + STATION_MAX_RAD * 2;
 
 						if (createStation) {
 							Civilian@ civ = createCivilian(pos, emp, CiT_Station, radius=STATION_MAX_RAD);
