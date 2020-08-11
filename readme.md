@@ -23,6 +23,8 @@ This mod makes civilian transport ships more important.
 
 # todo (ideas)
 - add Statuses to Asteroids (so we can stop hack-disabling the resource manually)
+- remove blockaded status when a planet/asteroid changes target.
+  (in case its still under siege it will regain status quickly)
 - only spawn customs office if there's actual export to that system
     - add upgrades (through planet buildings or orbitals)
       currently they start MAX size, they could start min and be upgraded in steps
