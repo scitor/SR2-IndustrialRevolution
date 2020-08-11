@@ -125,6 +125,7 @@ EXPBLOCK_LOWLEVEL: Planet must be at least level $1.
 EXPBLOCK_POP: Planet needs $1 Billion population to export resource.
 EXPBLOCK_DISCONNECTED: May only trade through connected systems.
 EXPBLOCK_UNUSABLE: Special circumstances prevent export.
+EXPBLOCK_BLOCKADED_EXPORT: Trade ships destroyed, export blockaded!
 
 HINT_USE_PLANETS_TITLE: Idle Planets
 HINT_USE_PLANETS: <<|

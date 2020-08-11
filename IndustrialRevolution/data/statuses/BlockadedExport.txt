@@ -1,0 +1,7 @@
+Status: BlockadedExport
+	Name: #STATUS_BLOCKADED_EXPORT
+	Description: #STATUS_BLOCKADED_EXPORT_DESC
+	Icon: QuickbarIcons::7
+	Color: #ff9000
+
+	RemoveOnOwnerChange()

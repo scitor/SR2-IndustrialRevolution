@@ -941,6 +941,9 @@ tidy class ObjectResources : Component_Resources, Savable {
 		TradePath@ path = r.path;
 		if(path.goal !is null && (!path.valid || !path.isUsablePath))
 			return locale::EXPBLOCK_DISCONNECTED;
+		auto@ status = getStatusType("BlockadedExport");
+		if(status !is null && obj.hasStatuses && obj.hasStatusEffect(status.id))
+			return locale::EXPBLOCK_BLOCKADED_EXPORT;
 		if(!r.usable)
 			return locale::EXPBLOCK_UNUSABLE;
 		return "";

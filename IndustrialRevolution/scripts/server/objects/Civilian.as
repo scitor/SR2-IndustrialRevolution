@@ -213,9 +213,27 @@ tidy class CivilianScript {
 					cargoResource.hooks[i].onTradeDestroy(obj, origin, pathTarget, null);
 			}
 		}
-		if(origin !is null && origin.hasResources)
+		// did we have an origin? set blockaded if it was a planet
+		if(origin !is null && origin.hasResources) {
+			if(origin.isPlanet) {
+				auto@ status = getStatusType("BlockadedExport");
+				if(status !is null && !origin.hasStatusEffect(status.id))
+					origin.addStatus(status.id);
+			}
+			uint resId = uint(-1);
+			//print(format("cargo $1 resId $2 count $3 type $4", obj.getCargoResource(), resId, origin.nativeResourceCount, origin.nativeResourceType[0]));
+			for(uint i = 0, cnt = origin.nativeResourceCount; i < cnt; ++i) {
+				if(origin.nativeResourceType[i] == obj.getCargoResource()) {
+					resId = i;
+					break;
+				}
+			}
+			if(resId != uint(-1)) // tried this with a status but asteroid didnt like.. this works
+				origin.setResourceDisabled(resId, true);
+
 			origin.setAssignedCivilian(null);
-		if(pathTarget !is null && pathTarget.isPlanet && pathTarget.owner is obj.owner) {
+		}
+		if(obj.getCargoType() == CT_Goods && pathTarget !is null && pathTarget.isPlanet && pathTarget.owner is obj.owner) {
 			auto@ status = getStatusType("Blockaded");
 			if(status !is null)
 				pathTarget.addStatus(status.id, timer=BLOCKADE_TIMER);
@@ -334,6 +352,7 @@ tidy class CivilianScript {
 				if(nextRegion !is destRegion || destRegion is pathTarget || getSystem(prevRegion).isSpatialAdjacent(getSystem(nextRegion)))  {
 					enterDest = nextRegion.position + (prevRegion.position - nextRegion.position).normalized(nextRegion.radius * 0.85);
 					enterDest += random3d(0.0, DEST_RANGE);
+					enterDest.y = nextRegion.position.y; // stay level, even in non-flat universes
 				}
 				else {
 					enterDest = pathTarget.position + vec3d(0,0,pathTarget.radius+10.0);
@@ -350,7 +369,7 @@ tidy class CivilianScript {
 				if(nextRegion is destRegion) {
 					//Move to destination
 					obj.maxAcceleration = ACC_SYSTEM;
-					if(curRegion is pathTarget || obj.moveTo(pathTarget, moveId, distance=10.0, enterOrbit=false)) {
+					if(obj.moveTo(pathTarget, moveId, distance=10.0, enterOrbit=false)) {
 						moveId = -1;
 						if(cargoType == CT_Resource)
 							destRegion.bumpTradeCounter(obj.owner);
@@ -358,7 +377,25 @@ tidy class CivilianScript {
 							for(uint i = 0, cnt = cargoResource.hooks.length; i < cnt; ++i)
 								cargoResource.hooks[i].onTradeDeliver(obj, origin, pathTarget);
 						}
+						if (origin !is null && origin.hasResources) {
+							if (origin.isPlanet) {
+								auto@ status = getStatusType("BlockadedExport");
+								if(status !is null && origin.hasStatusEffect(status.id))
+									origin.removeStatusInstanceOfType(status.id);
+							}
+							uint resId = uint(-1);
+							for(uint i = 0, cnt = origin.nativeResourceCount; i < cnt; ++i) {
+								if(origin.nativeResourceType[i] == obj.getCargoResource()) {
+									resId = i;
+									break;
+								}
+							}
+							if(resId != uint(-1))
+								origin.setResourceDisabled(resId, false);
+						}
+						//if(pathTarget)
 						freeCivilian(obj);
+
 						return 0.4;
 					}
 					else {
@@ -368,6 +405,7 @@ tidy class CivilianScript {
 				else if(curRegion is null) {
 					//Move to closest region
 					vec3d pos = nextRegion.position + (nextRegion.position - obj.position).normalized(nextRegion.radius * 0.85);
+					pos.y = nextRegion.position.y; // stay level, even in non-flat universes
 					obj.maxAcceleration = ACC_INTERSYSTEM;
 					if(obj.moveTo(pos, moveId, enterOrbit=false)) {
 						moveId = -1;
@@ -403,13 +441,15 @@ tidy class CivilianScript {
 			}
 			if(!leavingRegion) {
 				if(intermediate !is null) {
+					obj.maxAcceleration = ACC_SYSTEM;
 					if(obj.moveTo(intermediate, moveId, distance=10.0, enterOrbit=false)) {
+						Civilian@ civStation = cast<Civilian>(intermediate);
+						if (civStation !is null) {
+							civStation.setCargoResource(obj.getCargoResource());
+						}
 						moveId = -1;
 						@intermediate = null;
 						return 0.4;
-					}
-					else {
-						return 0.2;
 					}
 				}
 				else {
