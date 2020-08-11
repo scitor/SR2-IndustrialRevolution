@@ -18,7 +18,7 @@ Object@ findEnemy(Object@ origin, Object@ obj, Empire@ emp, const vec3d& around,
 						@targ = cast<Ship>(targ).Leader;
 				}
 				if(targ !is null) {
-					if((!ignoreSecondary || (!targ.isPlanet && !targ.isColonyShip && !targ.isCivilian && targ.owner !is null && (targ.owner.major || !emp.major)))
+					if((!ignoreSecondary || (!targ.isPlanet && !targ.isColonyShip && targ.owner !is null && (targ.owner.major || !emp.major)))
 						&& doesAutoTarget(origin, targ)) {
 						if(area < 0 || targ.position.distanceToSQ(around) < areaSQ)
 							return targ;
@@ -36,7 +36,7 @@ Object@ findEnemy(Object@ origin, Object@ obj, Empire@ emp, const vec3d& around,
 				if(targ is null)
 					continue;
 			}
-			if((!ignoreSecondary || (!targ.isPlanet && !targ.isColonyShip && !targ.isCivilian && targ.owner !is null && (targ.owner.major || !emp.major)))
+			if((!ignoreSecondary || (!targ.isPlanet && !targ.isColonyShip && targ.owner !is null && (targ.owner.major || !emp.major)))
 				&& doesAutoTarget(origin, targ)) {
 				if(area < 0 || targ.position.distanceToSQ(around) < areaSQ)
 					return targ;
