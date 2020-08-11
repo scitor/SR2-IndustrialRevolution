@@ -1,6 +1,7 @@
 import resources;
 import systems;
 import planet_levels;
+import statuses;
 from resources import _tempResource;
 
 tidy class ObjectResources : Component_Resources {
@@ -196,7 +197,7 @@ tidy class ObjectResources : Component_Resources {
 		}
 		return uint(-1);
 	}
-	
+
 	string getDisabledReason(Object& obj, int id) {
 		uint index = getNativeIndex(id);
 		if(index >= nativeResources.length)
@@ -235,6 +236,9 @@ tidy class ObjectResources : Component_Resources {
 				src.getTerritory(obj.owner) !is dst.getTerritory(obj.owner))
 			return locale::EXPBLOCK_DISCONNECTED;
 		}
+		auto@ status = getStatusType("BlockadedExport");
+		if(status !is null && obj.hasStatuses && obj.hasStatusEffect(status.id))
+			return locale::EXPBLOCK_BLOCKADED_EXPORT;
 		if(!r.usable)
 			return locale::EXPBLOCK_UNUSABLE;
 		return "";
@@ -256,7 +260,7 @@ tidy class ObjectResources : Component_Resources {
 			if(resources[i].origin is null || obj !is resources[i].origin)
 				yield(resources[i]);
 	}
-	
+
 	bool get_hasAutoImports(Player& pl, Object& obj) {
 		for(uint i = 0, cnt = queuedImports.length; i < cnt; ++i)
 			if(queuedImports[i].origin is null && pl.emp is queuedImports[i].forEmpire)
@@ -591,7 +595,7 @@ tidy class ObjectResources : Component_Resources {
 			msg >> ImportDisabled;
 		else
 			ImportDisabled = 0;
-		
+
 		if(msg.readBit())
 			msg >> ExportDisabled;
 		else

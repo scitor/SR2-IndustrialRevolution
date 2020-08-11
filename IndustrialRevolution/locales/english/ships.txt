@@ -61,9 +61,14 @@ CIVILIAN_FREIGHTER: Civilian Freighter
 CIVILIAN_CARAVAN: Civilian Caravan
 CIVILIAN_STATION: Civilian Trade Station
 CIVILIAN: Civilian
+CIVILIAN_CUSTOMS_OFFICE: Customs Office $1
 STATUS_BLOCKADED: Blockaded!
 STATUS_BLOCKADED_DESC: <<|
-	Some of the civilian trade ships carrying this planet's imports were shot down. As a result, the planet produces 1 less of a random empire resource for each stack of "Blockaded!".
+	Civilian trade ship carrying goods for this planet were shot down. As a result, the planet produces 1 less of a random empire resource for each ship destroyed.
+>>
+STATUS_BLOCKADED_EXPORT: Blockaded Export!
+STATUS_BLOCKADED_EXPORT_DESC: <<|
+	Exported shipment was lost en route. The resource will be available once the next trade ship arrives.
 >>
 PICKUP_PROTECTING: Protecting
 PICKUP_UNPROTECTED: Unprotected
