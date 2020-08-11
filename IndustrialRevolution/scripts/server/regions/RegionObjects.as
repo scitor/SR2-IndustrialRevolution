@@ -20,7 +20,7 @@ import achievements;
 #section all
 
 const uint ZealotMask = 0;
-const double CIV_TIMER = 3.0 * 60.0;
+const double CIV_TIMER = 60.0;
 const double TRADE_TIMER = 3.0 * 60.0;
 const double STATION_TRADES = 6.0;
 const double CIVILIAN_LIMIT_POW = 0.85;
@@ -1173,6 +1173,7 @@ tidy class RegionObjects : Component_RegionObjects, Savable {
 	}
 
 	void updateCivilianTrade(Object& region) {
+		//print("updateCivilianTrade");
 		//Make sure each planet has a civilian ship assigned
 		if(config::ENABLE_CIVILIAN_TRADE == 0.0 || config::CIVILIAN_TRADE_MULT == 0.0)
 			return;
@@ -1190,36 +1191,50 @@ tidy class RegionObjects : Component_RegionObjects, Savable {
 			if(timer < CIV_TIMER / config::CIVILIAN_TRADE_MULT)
 				continue;
 
-			//Calculate maximum amount of civilians
-			int plCount = owner.TotalPlanets.value;
-			int civLimit = 0;
-			int plLimit = 100 * config::CIVILIAN_TRADE_MULT;
-			if(plCount > plLimit)
-				civLimit = plLimit + pow(double(plCount - plLimit), CIVILIAN_LIMIT_POW);
-			else
-				civLimit = plCount;
-			civLimit = double(civLimit) * config::CIVILIAN_TRADE_MULT;
+			Object@ destination = pl.getNativeResourceDestination(owner, 0);
+			if(destination is null || (destination.owner !is null && destination.owner.id != owner.id))
+				continue;
 
-			if(owner.CivilianTradeShips.value < civLimit) {
-				Object@ destination = pl.getNativeResourceDestination(owner, 0);
-				if(destination is null)
-					continue;
-				
-				@civ = createCivilian(pl.position, owner, type=CiT_Freighter,
-						radius = randomCivilianFreighterSize());
-				if(civ.radius >= CIV_SIZE_CARAVAN)
-					civ.modIncome(+CIV_CARAVAN_INCOME);
-				civ.pathTo(destination);
-				civ.setOrigin(pl);
-				civ.setCargoResource(pl.primaryResourceType);
-				pl.setAssignedCivilian(civ);
-				pl.setCivilianTimer(0.0);
-			}
-			else {
-				needRequests |= owner.mask;
-			}
+			@civ = createCivilian(pl.position, owner, type=CiT_Freighter,
+					radius = randomCivilianFreighterSize());
+			if(civ.radius >= CIV_SIZE_CARAVAN)
+				civ.modIncome(+CIV_CARAVAN_INCOME);
+			civ.pathTo(destination);
+			civ.name = destination.name;
+			civ.setOrigin(pl);
+			civ.setCargoResource(pl.primaryResourceType);
+			pl.setAssignedCivilian(civ);
+			pl.setCivilianTimer(0.0);
 		}
+		// asteroids spawn civilians too
+		for(uint i = 0; i < asteroidList.length; ++i) {
+			Asteroid@ as = asteroidList[i];
+			Empire@ owner = as.owner;
+			if(owner is null || !owner.valid)
+				continue;
 
+			Civilian@ civ = as.getAssignedCivilian();
+			if(civ !is null)
+				continue;
+			double timer = as.getCivilianTimer();
+			if(timer < CIV_TIMER / config::CIVILIAN_TRADE_MULT)
+				continue;
+
+			Object@ destination = as.getNativeResourceDestination(owner, 0);
+			if(destination is null || (destination.owner !is null && destination.owner.id != owner.id))
+				continue;
+
+			@civ = createCivilian(as.position, owner, type=CiT_Freighter,
+					radius = randomCivilianFreighterSize());
+			if(civ.radius >= CIV_SIZE_CARAVAN)
+				civ.modIncome(+CIV_CARAVAN_INCOME);
+			civ.setCargoResource(as.primaryResourceType);
+			civ.pathTo(destination);
+			civ.name = destination.name;
+			civ.setOrigin(as);
+			as.setAssignedCivilian(civ);
+			as.setCivilianTimer(0.0);
+		}
 		if(needRequests != TradeRequestMask) {
 			for(uint i = 0, cnt = getEmpireCount(); i < cnt; ++i) {
 				Empire@ emp = getEmpire(i);
@@ -1238,51 +1253,59 @@ tidy class RegionObjects : Component_RegionObjects, Savable {
 		if(gameTime >= tradeTimer) {
 			tradeTimer = gameTime + TRADE_TIMER;
 
-			for(uint i = 0, cnt = getEmpireCount(); i < cnt; ++i) {
-				Empire@ emp = getEmpire(i);
+			for(uint e = 0, ecnt = getEmpireCount(); e < ecnt; ++e) {
+				Empire@ emp = getEmpire(e);
 				if(!emp.major)
 					continue;
-				uint buildStations = min(planetCounts[i], uint(double(tradeCounter[i]) / STATION_TRADES));
-				uint maxStations = max(buildStations, uint(double(tradeCounter[i] * 2) / STATION_TRADES));
 
-				uint stationCount = 0;
+				array<vec3d> stationPoss;
 				for(uint i = 0, cnt = tradeStations.length; i < cnt; ++i) {
 					Empire@ owner = tradeStations[i].owner;
 					if(!tradeStations[i].valid) {
 						tradeStations.removeAt(i);
 						--i; --cnt;
-					}
-					else if(owner is emp) {
-						stationCount += 1;
+					} else if(owner is emp) {
+						stationPoss.insertLast(tradeStations[i].position);
 					}
 				}
-				if(stationCount > maxStations) {
-					for(uint i = 0, cnt = tradeStations.length; i < cnt && stationCount > maxStations; ++i) {
-						if(tradeStations[i].owner is emp) {
-							tradeStations[i].destroy();
-							stationCount -= 1;
+				uint stationCount = 0;
+				for(uint i = 0, cnt = system.adjacent.length; i < cnt; ++i) {
+					const SystemDesc@ other = getSystem(system.adjacent[i]);
+					// build trade stations on trade connection exits
+					vec3d pos = system.position + (other.object.position - system.position).normalized(system.radius * 0.85);
+					bool createStation = true;
+					for(uint p = 0, pcnt = stationPoss.length; p < pcnt; ++p) {
+						if(pos.distanceTo(stationPoss[p]) < STATION_MAX_RAD * STATION_MAX_RAD * 5) {
+							createStation = false;
+							break;
 						}
 					}
-				}
-				else if(stationCount < buildStations) {
-					for(; stationCount < buildStations; ++stationCount) {
-						vec3d pos = system.position;
-						vec2d offset = random2d(system.radius * 0.5, system.radius * 0.8);
-						pos.x += offset.x;
-						pos.z += offset.y;
+					// align stations around traders exit position
+					double angle = (vec2d(other.object.position.x, other.object.position.z) - vec2d(system.position.x, system.position.z)).radians();
+					if (angle < 0)
+						angle += twopi;
+					if(other !is null && other.object.TradeMask & emp.TradeMask.value != 0) {
+						// every emp gets its own place
+						angle += twopi / double(ecnt-1) * (e+1);
+						pos.x += cos(angle) * STATION_MAX_RAD * 2;
+						pos.z += sin(angle) * STATION_MAX_RAD * 2;
+						pos.y += system.position.y;
 
-						Civilian@ civ = createCivilian(pos, emp, CiT_Station,
-								radius=randomd(STATION_MIN_RAD, STATION_MAX_RAD));
-						civ.modIncome(+CIV_STATION_INCOME);
-						civ.setCargoType(CT_Goods);
-						tradeStations.insertLast(civ);
+						if (createStation) {
+							Civilian@ civ = createCivilian(pos, emp, CiT_Station, radius=STATION_MAX_RAD);
+							civ.modIncome(+CIV_STATION_INCOME);
+							civ.setCargoType(CT_Goods);
+							civ.name = format(locale::CIVILIAN_CUSTOMS_OFFICE, other.object.name);
+							tradeStations.insertLast(civ);
+						}
+						stationCount++;
 					}
 				}
 				if(stationCount == 0)
 					HaveStationsMask &= ~emp.mask;
 				else
 					HaveStationsMask |= emp.mask;
-				tradeCounter[i] = 0;
+				tradeCounter[e] = 0;
 			}
 		}
 	}
@@ -1293,6 +1316,7 @@ tidy class RegionObjects : Component_RegionObjects, Savable {
 		Object@ bestDest;
 		Empire@ civOwner = civ.owner;
 		double bestTimer = 0.0;
+		auto@ statusBlockaded = getStatusType("BlockadedExport");
 		for(uint i = 0; i < planetList.length; ++i) {
 			Planet@ pl = planetList[i];
 			Empire@ owner = pl.owner;
@@ -1305,95 +1329,42 @@ tidy class RegionObjects : Component_RegionObjects, Savable {
 			if(destination is null)
 				continue;
 			double timer = pl.getCivilianTimer();
+			if(statusBlockaded !is null && pl.hasStatusEffect(statusBlockaded.id)){
+				timer += CIV_TIMER; // prefer blockaded planets to recover quickly
+			}
 			if(timer > bestTimer) {
 				@bestPlanet = pl;
 				@bestDest = destination;
 				bestTimer = timer;
 			}
 		}
+		if(bestPlanet is null) {
+			civ.destroy();
+			return;
+		}
+		//Calculate maximum amount of civilians
+		int plCount = civOwner.TotalPlanets.value;
+		int civLimit = 0;
+		int plLimit = 100 * config::CIVILIAN_TRADE_MULT;
+		if(plCount > plLimit)
+			civLimit = plLimit + pow(double(plCount - plLimit), CIVILIAN_LIMIT_POW);
+		else
+			civLimit = plCount;
+		civLimit = double(civLimit) * config::CIVILIAN_TRADE_MULT;
 
-		if(bestPlanet !is null && bestTimer > randomd(0.0, CIV_TIMER / config::CIVILIAN_TRADE_MULT)) {
-			//Reroute the trader
-			civ.pathTo(bestPlanet, bestDest);
-			civ.setCargoResource(bestPlanet.primaryResourceType);
-			civ.resetStepCount();
-			bestPlanet.setAssignedCivilian(civ);
-			bestPlanet.setCivilianTimer(0.0);
+		print(format("$1 civLimit $2", civOwner.CivilianTradeShips.value, civLimit));
+		if(civOwner.CivilianTradeShips.value > civLimit) {
+			civ.destroy();
+			return;
 		}
-		else {
-			//Send the trader to a random adjacent system
-			SystemDesc@ nextSys;
-			int stepCount = civ.getStepCount();
-			if(randomd() > pow(0.9, stepCount)) {
-				Region@ reqRegion = civOwner.getTradeCivilianRequest(civ.position);
-				if(reqRegion !is null)
-					@nextSys = getSystem(reqRegion);
-				civ.resetStepCount();
-				if(nextSys is null && bestPlanet !is null) {
-					civ.pathTo(bestPlanet, bestDest);
-					civ.setCargoResource(bestPlanet.primaryResourceType);
-					bestPlanet.setAssignedCivilian(civ);
-					bestPlanet.setCivilianTimer(0.0);
-					return;
-				}
-			}
-			if(nextSys is null) {
-				uint sysCount = 0;
-				for(uint i = 0, cnt = system.adjacent.length; i < cnt; ++i) {
-					SystemDesc@ other = getSystem(system.adjacent[i]);
-					if(other.object.getPlanetCount(civOwner) != 0)
-						sysCount += 1;
-				}
-				for(uint i = 0, cnt = system.wormholes.length; i < cnt; ++i) {
-					SystemDesc@ other = getSystem(system.wormholes[i]);
-					if(other.object.getPlanetCount(civOwner) != 0)
-						sysCount += 1;
-				}
-				if(sysCount != 0) {
-					uint index = randomi(0, sysCount-1);
-					for(uint i = 0, cnt = system.adjacent.length; i < cnt; ++i) {
-						SystemDesc@ other = getSystem(system.adjacent[i]);
-						if(other.object.getPlanetCount(civOwner) != 0) {
-							if(index == 0) {
-								@nextSys = other;
-								break;
-							}
-							else {
-								--index;
-							}
-						}
-					}
-					if(nextSys is null) {
-						for(uint i = 0, cnt = system.wormholes.length; i < cnt; ++i) {
-							SystemDesc@ other = getSystem(system.wormholes[i]);
-							if(other.object.getPlanetCount(civOwner) != 0) {
-								if(index == 0) {
-									@nextSys = other;
-									break;
-								}
-								else {
-									--index;
-								}
-							}
-						}
-					}
-				}
-			}
-			if(nextSys !is null) {
-				civ.setCargoType(CT_Goods);
-				civ.pathTo(nextSys.object);
-				civ.modStepCount(+1);
-			}
-			else {
-				if(bestPlanet is null) {
-					civ.destroy();
-				}
-				else {
-					//TODO: Remember the civilian for later
-					civ.destroy();
-				}
-			}
-		}
+
+		//Reroute the trader
+		civ.pathTo(bestPlanet, bestDest);
+		civ.name = bestPlanet.name;
+		civ.setCargoResource(bestPlanet.primaryResourceType);
+		civ.resetStepCount();
+		bestPlanet.setAssignedCivilian(civ);
+		bestPlanet.setCivilianTimer(0.0);
 	}
 #section all
 
