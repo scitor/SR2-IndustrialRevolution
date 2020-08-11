@@ -429,9 +429,11 @@ tidy class CivilianScript {
 						@nextRegion = path.pathNode[1].object;
 						awaitingIntermediate = true;
 						@intermediate = null;
-						if(curRegion.hasTradeStation(obj.owner))
-							curRegion.getTradeStation(obj, obj.owner, obj.position);
-						else if(cargoType == CT_Goods)
+						if(curRegion.hasTradeStation(obj.owner)) {
+							// take station at exit point
+							vec3d pos = prevRegion.position + (nextRegion.position - prevRegion.position).normalized(prevRegion.radius * 0.85);
+							curRegion.getTradeStation(obj, obj.owner, pos);
+						} else if(cargoType == CT_Goods)
 							curRegion.getTradePlanet(obj, obj.owner);
 						else
 							awaitingIntermediate = false;
