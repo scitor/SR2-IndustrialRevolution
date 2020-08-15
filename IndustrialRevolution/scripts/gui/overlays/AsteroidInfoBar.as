@@ -10,9 +10,11 @@ import elements.GuiProgressbar;
 import elements.GuiGroupDisplay;
 import elements.GuiBlueprint;
 import elements.GuiSkinElement;
+import elements.GuiStatusBox;
 import elements.GuiResources;
 import cargo;
 import resources;
+import statuses;
 import ship_groups;
 import util.formatting;
 from obj_selection import isSelected, selectObject, clearSelection, addToSelection;
@@ -29,11 +31,15 @@ class AsteroidInfoBar : InfoBar {
 	GuiText@ cargoName;
 	GuiText@ cargoValue;
 	GuiResourceGrid@ resources;
-	
+
 	GuiSkinElement@ stateBox;
 	GuiMarkupText@ state;
 
 	ActionBar@ actions;
+
+	array<GuiStatusBox@> statusIcons;
+	GuiSkinElement@ statusList;
+	array<Status> statuses;
 
 	AsteroidInfoBar(IGuiElement@ parent) {
 		super(parent);
@@ -69,12 +75,16 @@ class AsteroidInfoBar : InfoBar {
 		@state = GuiMarkupText(stateBox, Alignment(Left+8, Top+4, Right-4, Bottom));
 		state.memo = true;
 
+		@statusList = GuiSkinElement(this, Alignment(Left+236, Top+y, Left+236+34, Bottom-4), SS_PlainBox);
+		statusList.noClip = true;
+		statusList.visible = false;
+
 		updateAbsolutePosition();
 	}
 
 	void updateActions() {
 		actions.clear();
-		
+
 		if(obj.owner is playerEmpire) {
 			actions.addBasic(obj);
 			actions.addEmpireAbilities(playerEmpire, obj);
@@ -119,7 +129,7 @@ class AsteroidInfoBar : InfoBar {
 			name.text = obj.name;
 			if(owner !is null)
 				name.color = owner.color;
-			
+
 			if(obj.cargoTypes != 0) {
 				//Update cargo display
 				auto@ cargo = getCargoType(obj.cargoType[0]);
@@ -158,6 +168,32 @@ class AsteroidInfoBar : InfoBar {
 			else {
 				resourceBox.visible = false;
 			}
+
+			//Update statuses
+			if(obj.statusEffectCount > 0)
+				statuses.syncFrom(obj.getStatusEffects());
+			else
+				statuses.length = 0;
+
+			//Update condition display
+			if(statuses.length != 0) {
+				uint prevCnt = statusIcons.length, cnt = statuses.length;
+				for(uint i = cnt; i < prevCnt; ++i)
+					statusIcons[i].remove();
+				statusIcons.length = cnt;
+				for(uint i = 0; i < cnt; ++i) {
+					auto@ icon = statusIcons[i];
+					if(icon is null) {
+						@icon = GuiStatusBox(statusList, recti_area(2, 2+32*i, 30, 30));
+						@statusIcons[i] = icon;
+					}
+					@icon.fromObject = obj;
+					icon.update(statuses[i]);
+				}
+				statusList.visible = true;
+			}
+			else
+				statusList.visible = false;
 
 			//Update action bar
 			updateActions();

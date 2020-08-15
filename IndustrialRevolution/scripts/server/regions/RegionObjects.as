@@ -1250,7 +1250,7 @@ tidy class RegionObjects : Component_RegionObjects, Savable {
 			TradeRequestMask = needRequests;
 		}
 
-		if(gameTime >= tradeTimer) {
+		if(false /*gameTime >= tradeTimer*/) {
 			tradeTimer = gameTime + TRADE_TIMER;
 
 			for(uint e = 0, ecnt = getEmpireCount(); e < ecnt; ++e) {
@@ -1258,24 +1258,25 @@ tidy class RegionObjects : Component_RegionObjects, Savable {
 				if(!emp.major)
 					continue;
 
+				uint stationCount = 0;
 				array<vec3d> stationPoss;
 				for(uint i = 0, cnt = tradeStations.length; i < cnt; ++i) {
-					Empire@ owner = tradeStations[i].owner;
 					if(!tradeStations[i].valid) {
 						tradeStations.removeAt(i);
 						--i; --cnt;
-					} else if(owner is emp) {
+					} else if(tradeStations[i].owner is emp) {
 						stationPoss.insertLast(tradeStations[i].position);
+						stationCount++;
 					}
 				}
-				uint stationCount = 0;
+				//print(format("$1 $2 $3 $4 $5", system.name, emp.id, stationPoss.length, tradeStations.length, stationCount));
 				for(uint i = 0, cnt = system.adjacent.length; i < cnt; ++i) {
 					const SystemDesc@ other = getSystem(system.adjacent[i]);
 					// build trade stations on trade connection exits
 					vec3d pos = system.position + (other.object.position - system.position).normalized(system.radius * 0.85);
 					bool createStation = true;
 					for(uint p = 0, pcnt = stationPoss.length; p < pcnt; ++p) {
-						if(pos.distanceToSQ(stationPoss[p]) < STATION_MAX_RAD * STATION_MAX_RAD * 5) {
+						if(pos.distanceToSQ(stationPoss[p]) < STATION_MAX_RAD * STATION_MAX_RAD * 10) {
 							createStation = false;
 							break;
 						}
@@ -1289,7 +1290,7 @@ tidy class RegionObjects : Component_RegionObjects, Savable {
 						angle += twopi / double(ecnt-1) * (e+1);
 						pos.x += cos(angle) * STATION_MAX_RAD * 2;
 						pos.z += sin(angle) * STATION_MAX_RAD * 2;
-						pos.y += system.position.y + STATION_MAX_RAD * 2;
+						pos.y = system.position.y + STATION_MAX_RAD * 2;
 
 						if (createStation) {
 							Civilian@ civ = createCivilian(pos, emp, CiT_Station, radius=STATION_MAX_RAD);
@@ -1312,7 +1313,7 @@ tidy class RegionObjects : Component_RegionObjects, Savable {
 
 	void freeUpCivilian(Object& region, Civilian@ civ) {
 		//Check which planet here needs a trader the most
-		Planet@ bestPlanet;
+		Object@ bestPlanet;
 		Object@ bestDest;
 		Empire@ civOwner = civ.owner;
 		double bestTimer = 0.0;
@@ -1339,6 +1340,26 @@ tidy class RegionObjects : Component_RegionObjects, Savable {
 			}
 		}
 		if(bestPlanet is null) {
+			for(uint i = 0; i < asteroidList.length; ++i) {
+				Asteroid@ as = asteroidList[i];
+				Empire@ owner = as.owner;
+				if(owner !is civOwner)
+					continue;
+				Civilian@ civ = as.getAssignedCivilian();
+				if(civ !is null)
+					continue;
+				Object@ destination = as.getNativeResourceDestination(owner, 0);
+				if(destination is null)
+					continue;
+				double timer = as.getCivilianTimer();
+				if(timer > bestTimer) {
+					@bestPlanet = as;
+					@bestDest = destination;
+					bestTimer = timer;
+				}
+			}
+		}
+		if(bestPlanet is null) {
 			civ.destroy();
 			return;
 		}
@@ -1360,7 +1381,7 @@ tidy class RegionObjects : Component_RegionObjects, Savable {
 
 		//Reroute the trader
 		civ.pathTo(bestPlanet, bestDest);
-		civ.name = bestPlanet.name;
+		civ.name = bestDest.name;
 		civ.setCargoResource(bestPlanet.primaryResourceType);
 		civ.resetStepCount();
 		bestPlanet.setAssignedCivilian(civ);

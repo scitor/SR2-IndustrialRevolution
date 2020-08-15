@@ -45,7 +45,7 @@ class BombardEffect : StatusHook {
 		if(pl !is null)
 			pl.modBombardment(1);
 	}
-	
+
 	void onRemoveStack(Object& obj, Status@ status, StatusInstance@ instance, any@ data) {
 		Planet@ pl = cast<Planet>(obj);
 		if(pl !is null)
@@ -145,6 +145,57 @@ class ReduceProductionPerStack : StatusHook {
 		data.store(@current);
 		for(uint i = 1; i < TR_COUNT; ++i)
 			file >> current[i];
+	}
+#section all
+};
+
+class DisableResource : StatusHook {
+	Document doc("Disable export of a specific resource, taken from originObject.");
+
+#section server
+	void onCreate(Object& obj, Status@ status, any@ data) override {
+		if(!obj.hasStatuses || status.originObject is null)
+			return;
+
+		Civilian@ civ = cast<Civilian@>(status.originObject);
+		if (civ is null)
+			return;
+
+		uint resId = civ.getCargoResource();
+		uint nResId = uint(-1);
+		for(uint i = 0, cnt = obj.nativeResourceCount; i < cnt; ++i) {
+			if(obj.nativeResourceType[i] == resId) {
+				nResId = i;
+				break;
+			}
+		}
+		if(nResId != uint(-1)) {
+			obj.setResourceDisabled(nResId, true);
+			data.store(resId);
+		}
+	}
+
+	void onDestroy(Object& obj, Status@ status, any@ data) override {
+		if(!obj.hasStatuses)
+			return;
+
+		uint resId = uint(-1);
+		data.retrieve(resId);
+
+		if(resId != uint(-1))
+			obj.setResourceDisabled(resId, false);
+	}
+
+	void save(Status@ status, any@ data, SaveFile& file) override {
+		uint resId = uint(-1);
+		data.retrieve(resId);
+		file << resId;
+	}
+
+	void load(Status@ status, any@ data, SaveFile& file) override {
+		uint resId = uint(-1);
+		file >> resId;
+		data.store(resId);
 	}
 #section all
 };

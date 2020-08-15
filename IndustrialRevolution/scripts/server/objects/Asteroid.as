@@ -56,6 +56,7 @@ tidy class AsteroidScript {
 		}
 		if(file >= SV_0125)
 			file >> cast<Savable>(obj.Resources);
+		file >> cast<Savable>(obj.Statuses);
 
 		if(file < SV_0122 || file >= SV_0125) {
 			Object@ origin;
@@ -91,6 +92,7 @@ tidy class AsteroidScript {
 		file << cast<Savable>(obj.Orbit);
 		file << cast<Savable>(obj.Cargo);
 		file << cast<Savable>(obj.Resources);
+		file << cast<Savable>(obj.Statuses);
 		file << obj.origin;
 
 		uint cnt = available.length;
@@ -534,6 +536,7 @@ tidy class AsteroidScript {
 		obj.writeResources(msg);
 		obj.writeCargo(msg);
 		obj.writeOrbit(msg);
+		obj.writeStatuses(msg);
 	}
 
 	bool syncDelta(const Asteroid& obj, Message& msg) {
@@ -563,6 +566,11 @@ tidy class AsteroidScript {
 		else
 			msg.write0();
 
+		if(obj.writeStatusDelta(msg))
+			used = true;
+		else
+			msg.write0();
+
 		return used;
 	}
 
@@ -571,5 +579,6 @@ tidy class AsteroidScript {
 		obj.writeResources(msg);
 		obj.writeCargo(msg);
 		obj.writeOrbit(msg);
+		obj.writeStatuses(msg);
 	}
 };

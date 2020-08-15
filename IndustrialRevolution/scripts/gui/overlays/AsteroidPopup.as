@@ -4,10 +4,12 @@ import elements.GuiButton;
 import elements.GuiSprite;
 import elements.Gui3DObject;
 import elements.GuiSkinElement;
+import elements.GuiStatusBox;
 import elements.GuiResources;
 from overlays.ContextMenu import openContextMenu;
 import resources;
 import cargo;
+import statuses;
 
 class AsteroidPopup : Popup {
 	GuiText@ name;
@@ -20,6 +22,9 @@ class AsteroidPopup : Popup {
 	GuiText@ cargoName;
 	GuiText@ cargoValue;
 	GuiResourceGrid@ resources;
+
+	GuiSkinElement@ statusBox;
+	array<GuiStatusBox@> statusIcons;
 
 	AsteroidPopup(BaseGuiElement@ parent) {
 		super(parent);
@@ -35,6 +40,10 @@ class AsteroidPopup : Popup {
 
 		@resources = GuiResourceGrid(band, Alignment(Left+4, Top+4, Right-3, Bottom-4));
 		resources.visible = false;
+
+		@statusBox = GuiSkinElement(this, Alignment(Right-2, Top, Right+34, Bottom), SS_PlainBox);
+		statusBox.noClip = true;
+		statusBox.visible = false;
 
 		@cargoIcon = GuiSprite(band, Alignment(Left+2, Top+2, Left+31, Bottom-2));
 		@cargoName = GuiText(band, Alignment(Left+38, Top+4, Right-4, Bottom-4));
@@ -148,6 +157,34 @@ class AsteroidPopup : Popup {
 		}
 		else {
 			band.visible = false;
+		}
+		//Update statuses
+		{
+			array<Status> statuses;
+			if(obj.statusEffectCount > 0)
+				statuses.syncFrom(obj.getStatusEffects());
+			if(!obj.visible) {
+				for(uint i = 0, cnt = statuses.length; i < cnt; ++i) {
+					if(statuses[i].type.conditionFrequency <= 0 && statuses[i].type.visibility != StV_Global) {
+						statuses.removeAt(i);
+						--i; --cnt;
+					}
+				}
+			}
+			uint prevCnt = statusIcons.length, cnt = statuses.length;
+			for(uint i = cnt; i < prevCnt; ++i)
+				statusIcons[i].remove();
+			statusIcons.length = cnt;
+			statusBox.visible = cnt != 0;
+			for(uint i = 0; i < cnt; ++i) {
+				auto@ icon = statusIcons[i];
+				if(icon is null) {
+					@icon = GuiStatusBox(statusBox, recti_area(2, 2+32*i, 30, 30));
+					icon.noClip = true;
+					@statusIcons[i] = icon;
+				}
+				icon.update(statuses[i]);
+			}
 		}
 
 		Popup::update();

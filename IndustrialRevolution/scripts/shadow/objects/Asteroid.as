@@ -15,7 +15,7 @@ tidy class AsteroidScript {
 	void makeMesh(Asteroid& obj) {
 		MeshDesc mesh;
 		switch(obj.id % 4) {
-			case 0:	
+			case 0:
 				@mesh.model = model::Asteroid1; break;
 			case 1:
 				@mesh.model = model::Asteroid2; break;
@@ -42,7 +42,7 @@ tidy class AsteroidScript {
 		else
 			icon.establish(obj, 0.015, spritesheet::AsteroidIcon, 0);
 		icon.memorable = true;
-		
+
 		if(obj.region !is null)
 			obj.region.addStrategicIcon(-1, obj, icon);
 
@@ -124,7 +124,7 @@ tidy class AsteroidScript {
 			return 0;
 		return available.length;
 	}
-	
+
 	uint getAvailable(uint index) {
 		if(index >= available.length)
 			return uint(-1);
@@ -132,7 +132,7 @@ tidy class AsteroidScript {
 			return uint(-1);
 		return available[index].id;
 	}
-	
+
 	double getAvailableCost(uint index) {
 		if(index >= costs.length)
 			return -1.0;
@@ -140,22 +140,22 @@ tidy class AsteroidScript {
 			return -1.0;
 		return costs[index];
 	}
-	
+
 	double getAvailableCostFor(uint resId) {
 		const ResourceType@ type = getResource(resId);
 		if(type is null)
 			return -1.0;
-	
+
 		for(uint i = 0, cnt = available.length; i < cnt; ++i) {
 			if(exploited[i])
 				continue;
 			if(available[i] is type)
 				return costs[i];
 		}
-	
+
 		return -1.0;
 	}
-	
+
 	void _readAsteroid(Asteroid& obj, Message& msg) {
 		@obj.origin = msg.readObject();
 		uint cnt = msg.readSmall();
@@ -176,6 +176,8 @@ tidy class AsteroidScript {
 		obj.readResources(msg);
 		obj.readCargo(msg);
 		obj.readOrbit(msg);
+		obj.readOrbit(msg);
+		obj.readStatuses(msg);
 		makeMesh(obj);
 	}
 
@@ -188,6 +190,8 @@ tidy class AsteroidScript {
 			obj.readCargoDelta(msg);
 		if(msg.readBit())
 			obj.readOrbitDelta(msg);
+		if(msg.readBit())
+			obj.readStatusDelta(msg);
 	}
 
 	void syncDetailed(Asteroid& obj, Message& msg, double tDiff) {
@@ -195,5 +199,6 @@ tidy class AsteroidScript {
 		obj.readResources(msg);
 		obj.readCargo(msg);
 		obj.readOrbit(msg);
+		obj.readStatuses(msg);
 	}
 };
