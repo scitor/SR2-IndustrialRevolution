@@ -114,6 +114,12 @@ server:
 	safe double getCivilianTimer();
 	void setCivilianTimer(double time);
 
+	safe uint get_assignedCivilianCount();
+	void addAssignedCivilian(Civilian@ civ);
+	void removeAssignedCivilian(Civilian@ civ);
+	bool isCivilianAssigned(Civilian@ civ);
+	void clearAssignedCivilians();
+
 shadow:
 	void readResourceDelta(Message& msg);
 	void readResources(Message& msg);
