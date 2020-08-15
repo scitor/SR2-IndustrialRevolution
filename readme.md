@@ -1,4 +1,5 @@
-# Industrial Revolition
+# Industrial Revolution
+_A mod for Star Ruler 2_
 
 ![logo](IndustrialRevolution/logo.png "")
 
@@ -20,16 +21,16 @@ This mod makes civilian transport ships more important.
       mostly.. it chooses the next (blockaded) planet if the global civLimit isn't reached, or despawns.
 - moved trade stations to be at 'exit points' of systems, renamed to "Customs Office [Systemname]"
 - civilians (from a foreign empire) are enemies too for AI (colony ships apparently too)
+- added Statuses to Asteroids
 
 # todo (ideas)
-- add Statuses to Asteroids (so we can stop hack-disabling the resource manually)
+- maybe multiple ships per route (1/min/route)
 - remove blockaded status when a planet/asteroid changes target.
   (in case its still under siege it will regain status quickly)
 - only spawn customs office if there's actual export to that system
     - add upgrades (through planet buildings or orbitals)
       currently they start MAX size, they could start min and be upgraded in steps
 - rework pirates (smaller, more of them, camping on lanes, interceptable, more stashes, occasional raid)
-- maybe multiple ships per route (1/min/route)
 - change ore asteroids to use a mining bases like a resource
     - with shards there would be one main roid per group where a mining base has to be built to start operations (maybe w/ fake ships).
     - like a resource, as soon as you connect it it's available, with a random yield ore/min on the receiving planet (or global)

@@ -154,7 +154,7 @@ class DisableResource : StatusHook {
 
 #section server
 	void onCreate(Object& obj, Status@ status, any@ data) override {
-		if(!obj.hasStatuses || status.originObject is null)
+		if(!obj.hasResources || status.originObject is null)
 			return;
 
 		Civilian@ civ = cast<Civilian@>(status.originObject);
@@ -164,38 +164,34 @@ class DisableResource : StatusHook {
 		uint resId = civ.getCargoResource();
 		uint nResId = uint(-1);
 		for(uint i = 0, cnt = obj.nativeResourceCount; i < cnt; ++i) {
-			if(obj.nativeResourceType[i] == resId) {
+			if(obj.nativeResourceType[i] == resId && obj.nativeResourceUsable[i]) {
 				nResId = i;
 				break;
 			}
 		}
 		if(nResId != uint(-1)) {
 			obj.setResourceDisabled(nResId, true);
-			data.store(resId);
 		}
+		data.store(nResId);
 	}
 
 	void onDestroy(Object& obj, Status@ status, any@ data) override {
-		if(!obj.hasStatuses)
-			return;
-
-		uint resId = uint(-1);
-		data.retrieve(resId);
-
-		if(resId != uint(-1))
-			obj.setResourceDisabled(resId, false);
+		uint nResId = uint(-1);
+		data.retrieve(nResId);
+		if(nResId != uint(-1))
+			obj.setResourceDisabled(nResId, false);
 	}
 
 	void save(Status@ status, any@ data, SaveFile& file) override {
-		uint resId = uint(-1);
-		data.retrieve(resId);
-		file << resId;
+		uint nResId = uint(-1);
+		data.retrieve(nResId);
+		file << nResId;
 	}
 
 	void load(Status@ status, any@ data, SaveFile& file) override {
-		uint resId = uint(-1);
-		file >> resId;
-		data.store(resId);
+		uint nResId = uint(-1);
+		file >> nResId;
+		data.store(nResId);
 	}
 #section all
 };
