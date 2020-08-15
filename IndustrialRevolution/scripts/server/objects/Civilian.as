@@ -213,27 +213,14 @@ tidy class CivilianScript {
 					cargoResource.hooks[i].onTradeDestroy(obj, origin, pathTarget, null);
 			}
 		}
-		// did we have an origin? set blockaded if it was a planet
-		if(origin !is null && origin.hasResources) {
-			if(origin.isPlanet) {
-				auto@ status = getStatusType("BlockadedExport");
-				if(status !is null && !origin.hasStatusEffect(status.id))
-					origin.addStatus(status.id);
+		// did we have an origin? set blockaded
+		if(origin !is null && origin.hasStatuses) {
+			auto@ status = getStatusType("BlockadedExport");
+			if(status !is null && !origin.hasStatusEffect(status.id)) {
+				origin.addStatus(status.id, originObject=obj);
 			}
-			uint resId = uint(-1);
-			//print(format("cargo $1 resId $2 count $3 type $4", obj.getCargoResource(), resId, origin.nativeResourceCount, origin.nativeResourceType[0]));
-			for(uint i = 0, cnt = origin.nativeResourceCount; i < cnt; ++i) {
-				if(origin.nativeResourceType[i] == obj.getCargoResource()) {
-					resId = i;
-					break;
-				}
-			}
-			if(resId != uint(-1)) // tried this with a status but asteroid didnt like.. this works
-				origin.setResourceDisabled(resId, true);
-
 			origin.setAssignedCivilian(null);
-		}
-		if(obj.getCargoType() == CT_Goods && pathTarget !is null && pathTarget.isPlanet && pathTarget.owner is obj.owner) {
+		} else if(obj.getCargoType() == CT_Goods && pathTarget !is null && pathTarget.isPlanet && pathTarget.owner is obj.owner) {
 			auto@ status = getStatusType("Blockaded");
 			if(status !is null)
 				pathTarget.addStatus(status.id, timer=BLOCKADE_TIMER);
@@ -378,22 +365,12 @@ tidy class CivilianScript {
 								cargoResource.hooks[i].onTradeDeliver(obj, origin, pathTarget);
 						}
 						if (origin !is null && origin.hasResources) {
-							if (origin.isPlanet) {
+							if (origin.hasStatuses) {
 								auto@ status = getStatusType("BlockadedExport");
 								if(status !is null && origin.hasStatusEffect(status.id))
 									origin.removeStatusInstanceOfType(status.id);
 							}
-							uint resId = uint(-1);
-							for(uint i = 0, cnt = origin.nativeResourceCount; i < cnt; ++i) {
-								if(origin.nativeResourceType[i] == obj.getCargoResource()) {
-									resId = i;
-									break;
-								}
-							}
-							if(resId != uint(-1))
-								origin.setResourceDisabled(resId, false);
 						}
-						//if(pathTarget)
 						freeCivilian(obj);
 
 						return 0.4;
@@ -462,8 +439,10 @@ tidy class CivilianScript {
 					vec3d leaveDest;
 					if(prevRegion is null)
 						leaveDest = obj.position;
-					else
+					else {
 						leaveDest = prevRegion.position + (nextRegion.position - prevRegion.position).normalized(prevRegion.radius * 0.85) + random3d(0, DEST_RANGE);
+						leaveDest.y = prevRegion.position.y; // stay level, even in non-flat universes
+					}
 					obj.maxAcceleration = ACC_SYSTEM;
 					if(obj.moveTo(leaveDest, moveId, enterOrbit=false)) {
 						moveId = -1;

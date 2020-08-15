@@ -250,6 +250,7 @@ Asteroid : objects.Asteroid::AsteroidScript {
 	Orbit orbit
 	Cargo cargo
 	Resources resources
+	Statuses statuses
 visible:
 	Object origin
 	double HasBase = 0
