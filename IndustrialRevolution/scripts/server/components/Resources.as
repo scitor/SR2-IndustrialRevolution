@@ -46,8 +46,9 @@ tidy class ObjectResources : Component_Resources, Savable {
 	uint ResourceModId = 0;
 	uint ResourceLevel = 999;
 
-	locked_Civilian civilian;
+	locked_Civilian civilian; // ambassador
 	double civilianTimer = 200.0;
+	array<Civilian@> civilians;
 	
 	ObjectResources() {}
 	
@@ -103,6 +104,13 @@ tidy class ObjectResources : Component_Resources, Savable {
 
 		file << civilian.get();
 		file << civilianTimer;
+
+		cnt = 0;
+		if(civilians !is null)
+			cnt = civilians.length;
+		file << cnt;
+		for(uint i = 0; i < cnt; ++i)
+			file << civilians[i];
 	}
 	
 	void load(SaveFile& file) {
@@ -174,6 +182,14 @@ tidy class ObjectResources : Component_Resources, Savable {
 		if(file >= SV_0048) {
 			civilian.set(cast<Civilian>(file.readObject()));
 			file >> civilianTimer;
+
+			file >> cnt;
+			if(cnt > 0) {
+				civilians = array<Civilian@>(cnt);
+				for(uint i = 0; i < cnt; ++i) {
+					@civilians[i] = cast<Civilian>(file.readObject());
+				}
+			}
 		}
 		else
 			civilianTimer = randomd(0.0, 180.0);
@@ -269,6 +285,29 @@ tidy class ObjectResources : Component_Resources, Savable {
 
 	void setAssignedCivilian(Civilian@ civ) {
 		civilian.set(civ);
+	}
+
+	uint get_assignedCivilianCount() {
+		if (civilians is null)
+			return 0;
+		return civilians.length();
+	}
+
+	void addAssignedCivilian(Civilian@ civ) {
+		civilians.insertLast(civ);
+	}
+
+	void removeAssignedCivilian(Civilian@ civ) {
+		civilians.remove(civ);
+	}
+
+	bool isCivilianAssigned(Civilian@ civ) {
+		return civilians.find(civ) >= 0 ? true : false;
+	}
+
+	void clearAssignedCivilians() {
+		while (civilians.length > 0)
+			civilians.remove(civilians[civilians.length-1]);
 	}
 
 	double getCivilianTimer() {
