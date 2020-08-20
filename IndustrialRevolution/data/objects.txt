@@ -350,7 +350,6 @@ local visible:
 	safe double get_maxHealth() const;
 server:
 	void setOrigin(Object@ origin);
-	void pathTo(Object@ origin, Object@ target, Object@ intermediate = null);
 	void pathTo(Object@ target);
 	void gotoTradeStation(Civilian@ station);
 	void gotoTradePlanet(Planet@ planet);

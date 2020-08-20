@@ -68,7 +68,7 @@ STATUS_BLOCKADED_DESC: <<|
 >>
 STATUS_BLOCKADED_EXPORT: Blockaded Export!
 STATUS_BLOCKADED_EXPORT_DESC: <<|
-	Exported shipment was lost en route. The resource will be available once the next trade ship arrives.
+	Civilian trade ship carrying goods from this planet were shot down. The resource will be available once the next trade ship arrives.
 >>
 PICKUP_PROTECTING: Protecting
 PICKUP_UNPROTECTED: Unprotected

@@ -149,53 +149,6 @@ class ReduceProductionPerStack : StatusHook {
 #section all
 };
 
-class DisableResource : StatusHook {
-	Document doc("Disable export of a specific resource, taken from originObject.");
-
-#section server
-	void onCreate(Object& obj, Status@ status, any@ data) override {
-		if(!obj.hasResources || status.originObject is null)
-			return;
-
-		Civilian@ civ = cast<Civilian@>(status.originObject);
-		if (civ is null)
-			return;
-
-		uint resId = civ.getCargoResource();
-		uint nResId = uint(-1);
-		for(uint i = 0, cnt = obj.nativeResourceCount; i < cnt; ++i) {
-			if(obj.nativeResourceType[i] == resId && obj.nativeResourceUsable[i]) {
-				nResId = i;
-				break;
-			}
-		}
-		if(nResId != uint(-1)) {
-			obj.setResourceDisabled(nResId, true);
-		}
-		data.store(nResId);
-	}
-
-	void onDestroy(Object& obj, Status@ status, any@ data) override {
-		uint nResId = uint(-1);
-		data.retrieve(nResId);
-		if(nResId != uint(-1))
-			obj.setResourceDisabled(nResId, false);
-	}
-
-	void save(Status@ status, any@ data, SaveFile& file) override {
-		uint nResId = uint(-1);
-		data.retrieve(nResId);
-		file << nResId;
-	}
-
-	void load(Status@ status, any@ data, SaveFile& file) override {
-		uint nResId = uint(-1);
-		file >> nResId;
-		data.store(nResId);
-	}
-#section all
-};
-
 //ApplyToFlagships()
 // Only apply this status to flagships.
 class ApplyToFlagships : StatusHook {

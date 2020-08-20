@@ -16,19 +16,19 @@ This mod makes civilian transport ships more important.
 - changed civilian trade ship navigation
     - asteroids with mining bases spawn trade ships (which can be destroyed, thus blockaded)
     - added "Blockaded Export" status, the specific resource is blockaded if ships are shot down until new ones arrive
-      old "Blockaded" status still applies to the target planet, if the ship was carrying goods from a trade station
+      old "Blockaded" status still applies to the target planet, if the ship was carrying goods from a trade station (currently disabled)
     - trade ships don't reassign to random planets after delivering inter-system resources anymore.
-      mostly.. it chooses the next (blockaded) planet if the global civLimit isn't reached, or despawns.
-- moved trade stations to be at 'exit points' of systems, renamed to "Customs Office [Systemname]"
-- civilians (from a foreign empire) are enemies too for AI (colony ships apparently too)
+- moved trade stations to be at 'exit points' of systems, repurposed back to trading
+- every planet has a "Customs Office" now, will not spawn ships until CO is present
+- civilians (from a foreign empire) are enemies too for AI (colony ships apparently too, need tuning)
 - added Statuses to Asteroids
+- multiple ships per route (1/min/route)
+- almost complete restructure of civilian navigation
+- removes blockaded status when a planet/asteroid changes export target.
+  (in case its still under siege it will regain status quickly)
 
 # todo (ideas)
-- maybe multiple ships per route (1/min/route)
-- remove blockaded status when a planet/asteroid changes target.
-  (in case its still under siege it will regain status quickly)
-- only spawn customs office if there's actual export to that system
-    - add upgrades (through planet buildings or orbitals)
+- add upgrades to customs offices (through planet buildings or orbitals)
       currently they start MAX size, they could start min and be upgraded in steps
 - rework pirates (smaller, more of them, camping on lanes, interceptable, more stashes, occasional raid)
 - change ore asteroids to use a mining bases like a resource
@@ -39,5 +39,3 @@ This mod makes civilian transport ships more important.
     - add more ore requirements to buildings (easier to get ore)
 - change AI to care for all this (prob no pirates for them or fake ones)
 - add inter-trade-station traffic as tech (for more income, maybe inter-empire as treaty, check treaty code functionality)
-- complete rewrite of civilian navigation is needed, to be more readable. (currently one messy if-cascade)
-- fix ships heading for dead stations

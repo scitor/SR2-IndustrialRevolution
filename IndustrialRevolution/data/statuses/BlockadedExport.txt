@@ -4,5 +4,4 @@ Status: BlockadedExport
 	Icon: QuickbarIcons::7
 	Color: #ff9000
 
-	DisableResource()
 	RemoveOnOwnerChange()

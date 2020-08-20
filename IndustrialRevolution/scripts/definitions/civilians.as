@@ -6,20 +6,36 @@ enum CargoType {
 enum CivilianType {
 	CiT_Freighter,
 	CiT_Station,
+	CiT_CustomsOffice,
+};
+
+enum CivilianNavState {
+	CiNS_NeedPath,
+	CiNS_PathToIntermediate,
+	CiNS_PathToExit,
+	CiNS_PathToNextRegion,
+	CiNS_MovingToTarget,
+	CiNS_ArrivedAtIntermediate,
+	CiNS_ArrivedAtExit,
+	CiNS_ArrivedAtRegion,
+	CiNS_ArrivedAtDropoff
 };
 
 array<const Model@> CivilianModels = {
 	model::Fighter,
 	model::CommerceStation,
+	model::Depot,
 };
 
 array<const Material@> CivilianMaterials = {
 	material::Ship10,
 	material::GenericPBR_CommerceStation,
+	material::GenericPBR_Depot,
 };
 
 array<Sprite> CivilianIcons = {
 	Sprite(spritesheet::HullIcons, 2),
+	Sprite(spritesheet::OrbitalIcons, 0),
 	Sprite(spritesheet::OrbitalIcons, 0),
 };
 
@@ -30,8 +46,15 @@ const double CIV_SIZE_CARAVAN = 5.0;
 
 const double CIV_RADIUS_WORTH = 1.0;
 
+const int CIV_COFFICE_INCOME = 10;
 const int CIV_CARAVAN_INCOME = 15;
 const int CIV_STATION_INCOME = 20;
+
+const double STATION_MIN_RAD = 5.0;
+const double STATION_MAX_RAD = 10.0;
+
+vec2d VEC2_NULL(INFINITY, INFINITY);
+vec3d VEC3_NULL(INFINITY, INFINITY, INFINITY);
 
 const Model@ getCivilianModel(Empire@ owner, uint type, double radius) {
 	if(owner !is null) {
@@ -90,6 +113,3 @@ Sprite getCivilianIcon(Empire@ owner, uint type, double radius) {
 	}
 	return CivilianIcons[type];
 }
-
-const double STATION_MIN_RAD = 5.0;
-const double STATION_MAX_RAD = 10.0;

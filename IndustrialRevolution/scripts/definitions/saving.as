@@ -202,6 +202,7 @@ enum SaveVersion {
 	SV_0161,
 	SV_0162,
 	SV_0163,
+	SV_0164_IR,
 
 	SV_NEXT,
 	SV_CURRENT = SV_NEXT - 1,
