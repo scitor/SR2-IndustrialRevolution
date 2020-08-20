@@ -12,7 +12,7 @@ const int GOODS_WORTH = 8;
 const double CIV_HEALTH = 25.0;
 const double CIV_REPAIR = 1.0;
 const double BLOCKADE_TIMER = 3.0 * 60.0;
-const double DEST_RANGE = 20.0;
+const double DEST_RANGE = 50.0;
 
 tidy class CivilianScript {
 	uint type = 0;
@@ -188,6 +188,7 @@ tidy class CivilianScript {
 			obj.activateMover();
 			obj.maxAcceleration = ACC_STATION;
 			obj.rotationSpeed = 0.5;
+			addAmbientSource(CURRENT_PLAYER, "ambient_station", obj.id, obj.position, STATION_MAX_RAD);
 		}
 		makeMesh(obj);
 		Health = get_maxHealth(obj);
@@ -310,12 +311,16 @@ tidy class CivilianScript {
 		navStateMoved = fNavState;
 	}
 
+	double getInertiaFromSize(Civilian& obj) {
+		return 1.0 - (obj.radius - CIV_SIZE_MIN) / CIV_SIZE_MAX;
+	}
+
 	void quarterImpulse(Civilian& obj) {
-		obj.maxAcceleration = ACC_SYSTEM;
+		obj.maxAcceleration = getInertiaFromSize(obj) * ACC_SYSTEM;
 	}
 
 	void fullImpulse(Civilian& obj) {
-		obj.maxAcceleration = ACC_INTERSYSTEM;
+		obj.maxAcceleration = getInertiaFromSize(obj) * ACC_INTERSYSTEM;
 	}
 
 	double tick(Civilian& obj, double time) {
