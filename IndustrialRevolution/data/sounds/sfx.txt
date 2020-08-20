@@ -270,3 +270,6 @@ Sound: ambient_blackhole
 Sound: graviton_charge
 	File: data/sounds/artifacts/WEAP_graviton_charge-001.ogg
 	
+Stream: ambient_station
+	File: data/sounds/ambient_station.ogg
+	Volume: 0.2

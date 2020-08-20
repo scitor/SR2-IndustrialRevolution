@@ -51,7 +51,7 @@ tidy class CivilianScript {
 		regionOwnerChange(obj, prevOwner);
 		return false;
 	}
-	
+
 	double tick(Civilian& obj, double time) {
 		updateRegion(obj);
 		if(obj.hasMover)
@@ -92,6 +92,7 @@ tidy class CivilianScript {
 		msg >> type;
 		_readDelta(obj, msg);
 		makeMesh(obj);
+		addAmbientSource("ambient_station", obj.id, obj.position, STATION_MAX_RAD);
 	}
 
 	void syncDetailed(Civilian& obj, Message& msg, double tDiff) {
