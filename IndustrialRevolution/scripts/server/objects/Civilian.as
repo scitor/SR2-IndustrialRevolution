@@ -71,6 +71,7 @@ tidy class CivilianScript {
 			@cargoResource = getResource(msg.readIdentifier(SI_Resource));
 		msg >> cargoWorth;
 
+		addAmbientSource(CURRENT_PLAYER, "ambient_station", obj.id, obj.position, STATION_MIN_RAD);
 		makeMesh(obj);
 	}
 
@@ -188,7 +189,7 @@ tidy class CivilianScript {
 			obj.activateMover();
 			obj.maxAcceleration = ACC_STATION;
 			obj.rotationSpeed = 0.5;
-			addAmbientSource(CURRENT_PLAYER, "ambient_station", obj.id, obj.position, STATION_MAX_RAD);
+			addAmbientSource(CURRENT_PLAYER, "ambient_station", obj.id, obj.position, STATION_MIN_RAD);
 		}
 		makeMesh(obj);
 		Health = get_maxHealth(obj);
@@ -222,7 +223,7 @@ tidy class CivilianScript {
 		if((obj.inCombat || obj.engaged) && !game_ending) {
 			playParticleSystem("ShipExplosion", obj.position, obj.rotation, obj.radius, obj.visibleMask);
 		}
-		else {
+		else if(type == CiT_Freighter) {
 			if(cargoResource !is null) {
 				for(uint i = 0, cnt = cargoResource.hooks.length; i < cnt; ++i)
 					cargoResource.hooks[i].onTradeDestroy(obj, origin, pathTarget, null);
@@ -240,6 +241,8 @@ tidy class CivilianScript {
 			if(status !is null)
 				pathTarget.addStatus(status.id, timer=BLOCKADE_TIMER);
 		}
+		if(type != CiT_Freighter)
+			removeAmbientSource(obj.id);
 		leaveRegion(obj);
 		if(obj.owner !is null && obj.owner.valid) {
 			if(type == CiT_Freighter)

@@ -44,6 +44,7 @@ tidy class CivilianScript {
 	}
 
 	void destroy(Civilian& obj) {
+		removeAmbientSource(obj.id);
 		leaveRegion(obj);
 	}
 
