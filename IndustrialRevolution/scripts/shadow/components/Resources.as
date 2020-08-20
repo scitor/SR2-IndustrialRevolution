@@ -18,6 +18,7 @@ tidy class ObjectResources : Component_Resources {
 	int ImportDisabled = 0;
 	uint ResourceModId = 0;
 	bool terraforming = false;
+	bool blockaded = false;
 	double resVanishBonus = 0.0;
 
 	ObjectResources() {
@@ -208,6 +209,8 @@ tidy class ObjectResources : Component_Resources {
 		auto@ to = r.exportedTo;
 		if(ExportDisabled != 0)
 			return locale::EXPBLOCK_DISABLED;
+		if(terraforming)
+			return locale::EXPBLOCK_TERRAFORMING;
 		if((to !is null && to.region is null) || obj.region is null)
 			return locale::EXPBLOCK_DEEPSPACE;
 		if(!obj.owner.valid) {
@@ -236,8 +239,7 @@ tidy class ObjectResources : Component_Resources {
 				src.getTerritory(obj.owner) !is dst.getTerritory(obj.owner))
 			return locale::EXPBLOCK_DISCONNECTED;
 		}
-		auto@ status = getStatusType("BlockadedExport");
-		if(status !is null && obj.hasStatuses && obj.hasStatusEffect(status.id))
+		if(blockaded)
 			return locale::EXPBLOCK_BLOCKADED_EXPORT;
 		if(!r.usable)
 			return locale::EXPBLOCK_UNUSABLE;
@@ -500,6 +502,7 @@ tidy class ObjectResources : Component_Resources {
 
 	void _readRes(Object& obj, Message& msg) {
 		msg >> terraforming;
+		msg >> blockaded;
 		resVanishBonus = msg.read_float();
 		availableResources.read(msg);
 

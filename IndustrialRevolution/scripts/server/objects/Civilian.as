@@ -5,13 +5,14 @@ import resources;
 import civilians;
 import statuses;
 
+const double ACC_STATION = 0.1;
 const double ACC_SYSTEM = 2.0;
 const double ACC_INTERSYSTEM = 65.0;
 const int GOODS_WORTH = 8;
 const double CIV_HEALTH = 25.0;
 const double CIV_REPAIR = 1.0;
 const double BLOCKADE_TIMER = 3.0 * 60.0;
-const double DEST_RANGE = 4.0;
+const double DEST_RANGE = 20.0;
 
 tidy class CivilianScript {
 	uint type = 0;
@@ -20,9 +21,13 @@ tidy class CivilianScript {
 	Object@ intermediate;
 	Region@ prevRegion;
 	Region@ nextRegion;
+	Object@ moveTargetObj;
+	vec3d moveTargetPos;
+	uint navState = CiNS_NeedPath;
+	uint navStateMoved = CiNS_NeedPath;
 	int moveId = -1;
-	bool leavingRegion = false, awaitingIntermediate = false;
-	bool pickedUp = false;
+	bool awaitingIntermediate = false;
+	bool mainRun = true;
 	double Health = CIV_HEALTH;
 	int stepCount = 0;
 	int income = 0;
@@ -53,8 +58,11 @@ tidy class CivilianScript {
 		msg >> prevRegion;
 		msg >> nextRegion;
 		msg >> moveId;
-		msg >> leavingRegion;
-		msg >> pickedUp;
+		msg >> navState;
+		msg >> navStateMoved;
+		msg >> moveTargetObj;
+		msg >> moveTargetPos;
+		msg >> mainRun;
 		msg >> Health;
 		msg >> stepCount;
 		msg >> income;
@@ -82,8 +90,11 @@ tidy class CivilianScript {
 		msg << prevRegion;
 		msg << nextRegion;
 		msg << moveId;
-		msg << leavingRegion;
-		msg << pickedUp;
+		msg << navState;
+		msg << navStateMoved;
+		msg << moveTargetObj;
+		msg << moveTargetPos;
+		msg << mainRun;
 		msg << Health;
 		msg << stepCount;
 		msg << income;
@@ -99,8 +110,6 @@ tidy class CivilianScript {
 	}
 
 	uint getCargoType() {
-		if(cargoType == CT_Resource && !pickedUp)
-			return CT_Goods;
 		return cargoType;
 	}
 
@@ -125,9 +134,9 @@ tidy class CivilianScript {
 	void setCargoResource(Civilian& obj, uint id) {
 		cargoType = CT_Resource;
 		@cargoResource = getResource(id);
-		if(pickedUp)
+		if(cargoResource !is null && cargoResource.cargoWorth > 0)
 			cargoWorth = cargoResource.cargoWorth * obj.radius * CIV_RADIUS_WORTH;
-		else
+		if(cargoWorth < 1) // c'mon it's worth something
 			cargoWorth = GOODS_WORTH * obj.radius * CIV_RADIUS_WORTH;
 		delta = true;
 	}
@@ -174,6 +183,11 @@ tidy class CivilianScript {
 			obj.activateMover();
 			obj.maxAcceleration = ACC_SYSTEM;
 			obj.rotationSpeed = 1.0;
+		} else {
+			// for orbiting
+			obj.activateMover();
+			obj.maxAcceleration = ACC_STATION;
+			obj.rotationSpeed = 0.5;
 		}
 		makeMesh(obj);
 		Health = get_maxHealth(obj);
@@ -214,12 +228,12 @@ tidy class CivilianScript {
 			}
 		}
 		// did we have an origin? set blockaded
-		if(origin !is null && origin.hasStatuses) {
+		if(origin !is null && origin.hasStatuses && origin.owner is obj.owner) {
 			auto@ status = getStatusType("BlockadedExport");
 			if(status !is null && !origin.hasStatusEffect(status.id)) {
-				origin.addStatus(status.id, originObject=obj);
+				origin.addStatus(status.id);
 			}
-			origin.setAssignedCivilian(null);
+			origin.removeAssignedCivilian(obj);
 		} else if(obj.getCargoType() == CT_Goods && pathTarget !is null && pathTarget.isPlanet && pathTarget.owner is obj.owner) {
 			auto@ status = getStatusType("Blockaded");
 			if(status !is null)
@@ -236,8 +250,10 @@ tidy class CivilianScript {
 
 	void freeCivilian(Civilian& obj) {
 		if(origin !is null && origin.hasResources)
-			origin.setAssignedCivilian(null);
+			origin.removeAssignedCivilian(obj);
 
+		//obj.name = getCivilianName(obj.type, obj.radius);
+		mainRun = false;
 		Region@ region = obj.region;
 		if(region !is null) {
 			@origin = null;
@@ -265,7 +281,7 @@ tidy class CivilianScript {
 		if(engaged && obj.region !is null)
 			obj.region.EngagedMask |= obj.owner.mask;
 	}
-	
+
 	void gotoTradeStation(Civilian@ station) {
 		if(!awaitingIntermediate)
 			return;
@@ -280,6 +296,28 @@ tidy class CivilianScript {
 		@intermediate = planet;
 	}
 
+	void setMoveTarget(vec3d pos, uint fNavState) {
+		moveTargetPos = pos;
+		@moveTargetObj = null;
+		navState = CiNS_MovingToTarget;
+		navStateMoved = fNavState;
+	}
+
+	void setMoveTarget(Object& obj, uint fNavState) {
+		moveTargetPos = VEC3_NULL;
+		@moveTargetObj = obj;
+		navState = CiNS_MovingToTarget;
+		navStateMoved = fNavState;
+	}
+
+	void quarterImpulse(Civilian& obj) {
+		obj.maxAcceleration = ACC_SYSTEM;
+	}
+
+	void fullImpulse(Civilian& obj) {
+		obj.maxAcceleration = ACC_INTERSYSTEM;
+	}
+
 	double tick(Civilian& obj, double time) {
 		//Update normal stuff
 		updateRegion(obj);
@@ -292,167 +330,264 @@ tidy class CivilianScript {
 			occasional_tick(obj);
 			timer = 1.f;
 		}
-
 		//Do repair
 		double maxHP = get_maxHealth(obj);
 		if(!obj.inCombat && Health < maxHP) {
 			Health = min(Health + (CIV_REPAIR * time * obj.radius), maxHP);
 			delta = true;
 		}
-		
+		//waiting for or being a trade station
 		if(awaitingIntermediate)
 			return 0.25;
-
+		if(getCivilianType() == CiT_Station || getCivilianType() == CiT_CustomsOffice) {
+			if (origin !is null && origin.owner !is obj.owner) {
+				obj.inCombat = true;
+				obj.destroy();
+			}
+			return 0.4;
+		}
+		if(pathTarget is null) {
+			freeCivilian(obj);
+			return 0.4;
+		}
 		//Update pathing
 		Region@ curRegion = obj.region;
-		if(pathTarget !is null) {
-			if(origin !is null && !pickedUp) {
-				if(obj.moveTo(origin, moveId, distance=10.0, enterOrbit=false)) {
-					pickedUp = true;
-					if(cargoResource !is null)
-						cargoWorth = cargoResource.cargoWorth * obj.radius * CIV_RADIUS_WORTH;
-					delta = true;
-					moveId = -1;
-					return 0.5;
-				}
-				else {
-					return 0.2;
-				}
-			}
-			Region@ destRegion;
-			if(pathTarget.isRegion)
-				@destRegion = cast<Region>(pathTarget);
-			else
-				@destRegion = pathTarget.region;
-			if(nextRegion is null) {
-				if(curRegion is null)
-					@nextRegion = findNearestRegion(obj.position);
-				else
-					@nextRegion = curRegion;
-			}
-			if(nextRegion is null || destRegion is null) {
-				freeCivilian(obj);
-				return 0.4;
-			}
-			if(leavingRegion) {
-				vec3d enterDest;
-				if(nextRegion !is destRegion || destRegion is pathTarget || getSystem(prevRegion).isSpatialAdjacent(getSystem(nextRegion)))  {
-					enterDest = nextRegion.position + (prevRegion.position - nextRegion.position).normalized(nextRegion.radius * 0.85);
-					enterDest += random3d(0.0, DEST_RANGE);
-					enterDest.y = nextRegion.position.y; // stay level, even in non-flat universes
-				}
-				else {
-					enterDest = pathTarget.position + vec3d(0,0,pathTarget.radius+10.0);
-				}
-				obj.maxAcceleration = ACC_INTERSYSTEM;
-				if(!obj.moveTo(enterDest, moveId, enterOrbit=false))
-					return 0.2;
-				if(cargoType == CT_Resource)
-					prevRegion.bumpTradeCounter(obj.owner);
-				moveId = -1;
-				leavingRegion = false;
-			}
-			if(curRegion is null || (nextRegion !is null && nextRegion is curRegion)) {
-				if(nextRegion is destRegion) {
-					//Move to destination
-					obj.maxAcceleration = ACC_SYSTEM;
-					if(obj.moveTo(pathTarget, moveId, distance=10.0, enterOrbit=false)) {
-						moveId = -1;
-						if(cargoType == CT_Resource)
-							destRegion.bumpTradeCounter(obj.owner);
-						if(cargoResource !is null && !pathTarget.isRegion) {
-							for(uint i = 0, cnt = cargoResource.hooks.length; i < cnt; ++i)
-								cargoResource.hooks[i].onTradeDeliver(obj, origin, pathTarget);
-						}
-						if (origin !is null && origin.hasResources) {
-							if (origin.hasStatuses) {
-								auto@ status = getStatusType("BlockadedExport");
-								if(status !is null && origin.hasStatusEffect(status.id))
-									origin.removeStatusInstanceOfType(status.id);
-							}
-						}
-						freeCivilian(obj);
+		Region@ destRegion;
+		if(pathTarget.isRegion)
+			@destRegion = cast<Region>(pathTarget);
+		else
+			@destRegion = pathTarget.region;
 
-						return 0.4;
-					}
-					else {
-						return 0.2;
-					}
+		if(curRegion is null && nextRegion is null)
+			navState = CiNS_NeedPath;
+
+		switch(navState) {
+			case CiNS_NeedPath: {
+				if(curRegion is destRegion) {
+					navState = CiNS_ArrivedAtRegion;
+					break;
 				}
-				else if(curRegion is null) {
+				if(curRegion is null) {
 					//Move to closest region
-					vec3d pos = nextRegion.position + (nextRegion.position - obj.position).normalized(nextRegion.radius * 0.85);
-					pos.y = nextRegion.position.y; // stay level, even in non-flat universes
-					obj.maxAcceleration = ACC_INTERSYSTEM;
-					if(obj.moveTo(pos, moveId, enterOrbit=false)) {
-						moveId = -1;
-						return 0.4;
-					}
-					else {
-						return 0.2;
-					}
+					if (nextRegion is null)
+						@nextRegion = findNearestRegion(obj.position);
+					vec3d pos = nextRegion.position + (obj.position - nextRegion.position).normalized(nextRegion.radius * 0.85);
+					setMoveTarget(pos, CiNS_ArrivedAtRegion);
+					fullImpulse(obj);
+					break;
 				}
-				else {
+				if(nextRegion is null) {
 					//Find the next region to path to
 					TradePath path(obj.owner);
 					path.generate(getSystem(curRegion), getSystem(destRegion));
-
 					if(path.pathSize < 2 || !path.valid) {
 						freeCivilian(obj);
-						return 0.4;
+						break;
 					}
-					else {
-						@prevRegion = curRegion;
-						@nextRegion = path.pathNode[1].object;
-						awaitingIntermediate = true;
-						@intermediate = null;
-						if(curRegion.hasTradeStation(obj.owner)) {
-							// take station at exit point
-							vec3d pos = prevRegion.position + (nextRegion.position - prevRegion.position).normalized(prevRegion.radius * 0.85);
-							curRegion.getTradeStation(obj, obj.owner, pos);
-						} else if(cargoType == CT_Goods)
-							curRegion.getTradePlanet(obj, obj.owner);
-						else
-							awaitingIntermediate = false;
-						leavingRegion = false;
-					}
-				}
+					@nextRegion = path.pathNode[1].object;
+					navState = CiNS_PathToIntermediate;
+				} else // we have a next region. move to exit
+					navState = CiNS_PathToExit;
+				break;
 			}
-			if(!leavingRegion) {
-				if(intermediate !is null) {
-					obj.maxAcceleration = ACC_SYSTEM;
-					if(obj.moveTo(intermediate, moveId, distance=10.0, enterOrbit=false)) {
-						Civilian@ civStation = cast<Civilian>(intermediate);
-						if (civStation !is null) {
-							civStation.setCargoResource(obj.getCargoResource());
-						}
-						moveId = -1;
-						@intermediate = null;
-						return 0.4;
-					}
+			case CiNS_PathToIntermediate: { // check for intermediate
+				if(curRegion is null) {
+					navState = CiNS_NeedPath;
+					break;
 				}
-				else {
-					if(moveId == -1 && !getSystem(prevRegion).isSpatialAdjacent(getSystem(nextRegion)))  {
-						leavingRegion = true;
-						return 0.5;
-					}
-					vec3d leaveDest;
-					if(prevRegion is null)
-						leaveDest = obj.position;
+				if(intermediate is null) {
+					awaitingIntermediate = true;
+					if(curRegion.hasTradeStation(obj.owner)) {
+						vec3d pos = curRegion.position + random3d(curRegion.radius);
+						// take station at exit point if we have a next region
+						if(nextRegion !is null)
+							pos = curRegion.position + (nextRegion.position - curRegion.position).normalized(curRegion.radius);
+						curRegion.getTradeStation(obj, obj.owner, pos);
+					} else if(!mainRun)
+						curRegion.getTradePlanet(obj, obj.owner);
 					else {
-						leaveDest = prevRegion.position + (nextRegion.position - prevRegion.position).normalized(prevRegion.radius * 0.85) + random3d(0, DEST_RANGE);
-						leaveDest.y = prevRegion.position.y; // stay level, even in non-flat universes
+						awaitingIntermediate = false;
+						navState = CiNS_NeedPath;
+						break;
 					}
-					obj.maxAcceleration = ACC_SYSTEM;
-					if(obj.moveTo(leaveDest, moveId, enterOrbit=false)) {
-						moveId = -1;
-						leavingRegion = true;
-						return 0.5;
-					}
+				} else {
+					if (intermediate.hasResources && intermediate.getCustomsOffice() !is null)
+						setMoveTarget(intermediate.getCustomsOffice(), CiNS_ArrivedAtIntermediate);
+					else
+						setMoveTarget(intermediate, CiNS_ArrivedAtIntermediate);
+					quarterImpulse(obj);
+					break;
 				}
+				return 0.4;
+			}
+			case CiNS_PathToExit: { // leaving region
+				if(curRegion is null || nextRegion is null) {
+					navState = CiNS_NeedPath;
+					break;
+				}
+				vec3d leaveDest;
+				leaveDest = curRegion.position + (nextRegion.position - curRegion.position).normalized(curRegion.radius * 0.85);
+				leaveDest += random3d(DEST_RANGE);
+				leaveDest.y = curRegion.position.y - STATION_MAX_RAD;
+				setMoveTarget(leaveDest, CiNS_ArrivedAtExit);
+				quarterImpulse(obj);
+				break;
+			}
+			case CiNS_PathToNextRegion: { // aka ftl between systems
+				if(curRegion is null || nextRegion is null) {
+					navState = CiNS_NeedPath;
+					break;
+				}
+				vec3d enterDest;
+				enterDest = nextRegion.position + (curRegion.position - nextRegion.position).normalized(nextRegion.radius * 0.85);
+				enterDest += random3d(DEST_RANGE);
+				enterDest.y = nextRegion.position.y - STATION_MAX_RAD;
+				fullImpulse(obj);
+				setMoveTarget(enterDest, CiNS_ArrivedAtRegion);
+				break;
+			}
+			case CiNS_MovingToTarget: { // in current system
+				if(moveTargetObj !is null && int(moveTargetObj.position.x) == 0 && int(moveTargetObj.position.z) == 0)
+					@moveTargetObj = null; // question to experts: why is pos empty after load?
+
+				if (moveTargetObj is null && moveTargetPos == VEC3_NULL) {
+					navState = CiNS_NeedPath;
+					@nextRegion = null;
+					break;
+				}
+
+				if(moveTargetObj !is null && obj.moveTo(moveTargetObj, moveId, distance=20.0, enterOrbit=false) ||
+				   moveTargetPos != VEC3_NULL && obj.moveTo(moveTargetPos, moveId, enterOrbit=false))
+				{
+					moveId = -1;
+					@moveTargetObj = null;
+					moveTargetPos = VEC3_NULL;
+					navState = navStateMoved;
+				}
+				break;
+			}
+			case CiNS_ArrivedAtIntermediate: {
+				// do trade stuff with station
+				handleTradeWithIntermediate(obj);
+				@intermediate = null;
+				navState = CiNS_PathToExit;
+				break;
+			}
+			case CiNS_ArrivedAtExit: {
+				if(curRegion is null || nextRegion is null) {
+					navState = CiNS_NeedPath;
+					break;
+				}
+				@prevRegion = curRegion;
+				navState = CiNS_PathToNextRegion;
+				break;
+			}
+			case CiNS_ArrivedAtRegion: {
+				@nextRegion = null;
+				if(prevRegion !is null)
+					prevRegion.bumpTradeCounter(obj.owner);
+				if(randomi(0,9)<3) {
+					// (1/3 chance to) check out a local trade station first
+					navState = CiNS_PathToIntermediate;
+					break;
+				}
+				if(curRegion is destRegion) {
+					//Move to destination
+					if(pathTarget.hasResources && pathTarget.getCustomsOffice() !is null)
+						setMoveTarget(pathTarget.getCustomsOffice(), CiNS_ArrivedAtDropoff);
+					else
+						setMoveTarget(pathTarget, CiNS_ArrivedAtDropoff);
+					quarterImpulse(obj);
+					break;
+				}
+				navState = CiNS_NeedPath;
+				break;
+			}
+			case CiNS_ArrivedAtDropoff: {
+				if(destRegion !is null)
+					destRegion.bumpTradeCounter(obj.owner);
+				if(mainRun) {
+					if(origin !is null) {
+						if(cargoResource !is null && !pathTarget.isRegion) {
+							for (uint i = 0, cnt = cargoResource.hooks.length; i < cnt; ++i)
+								cargoResource.hooks[i].onTradeDeliver(obj, origin, pathTarget);
+						}
+						if(origin.hasStatuses) {
+							auto @status = getStatusType("BlockadedExport");
+							if(status !is null)
+								origin.removeStatusInstanceOfType(status.id);
+						}
+					}
+					// start trading with the planets resource
+					obj.setCargoResource(pathTarget.primaryResourceType);
+				}
+				freeCivilian(obj);
+				break;
 			}
 		}
 		return 0.2;
+	}
+
+	// do trade stuff with station
+	void handleTradeWithIntermediate(Civilian& obj) {
+		Civilian@ tradeStation = cast<Civilian>(intermediate);
+		if(tradeStation !is null) {
+			// we sell good stuff
+			if(cargoType == CT_Resource) {
+				// Goods stations will always buy
+				if(tradeStation.getCargoType() == CT_Goods)
+					tradeStation.setCargoResource(obj.getCargoResource());
+				else {
+					const ResourceType@ stationRes = getResource(tradeStation.getCargoResource());
+					if(stationRes !is null) {
+						double cWorth = stationRes.cargoWorth > 0 ? stationRes.cargoWorth : GOODS_WORTH;
+						// 20% chance to 'sell' if resource is worth the same
+						double chance = getCargoWorth() / cWorth / 5;
+						if(randomd(0,1) < chance)
+							tradeStation.setCargoResource(obj.getCargoResource());
+							// they bought our stuff, now get the heck outta here
+					}
+				}
+			}
+			// lets check the market
+			if(tradeStation.getCargoType() == CT_Resource) {
+				if(cargoType == CT_Goods) // bought
+					obj.setCargoResource(tradeStation.getCargoResource());
+				else if(!mainRun) {
+					const ResourceType@ stationRes = getResource(tradeStation.getCargoResource());
+					if(stationRes !is null) {
+						double cWorth = stationRes.cargoWorth > 0 ? stationRes.cargoWorth : GOODS_WORTH;
+						// 20% chance to 'buy' if resource is worth the same
+						double chance = cWorth / getCargoWorth() / 5;
+						if(randomd(0,1) < chance)
+							obj.setCargoResource(tradeStation.getCargoResource());
+					}
+				}
+			}
+			return;
+		}
+		Planet@ tradePlanet = cast<Planet>(intermediate);
+		if(tradePlanet !is null) {
+			// lets check the market
+			if(cargoType == CT_Goods) // bought
+				obj.setCargoResource(tradePlanet.primaryResourceType);
+			else if(!mainRun) {
+				const ResourceType@ stationRes = getResource(tradePlanet.primaryResourceType);
+				if(stationRes !is null) {
+					double cWorth = stationRes.cargoWorth > 0 ? stationRes.cargoWorth : GOODS_WORTH;
+					// 20% chance to 'buy' if resource is worth the same
+					double chance = cWorth / getCargoWorth() / 5;
+					if(randomd(0,1) < chance)
+						obj.setCargoResource(tradePlanet.primaryResourceType);
+				}
+			}
+		}
+	}
+
+	void printForID(Object& obj, const int id, string str) {
+		if (obj.id == id) {
+			print(str);
+		}
 	}
 
 	void setOrigin(Object@ origin) {
@@ -460,26 +595,14 @@ tidy class CivilianScript {
 		delta = true;
 	}
 
-	void pathTo(Civilian& obj, Object@ origin, Object@ target, Object@ stopAt = null) {
-		@pathTarget = target;
-		@prevRegion = null;
-		@nextRegion = null;
-		@intermediate = stopAt;
-		@this.origin = origin;
-		pickedUp = false;
-		delta = true;
-		leavingRegion = false;
-	}
-
 	void pathTo(Civilian& obj, Object@ target) {
+		navState = CiNS_NeedPath;
 		@pathTarget = target;
 		@prevRegion = null;
 		@nextRegion = null;
 		@origin = null;
 		@intermediate = null;
-		pickedUp = true;
 		delta = true;
-		leavingRegion = false;
 	}
 
 	void damage(Civilian& obj, DamageEvent& evt, double position, const vec2d& direction) {
@@ -507,7 +630,7 @@ tidy class CivilianScript {
 	void _writeDelta(const Civilian& obj, Message& msg) {
 		msg.writeSmall(cargoType);
 		msg.writeSmall(cargoWorth);
-		msg.writeBit(pickedUp);
+		msg.writeBit(true);
 		msg.writeFixed(obj.health/obj.maxHealth);
 		if(cargoResource !is null) {
 			msg.write1();

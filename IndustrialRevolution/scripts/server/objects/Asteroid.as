@@ -56,7 +56,8 @@ tidy class AsteroidScript {
 		}
 		if(file >= SV_0125)
 			file >> cast<Savable>(obj.Resources);
-		file >> cast<Savable>(obj.Statuses);
+		if(file >= SV_0164_IR)
+			file >> cast<Savable>(obj.Statuses);
 
 		if(file < SV_0122 || file >= SV_0125) {
 			Object@ origin;

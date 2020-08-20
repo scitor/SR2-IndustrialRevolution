@@ -35,6 +35,7 @@ tidy class ObjectResources : Component_Resources, Savable {
 	bool deltaPath = false;
 	bool resourcesEnabled = true;
 	bool terraforming = false;
+	bool blockaded = false;
 	double ResourceCheck = 1.0;
 	float resEfficiency = 1.f;
 	double resEfficiencyBonus = 0.0;
@@ -46,10 +47,11 @@ tidy class ObjectResources : Component_Resources, Savable {
 	uint ResourceModId = 0;
 	uint ResourceLevel = 999;
 
-	locked_Civilian civilian; // ambassador
-	double civilianTimer = 200.0;
+	locked_Civilian customsOffice;
+	double civilianTimer = 60.0;
 	array<Civilian@> civilians;
-	
+	Mutex civLock;
+
 	ObjectResources() {}
 	
 	void save(SaveFile& file) {
@@ -102,15 +104,16 @@ tidy class ObjectResources : Component_Resources, Savable {
 			file << pressures[i];
 		file << totalPressure;
 
-		file << civilian.get();
+		file << customsOffice.get();
 		file << civilianTimer;
-
-		cnt = 0;
-		if(civilians !is null)
+		{
+			Lock lock(civLock);
 			cnt = civilians.length;
-		file << cnt;
-		for(uint i = 0; i < cnt; ++i)
-			file << civilians[i];
+			file << cnt;
+			for(uint i = 0; i < cnt; i++) {
+				file << civilians[i];
+			}
+		}
 	}
 	
 	void load(SaveFile& file) {
@@ -180,9 +183,14 @@ tidy class ObjectResources : Component_Resources, Savable {
 		file >> totalPressure;
 
 		if(file >= SV_0048) {
-			civilian.set(cast<Civilian>(file.readObject()));
+			customsOffice.set(cast<Civilian>(file.readObject()));
 			file >> civilianTimer;
+		}
+		else
+			civilianTimer = randomd(0.0, 180.0);
 
+		if(file >= SV_0164_IR) {
+			Lock lock(civLock);
 			file >> cnt;
 			if(cnt > 0) {
 				civilians = array<Civilian@>(cnt);
@@ -191,8 +199,6 @@ tidy class ObjectResources : Component_Resources, Savable {
 				}
 			}
 		}
-		else
-			civilianTimer = randomd(0.0, 180.0);
 	}
 
 	void resourcesPostLoad(Object& obj) {
@@ -279,35 +285,45 @@ tidy class ObjectResources : Component_Resources, Savable {
 			yield(resources[i]);
 	}
 
-	Civilian@ getAssignedCivilian() {
-		return civilian.get();
+	Civilian@ getCustomsOffice() {
+		Civilian@ cOffice = customsOffice.get();
+		if (cOffice is null || !cOffice.valid)
+			return null;
+		return cOffice;
 	}
 
-	void setAssignedCivilian(Civilian@ civ) {
-		civilian.set(civ);
+	void setCustomsOffice(Civilian@ cOffice) {
+		customsOffice.set(cOffice);
 	}
 
 	uint get_assignedCivilianCount() {
+		Lock lock(civLock);
 		if (civilians is null)
 			return 0;
 		return civilians.length();
 	}
 
 	void addAssignedCivilian(Civilian@ civ) {
+		Lock lock(civLock);
 		civilians.insertLast(civ);
 	}
 
 	void removeAssignedCivilian(Civilian@ civ) {
+		Lock lock(civLock);
 		civilians.remove(civ);
+		if(customsOffice.get() is civ)
+			customsOffice.set(null);
 	}
 
 	bool isCivilianAssigned(Civilian@ civ) {
-		return civilians.find(civ) >= 0 ? true : false;
+		Lock lock(civLock);
+		return civilians.find(civ) >= 0;
 	}
 
 	void clearAssignedCivilians() {
+		Lock lock(civLock);
 		while (civilians.length > 0)
-			civilians.remove(civilians[civilians.length-1]);
+			civilians.removeLast();
 	}
 
 	double getCivilianTimer() {
@@ -570,6 +586,12 @@ tidy class ObjectResources : Component_Resources, Savable {
 		terraforming = false;
 	}
 
+	void setBlockadedStatus(Object& obj, bool status = true) {
+		blockaded = status;
+		deltaRes = true;
+		checkResources(obj, true);
+	}
+
 	void removeResource(Object& obj, int id, bool wasManual = false) {
 		NativeResource@ r;
 		uint index = 0;
@@ -750,6 +772,17 @@ tidy class ObjectResources : Component_Resources, Savable {
 
 	bool get_primaryResourceExported() const {
 		return primaryResource.exportedTo !is null;
+	}
+
+	bool hasExports() const {
+		bool exports = false;
+		for(uint i = 0, cnt = nativeResources.length; i < cnt; ++i) {
+			if(nativeResources[i].exportedTo !is null) {
+				exports = true;
+				break;
+			}
+		}
+		return exports || primaryResource.exportedTo !is null;
 	}
 
 	Object@ get_nativeResourceDestination(Player& pl, const Object& obj, uint i) {
@@ -957,6 +990,8 @@ tidy class ObjectResources : Component_Resources, Savable {
 		auto@ to = r.exportedTo;
 		if(ExportDisabled != 0)
 			return locale::EXPBLOCK_DISABLED;
+		if(terraforming)
+			return locale::EXPBLOCK_TERRAFORMING;
 		if((to !is null && to.region is null) || obj.region is null)
 			return locale::EXPBLOCK_DEEPSPACE;
 		if(!obj.owner.valid) {
@@ -1006,6 +1041,10 @@ tidy class ObjectResources : Component_Resources, Savable {
 			if(r.usable)
 				obj.removeAvailableResource(obj, r.id, wasManual);
 		}
+		// remove all blockades, since res could be used locally
+		auto@ status = getStatusType("BlockadedExport");
+		if(status !is null && obj.hasStatuses && obj.hasStatusEffect(status.id))
+			obj.removeStatusInstanceOfType(status.id);
 
 		//Add to our new export
 		if(to !is null) {
@@ -1037,7 +1076,21 @@ tidy class ObjectResources : Component_Resources, Savable {
 			@r.exportedTo = null;
 			path.clear();
 		}
-
+		{
+			Lock lock(civLock);
+			for(uint i = 0, cnt = civilians.length; i < cnt; ++i) {
+				Civilian@ civ = civilians[i];
+				if(civ is null)
+					continue;
+				if(r.exportedTo !is null) {
+					civ.pathTo(r.exportedTo);
+					civ.name = r.exportedTo.name;
+				} else {
+					civ.pathTo(obj);
+					civ.name = obj.name;
+				}
+			}
+		}
 		//Check resource enabled state
 		checkResources(obj);
 		++ResourceModId;
@@ -1417,7 +1470,7 @@ tidy class ObjectResources : Component_Resources, Savable {
 			NativeResource@ r = nativeResources[i];
 			//Check usability
 			bool prev = r.usable;
-			r.usable = resourcesEnabled && ResourceLevel >= r.type.level
+			r.usable = resourcesEnabled && ResourceLevel >= r.type.level && !blockaded
 				&& r.disabled == 0 && (!terraforming || r.type.artificial);
 			r.efficiency = obj.resourceEfficiency;
 			
@@ -1760,12 +1813,30 @@ tidy class ObjectResources : Component_Resources, Savable {
 				r.type.onTick(obj, r, time);
 		}
 
+		{
+			Lock lock(civLock);
+			for(int i = civilians.length-1; i >= 0; i--) {
+				if(civilians[i] is null || !civilians[i].valid) {
+					civilians.removeAt(i);
+				}
+			}
+		}
+		// are we blockaded?
+		if(obj.hasStatuses) {
+			auto@ status = getStatusType("BlockadedExport");
+			if(status !is null) {
+				if(!hasExports())
+					obj.removeStatusInstanceOfType(status.id);
+				blockaded = obj.hasStatusEffect(status.id);
+			}
+		}
 		//Deal with civilian trade
 		civilianTimer += time;
 	}
 
 	void _writeRes(Message& msg) {
 		msg << terraforming;
+		msg << blockaded;
 		msg << float(resVanishBonus);
 		availableResources.write(msg);
 

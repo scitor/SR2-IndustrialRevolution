@@ -87,6 +87,7 @@ server:
 	void startTerraform();
 	void stopTerraform();
 	void terraformTo(uint resId);
+	void setBlockadedStatus(bool status = true);
 	void modResourceEfficiencyBonus(double amt);
 	void modResourceVanishBonus(double amt);
 	void bumpResourceModId();
@@ -109,8 +110,8 @@ server:
 	void writeResources(Message& msg) const;
 	void resourcesPostLoad();
 
-	safe Civilian@ getAssignedCivilian();
-	void setAssignedCivilian(Civilian@ civ);
+	safe Civilian@ getCustomsOffice();
+	void setCustomsOffice(Civilian@ cOffice);
 	safe double getCivilianTimer();
 	void setCivilianTimer(double time);
 
