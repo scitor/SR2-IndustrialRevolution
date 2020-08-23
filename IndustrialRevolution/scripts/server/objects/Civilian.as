@@ -56,7 +56,7 @@ tidy class CivilianScript {
 		msg >> prevRegion;
 		msg >> nextRegion;
 		msg >> moveId;
-		if(file >= SV_0164_IR) {
+		if(msg >= SV_0164_IR) {
 			msg >> navState;
 			msg >> navStateMoved;
 			msg >> moveTargetObj;
