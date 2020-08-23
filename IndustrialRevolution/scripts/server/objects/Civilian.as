@@ -56,11 +56,14 @@ tidy class CivilianScript {
 		msg >> prevRegion;
 		msg >> nextRegion;
 		msg >> moveId;
-		msg >> navState;
-		msg >> navStateMoved;
-		msg >> moveTargetObj;
-		msg >> moveTargetPos;
-		msg >> mainRun;
+		if(file >= SV_0164_IR) {
+			msg >> navState;
+			msg >> navStateMoved;
+			msg >> moveTargetObj;
+			msg >> moveTargetPos;
+		} else
+			msg.readBit(); // was leavingRegion
+		msg >> mainRun; // was pickedUp
 		msg >> Health;
 		msg >> stepCount;
 		msg >> income;

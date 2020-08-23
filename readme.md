@@ -4,9 +4,11 @@ _A mod for Star Ruler 2_
 ![logo](IndustrialRevolution/logo.png "")
 
 This mod makes civilian transport ships more important.
+
 (... and more industrial / eco stuff planned)
 
 Version: 0.1-testing
+
 **Depends on having the SR2-Community-Patch installed (not activated)**
 
 # What's different? (summary)
@@ -26,6 +28,10 @@ Version: 0.1-testing
 - Improved performance / code of trade ship navigation (didn't benchmark but it feels like quite a bit)
 
 # Details
+- each trade ship or station can hold one resource type and has a cargo depending on its size (currently 50% in IR of its size are cargo space, 100% in vanilla)
+- each resource has a defined worth, which is then multiplied by the cargo amount and set as the ships worth.
+- ships/stations do earn 10% of their cargo worth each cycle (
+ 
 ## New Trade Ship / Station mechanic
 
 - A trade ship spawns and travels the actual route for every resource a planet / asteroid is exporting, every 3 minutes
@@ -38,9 +44,10 @@ Version: 0.1-testing
 - Trade ships have an indicator for their status, being either on their `main run`, or `trading`. (icons in the popup)
 - Main run meaning transporting their actual resource to the designated planet. Trade run starts after this is complete.
 - Trade ships have a chance to go to a trade station before continuing their journey, to `sell` their resource.
-  `Selling` is essentially just setting that resource on a station, depending on a chance comparing their respective values.
-  In essence: _the more relative value a resource has, the more likely it is to be `sold`, the exact formula can be seen in [Civilian.as](IndustrialRevolution\scripts\server\objects\Civilian.as#L566).
-  Since income depends on the resource worth, higher value resources in cargo will generate more income over time.
+  `Selling` just means replacing that resource in a stations cargo, depending on a chance comparing their respective values.
+  In essence: _the more relative value a resource has, the more likely it is to be `sold`_.
+  The code should be easily readable now [Civilian.as](IndustrialRevolution/scripts/server/objects/Civilian.as#L566).
+- Since income depends on the resource worth, higher value resources in cargo will generate more income over time.
 - When on their trade run, ships also `buy` resources from planets, asteroids or stations. (same mechanic)
 
 - \* Planets spawn Customs Offices as soon as they're colonized. Ships generally try to route there first but also can reach the planet directly.
@@ -49,7 +56,7 @@ Version: 0.1-testing
 ## Asteroids
 
 Like planets, resource asteroids also spawn trade ships and can be blockaded. They also accept trade traffic, but don't have customs offices.
-Ore asteroids are planned to work just like resource asteroids, where trade ships will transport discrete amounts of Ore.
+Ore asteroids are planned to work just like resource asteroids, where trade ships will transport actual amounts of ore.
 
 # Changes
 (probably outdated, check commit history)
@@ -77,10 +84,13 @@ Ore asteroids are planned to work just like resource asteroids, where trade ship
     - with shards there would be one main roid per group where a mining base has to be built to start operations (maybe w/ fake ships).
     - like a resource, as soon as you connect it it's available, with a random yield ore/min on the receiving planet (or global)
     - maybe add upgrades (planet buildings or orbitals)
-- ask Dalo about global ore trickery (maybe can port from RS)
-    - add more ore requirements to buildings (easier to get ore)
 - change AI to care for all this (prob no pirates for them or fake ones)
 - add inter-trade-station traffic as tech (for more income, maybe inter-empire as treaty, check treaty code functionality)
-- change "MoveCargoWhenResourceExported" trait to use destroyable ships, with discrete cargo
+- change "OnExportMoveLocalCargo" to use destroyable ships, with discrete cargo (see below for further development)
 - change customs offices to be invul (or super-recharge) as long as there are supports around (so they can't be sniped)
 - try to add new category (or whatever) to let player design it's civilian ships with hexes (miner/trader/hauler/etc), maybe spawn like supports
+- fix heralds disabling path finding globally
+- morph all exportable resources into `Quantum Resources`: meaning a resource connection shouldn't just magically transport their goods, it should actually do it, in packets. With storages on the planets (like warehouses, maybe upgradable), which will run out once a ship doesn't arrive in time. Much like (the forge in SoI) with ore already, buildings/planets should use up those resources and need constant resupply.
+- add the ability to _just transport_ goods, with ships ofc. with storages, planets could be used as hubs to spread res where they're needed most. 
+- change planet requirements to not accept the same resource multiple times, or better only use up one worth of each res only. no more all-apples planets. make other soylents available (esp. the green one looks promising ;) )
+- maybe add real supply chains, where you need `resA0` and `resB0` to produce `resC1` and so on (could escalate quickly)
