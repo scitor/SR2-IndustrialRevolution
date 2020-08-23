@@ -55,6 +55,7 @@ const int CIV_COFFICE_UPKEEP = -10;
 
 const double STATION_MIN_RAD = 5.0;
 const double STATION_MAX_RAD = 10.0;
+const double STATION_SND_RAD = 2.0;
 
 vec2d VEC2_NULL(INFINITY, INFINITY);
 vec3d VEC3_NULL(INFINITY, INFINITY, INFINITY);

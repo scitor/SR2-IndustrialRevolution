@@ -72,7 +72,7 @@ tidy class CivilianScript {
 			@cargoResource = getResource(msg.readIdentifier(SI_Resource));
 		msg >> cargoWorth;
 
-		addAmbientSource(CURRENT_PLAYER, "ambient_station", obj.id, obj.position, STATION_MIN_RAD);
+		addAmbientSource(CURRENT_PLAYER, "ambient_station", obj.id, obj.position, STATION_SND_RAD);
 		makeMesh(obj);
 	}
 
@@ -213,7 +213,7 @@ tidy class CivilianScript {
 			obj.maxAcceleration = ACC_STATION;
 			obj.rotationSpeed = 0.5;
 			obj.stopMoving();
-			addAmbientSource(CURRENT_PLAYER, "ambient_station", obj.id, obj.position, STATION_MIN_RAD);
+			addAmbientSource(CURRENT_PLAYER, "ambient_station", obj.id, obj.position, STATION_SND_RAD);
 		}
 		obj.noCollide = true;
 		makeMesh(obj);
