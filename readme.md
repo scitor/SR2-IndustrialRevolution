@@ -39,8 +39,8 @@ Version: 0.1-testing
 - Main run meaning transporting their actual resource to the designated planet. Trade run starts after this is complete.
 - Trade ships have a chance to go to a trade station before continuing their journey, to `sell` their resource.
   `Selling` is essentially just setting that resource on a station, depending on a chance comparing their respective values.
-  The exact formula can be seen in `server/../Civilian.as` in essence: _the more relative value a resource has, the more likely it is to be `sold`._
-  Since income depends on the resource worth, higher value resources will generate more income over time.
+  In essence: _the more relative value a resource has, the more likely it is to be `sold`, the exact formula can be seen in [Civilian.as](IndustrialRevolution\scripts\server\objects\Civilian.as#L566).
+  Since income depends on the resource worth, higher value resources in cargo will generate more income over time.
 - When on their trade run, ships also `buy` resources from planets, asteroids or stations. (same mechanic)
 
 - \* Planets spawn Customs Offices as soon as they're colonized. Ships generally try to route there first but also can reach the planet directly.
@@ -61,20 +61,19 @@ Ore asteroids are planned to work just like resource asteroids, where trade ship
       old "Blockaded" status still applies to the target planet, if the ship was carrying goods from a trade station (currently disabled)
     - trade ships don't reassign to random planets after delivering inter-system resources anymore.
 - moved trade stations to be at 'exit points' of systems, repurposed back to trading
-- every planet has a "Customs Office" now, will not spawn ships until CO is present
+- every planet has a "Customs Office" now, will spawn ships slower until CO is present
 - civilians (from a foreign empire) are enemies too for AI (Remnants attack Civs now)
 - added Statuses to Asteroids
-- multiple ships per route (1/min/route)
+- multiple ships per route (every 3 or 2min)
 - almost complete restructure of civilian navigation
 - removes blockaded status when a planet/asteroid changes export target.
   (in case its still under siege it will regain status quickly)
 
 ## todo (ideas)
 - handle racism (lol, as in, modifiers for different races since Mechanoid doesn't have that many planets/traffic, First have base mats, etc)
-- add upgrades to customs offices (through planet buildings or orbitals)
-      currently they start MAX size, they could start min and be upgraded in steps
-- rework pirates (smaller, more of them, camping on lanes, interceptable, more stashes, occasional raid)
-- change ore asteroids to use a mining bases like a resource (like OreRate resource)
+- change customs offices to be either tech or built per planet (like normal orbitals)
+- rework pirates (smaller, interceptable, more hideouts, camping on lanes, occasional raid)
+- change ore asteroids to use a mining bases like a resource (like `OreRate` resource)
     - with shards there would be one main roid per group where a mining base has to be built to start operations (maybe w/ fake ships).
     - like a resource, as soon as you connect it it's available, with a random yield ore/min on the receiving planet (or global)
     - maybe add upgrades (planet buildings or orbitals)
