@@ -13,6 +13,8 @@ const double[] RARITY_DISTRIBUTION = {
 	0.70, 0.18, 0.08, 0.04, 0.05, 0.00002, //Level 3
 };
 const int CARGO_WORTH_LEVEL = 10;
+const int CARGO_WORTH_PRESSURE = 5;
+const int CARGO_GOODS_WORTH = 8;
 
 //Various ways excess budget may be exchanged into resources
 enum WelfareMode {
@@ -1367,6 +1369,7 @@ void loadResources(const string& filename) {
 	string key, value;
 	ResourceType@ r;
 	bool advance = true;
+	bool hasLevel = false;
 	while(!advance || file++) {
 		key = file.key;
 		value = file.value;
@@ -1413,8 +1416,7 @@ void loadResources(const string& filename) {
 		}
 		else if(key == "Level") {
 			r.level = toUInt(value);
-			if(r.cargoWorth == 0)
-				r.cargoWorth = (r.level+1) * CARGO_WORTH_LEVEL;
+			hasLevel = true;
 		}
 		else if(key == "Rarity Level") {
 			r.rarityLevel = toInt(value);
@@ -1561,9 +1563,28 @@ void loadResources(const string& filename) {
 			parseLine(line, r, file);
 		}
 	}
-	
-	if(r !is null)
-		addResourceType(r);
+
+	if(r is null)
+		return;
+	if(r.ident == "Microcline")
+		r.cargoWorth = -10; // nasty stuff...
+	else if(r.cargoWorth == 0) {
+		r.cargoWorth = r.rarity * r.rarity * CARGO_WORTH_LEVEL;
+		r.cargoWorth += hasLevel ? ((r.level+1) * CARGO_WORTH_LEVEL) : CARGO_GOODS_WORTH;
+		uint tilePressure = 0;
+		for(uint i = 0; i < TR_COUNT; ++i)
+			tilePressure += r.tilePressure[i];
+		r.cargoWorth += tilePressure * CARGO_WORTH_PRESSURE;
+	}
+	addResourceType(r);
+}
+
+Mutex printed;
+void listResources() {
+	Lock lock(printed);
+	for(uint i = 0, cnt = resources::resources.length; i < cnt; ++i)
+	print(format("$1 $2 $3 $4", i, resources::resources[i].cargoWorth, resources::resources[i].ident, resources::resources[i].name));
+
 }
 
 void preInit() {

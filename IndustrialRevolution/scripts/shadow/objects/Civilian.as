@@ -2,14 +2,13 @@ import regions.regions;
 import resources;
 import civilians;
 
-const double CIV_HEALTH = 25.0;
-
 tidy class CivilianScript {
 	uint type = 0;
 	uint cargoType = 0;
 	const ResourceType@ cargoResource;
 	int cargoWorth = 0;
-	bool pickedUp = false;
+	bool mainRun = true;
+	int income = 0;
 	double Health = 0;
 
 	uint getCivilianType() {
@@ -21,12 +20,10 @@ tidy class CivilianScript {
 	}
 
 	double get_maxHealth(const Civilian& obj) {
-		return CIV_HEALTH * obj.radius;
+		return CIV_RADIUS_HEALTH * obj.radius * obj.owner.ModHP.value;
 	}
 
 	uint getCargoType() {
-		if(cargoType == CT_Resource && !pickedUp)
-			return CT_Goods;
 		return cargoType;
 	}
 
@@ -38,6 +35,14 @@ tidy class CivilianScript {
 
 	int getCargoWorth() {
 		return cargoWorth;
+	}
+
+	bool isMainRun() {
+		return mainRun;
+	}
+
+	int getIncome() {
+		return income;
 	}
 
 	void init(Civilian& obj) {
@@ -73,7 +78,7 @@ tidy class CivilianScript {
 	void _readDelta(Civilian& obj, Message& msg) {
 		cargoType = msg.readSmall();
 		cargoWorth = msg.readSmall();
-		pickedUp = msg.readBit();
+		mainRun = msg.readBit();
 		Health = obj.maxHealth * msg.readFixed();
 		if(msg.readBit()) {
 			uint id = msg.readLimited(getResourceCount()-1);
@@ -82,6 +87,7 @@ tidy class CivilianScript {
 		else {
 			@cargoResource = null;
 		}
+		income = (obj.type == CiT_CustomsOffice) ? CIV_COFFICE_UPKEEP : calcIncomeFromCargoWorth(cargoWorth);
 	}
 
 	void syncInitial(Civilian& obj, Message& msg) {

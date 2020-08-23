@@ -168,7 +168,7 @@ class PirateStatus : StatusHook {
 						vec3d pos = vec3d(randomd(extentMin.x, extentMax.x), 0, randomd(extentMin.z, extentMax.z));
 						pos.y = getClosestSystem(pos).position.y;
 
-						Civilian@ civ = createCivilian(pos, Pirates, CiT_Station, radius=25.0);
+						Civilian@ civ = createCivilian(pos, Pirates, CiT_PirateHoard, radius=25.0);
 						civ.name = locale::PIRATE_HOARD;
 						civ.named = true;
 						civ.setCargoType(CT_Goods);

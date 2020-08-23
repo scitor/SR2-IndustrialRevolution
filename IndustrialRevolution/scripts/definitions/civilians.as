@@ -7,6 +7,7 @@ enum CivilianType {
 	CiT_Freighter,
 	CiT_Station,
 	CiT_CustomsOffice,
+	CiT_PirateHoard,
 };
 
 enum CivilianNavState {
@@ -24,12 +25,14 @@ enum CivilianNavState {
 array<const Model@> CivilianModels = {
 	model::Fighter,
 	model::CommerceStation,
+	model::Research_Station,
 	model::Depot,
 };
 
 array<const Material@> CivilianMaterials = {
 	material::Ship10,
 	material::GenericPBR_CommerceStation,
+	material::GenericPBR_Research_Station,
 	material::GenericPBR_Depot,
 };
 
@@ -37,24 +40,28 @@ array<Sprite> CivilianIcons = {
 	Sprite(spritesheet::HullIcons, 2),
 	Sprite(spritesheet::OrbitalIcons, 0),
 	Sprite(spritesheet::OrbitalIcons, 0),
+	Sprite(spritesheet::OrbitalIcons, 0),
 };
 
-const double CIV_SIZE_MIN = 2.0;
-const double CIV_SIZE_MAX = 5.4;
-const double CIV_SIZE_FREIGHTER = 2.7;
-const double CIV_SIZE_CARAVAN = 5.0;
+const double CIV_SIZE_MERCHANT = 2.0;
+const double CIV_SIZE_CARAVAN = 2.7;
+const double CIV_SIZE_FREIGHTER = 5.0;
+const double CIV_SIZE_TRANSPORTER = 5.4;
 
-const double CIV_RADIUS_WORTH = 1.0;
+const double CIV_RADIUS_WORTH = 0.5;
+const double CIV_RADIUS_HEALTH = 25.0;
 
-const int CIV_COFFICE_INCOME = 10;
-const int CIV_CARAVAN_INCOME = 15;
-const int CIV_STATION_INCOME = 20;
+const int CIV_COFFICE_UPKEEP = -10;
 
 const double STATION_MIN_RAD = 5.0;
 const double STATION_MAX_RAD = 10.0;
 
 vec2d VEC2_NULL(INFINITY, INFINITY);
 vec3d VEC3_NULL(INFINITY, INFINITY, INFINITY);
+
+uint calcIncomeFromCargoWorth(int cargoWorth) {
+	return max(1, int(double(cargoWorth) * 0.1));
+}
 
 const Model@ getCivilianModel(Empire@ owner, uint type, double radius) {
 	if(owner !is null) {
@@ -87,29 +94,67 @@ const Material@ getCivilianMaterial(Empire@ owner, uint type, double radius) {
 }
 
 double randomCivilianFreighterSize() {
-	return sqr(randomd()) * (CIV_SIZE_MAX - CIV_SIZE_MIN) + CIV_SIZE_MIN;
+	uint ra = round(sqr(randomd()) * 3);
+	switch(ra) {
+		case 1:
+			return CIV_SIZE_CARAVAN;
+		case 2:
+			return CIV_SIZE_FREIGHTER;
+		case 3:
+			return CIV_SIZE_TRANSPORTER;
+	}
+	return CIV_SIZE_MERCHANT;
 }
 
 string getCivilianName(uint type, double radius) {
 	if(type == CiT_Freighter) {
-		if(radius >= CIV_SIZE_CARAVAN)
-			return locale::CIVILIAN_CARAVAN;
-		else if(radius >= CIV_SIZE_FREIGHTER)
+		if(radius > CIV_SIZE_FREIGHTER)
+			return locale::CIVILIAN_TRANSPORTER;
+		else if(radius > CIV_SIZE_CARAVAN)
 			return locale::CIVILIAN_FREIGHTER;
+		else if(radius > CIV_SIZE_MERCHANT)
+			return locale::CIVILIAN_CARAVAN;
 		return locale::CIVILIAN_MERCHANT;
 	}
 	else if(type == CiT_Station) {
 		return locale::CIVILIAN_STATION;
+	}
+	else if(type == CiT_CustomsOffice) {
+		return locale::CIVILIAN_CUSTOMS_OFFICE;
+	}
+	else if(type == CiT_PirateHoard) {
+		return locale::CIVILIAN_CUSTOMS_OFFICE;
 	}
 	return locale::CIVILIAN;
 }
 
 Sprite getCivilianIcon(Empire@ owner, uint type, double radius) {
 	if(type == CiT_Freighter) {
-		if(radius >= CIV_SIZE_CARAVAN)
+		if(radius > CIV_SIZE_FREIGHTER)
+			return Sprite(spritesheet::HullIcons, 5);
+		else if(radius > CIV_SIZE_CARAVAN)
 			return Sprite(spritesheet::HullIcons, 4);
-		else if(radius >= CIV_SIZE_FREIGHTER)
+		else if(radius > CIV_SIZE_MERCHANT)
 			return Sprite(spritesheet::HullIcons, 3);
+		return Sprite(spritesheet::HullIcons, 2);
 	}
 	return CivilianIcons[type];
+}
+
+NameGenerator stationNames;
+bool stationNamesInitialized = false;
+string getRandomStationName() {
+	if(!stationNamesInitialized) {
+		stationNamesInitialized = true;
+		stationNames.read("data/station_names.txt");
+		stationNames.useGeneration = false;
+	}
+	string randName = stationNames.generate();
+
+	const array<string> grAlpha = {"Alpha","Beta","Gamma","Delta","Epsilon","Zeta","Eta","Theta","Iota","Kappa",
+		"Lambda","Mu","Nu","Xi","Omicron","Pi","Rho","Sigma","Tau","Upsilon","Phi","Chi","Psi","Omega"};
+	if(randomi(0,9)<1)
+		randName = format("$1 $2", randName, grAlpha[randomi(0, grAlpha.length-1)]);
+
+	return randName;
 }

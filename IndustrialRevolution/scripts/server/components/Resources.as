@@ -592,6 +592,10 @@ tidy class ObjectResources : Component_Resources, Savable {
 		checkResources(obj, true);
 	}
 
+	bool isBlockaded() {
+		return blockaded;
+	}
+
 	void removeResource(Object& obj, int id, bool wasManual = false) {
 		NativeResource@ r;
 		uint index = 0;
@@ -1755,6 +1759,7 @@ tidy class ObjectResources : Component_Resources, Savable {
 		else
 			ResourceCheck -= time;
 
+	//listResources();
 		//Vanish any native resources
 		for(uint i = 0, cnt = nativeResources.length; i < cnt; ++i) {
 			Resource@ r = nativeResources[i];

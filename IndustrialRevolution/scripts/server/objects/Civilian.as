@@ -8,11 +8,9 @@ import statuses;
 const double ACC_STATION = 0.1;
 const double ACC_SYSTEM = 2.0;
 const double ACC_INTERSYSTEM = 65.0;
-const int GOODS_WORTH = 8;
-const double CIV_HEALTH = 25.0;
 const double CIV_REPAIR = 1.0;
 const double BLOCKADE_TIMER = 3.0 * 60.0;
-const double DEST_RANGE = 50.0;
+const double DEST_RANGE = 20.0;
 
 tidy class CivilianScript {
 	uint type = 0;
@@ -28,7 +26,7 @@ tidy class CivilianScript {
 	int moveId = -1;
 	bool awaitingIntermediate = false;
 	bool mainRun = true;
-	double Health = CIV_HEALTH;
+	double Health = CIV_RADIUS_HEALTH;
 	int stepCount = 0;
 	int income = 0;
 	bool delta = false;
@@ -42,7 +40,7 @@ tidy class CivilianScript {
 	}
 
 	double get_maxHealth(const Civilian& obj) {
-		return CIV_HEALTH * obj.radius * obj.owner.ModHP.value;
+		return CIV_RADIUS_HEALTH * obj.radius * obj.owner.ModHP.value;
 	}
 
 	void load(Civilian& obj, SaveFile& msg) {
@@ -124,22 +122,43 @@ tidy class CivilianScript {
 		return cargoWorth;
 	}
 
+	bool isMainRun() {
+		return mainRun;
+	}
+
+	int getIncome() {
+		return income;
+	}
+
 	void setCargoType(Civilian& obj, uint type) {
 		cargoType = type;
 		@cargoResource = null;
 		if(type == CT_Goods)
-			cargoWorth = GOODS_WORTH * obj.radius * CIV_RADIUS_WORTH;
-		delta = true;
+			cargoWorth = (CARGO_GOODS_WORTH * obj.radius * CIV_RADIUS_WORTH) / (1.0+double(config::CIVILIAN_TRADE_MULT-1)/10); // 95-130%
+
+		modIncomeFromCargoWorth(obj);
 	}
 
 	void setCargoResource(Civilian& obj, uint id) {
-		cargoType = CT_Resource;
 		@cargoResource = getResource(id);
-		if(cargoResource !is null && cargoResource.cargoWorth > 0)
-			cargoWorth = cargoResource.cargoWorth * obj.radius * CIV_RADIUS_WORTH;
-		if(cargoWorth < 1) // c'mon it's worth something
-			cargoWorth = GOODS_WORTH * obj.radius * CIV_RADIUS_WORTH;
-		delta = true;
+		if(cargoResource is null) {
+			obj.setCargoType(CT_Goods);
+			return;
+		}
+		cargoType = CT_Resource;
+		cargoWorth = (cargoResource.cargoWorth * obj.radius * CIV_RADIUS_WORTH) / (1.0+double(config::CIVILIAN_TRADE_MULT-1)/10);
+
+		modIncomeFromCargoWorth(obj);
+	}
+
+	void modIncomeFromCargoWorth(Civilian& obj) {
+		if(obj.getCivilianType() == CiT_CustomsOffice)
+			obj.modIncome(CIV_COFFICE_UPKEEP - income);
+		else if(obj.getCivilianType() != CiT_PirateHoard)
+			// add 10% of transported cargo worth as income
+			obj.modIncome(calcIncomeFromCargoWorth(cargoWorth) - income);
+		else
+			delta = true;
 	}
 
 	void modCargoWorth(int diff) {
@@ -175,6 +194,7 @@ tidy class CivilianScript {
 		if(obj.owner !is null && obj.owner.valid)
 			obj.owner.modTotalBudget(+mod, MoT_Trade);
 		income += mod;
+		delta = true;
 	}
 
 	void postInit(Civilian& obj) {
@@ -189,8 +209,10 @@ tidy class CivilianScript {
 			obj.activateMover();
 			obj.maxAcceleration = ACC_STATION;
 			obj.rotationSpeed = 0.5;
+			obj.stopMoving();
 			addAmbientSource(CURRENT_PLAYER, "ambient_station", obj.id, obj.position, STATION_MIN_RAD);
 		}
+		obj.noCollide = true;
 		makeMesh(obj);
 		Health = get_maxHealth(obj);
 		delta = true;
@@ -223,26 +245,23 @@ tidy class CivilianScript {
 		if((obj.inCombat || obj.engaged) && !game_ending) {
 			playParticleSystem("ShipExplosion", obj.position, obj.rotation, obj.radius, obj.visibleMask);
 		}
-		else if(type == CiT_Freighter) {
-			if(cargoResource !is null) {
-				for(uint i = 0, cnt = cargoResource.hooks.length; i < cnt; ++i)
-					cargoResource.hooks[i].onTradeDestroy(obj, origin, pathTarget, null);
-			}
+		if(type == CiT_Freighter && cargoResource !is null && mainRun) {
+			for(uint i = 0, cnt = cargoResource.hooks.length; i < cnt; ++i)
+				cargoResource.hooks[i].onTradeDestroy(obj, origin, pathTarget, null);
 		}
 		// did we have an origin? set blockaded
-		if(origin !is null && origin.hasStatuses && origin.owner is obj.owner) {
-			auto@ status = getStatusType("BlockadedExport");
-			if(status !is null && !origin.hasStatusEffect(status.id)) {
-				origin.addStatus(status.id);
-			}
+		if(origin !is null) {
 			origin.removeAssignedCivilian(obj);
-		} else if(obj.getCargoType() == CT_Goods && pathTarget !is null && pathTarget.isPlanet && pathTarget.owner is obj.owner) {
+			auto@ status = getStatusType("BlockadedExport");
+			if(status !is null && origin.hasStatuses && origin.owner is obj.owner && !origin.hasStatusEffect(status.id))
+				origin.addStatus(status.id);
+		} else if(!mainRun && pathTarget !is null && pathTarget.isPlanet && pathTarget.owner is obj.owner) {
 			auto@ status = getStatusType("Blockaded");
 			if(status !is null)
 				pathTarget.addStatus(status.id, timer=BLOCKADE_TIMER);
 		}
 		if(type != CiT_Freighter)
-			removeAmbientSource(obj.id);
+			removeAmbientSource(CURRENT_PLAYER, obj.id);
 		leaveRegion(obj);
 		if(obj.owner !is null && obj.owner.valid) {
 			if(type == CiT_Freighter)
@@ -256,8 +275,6 @@ tidy class CivilianScript {
 		if(origin !is null && origin.hasResources)
 			origin.removeAssignedCivilian(obj);
 
-		//obj.name = getCivilianName(obj.type, obj.radius);
-		mainRun = false;
 		Region@ region = obj.region;
 		if(region !is null) {
 			@origin = null;
@@ -315,7 +332,7 @@ tidy class CivilianScript {
 	}
 
 	double getInertiaFromSize(Civilian& obj) {
-		return 1.0 - (obj.radius - CIV_SIZE_MIN) / CIV_SIZE_MAX;
+		return 1.0 - (obj.radius - CIV_SIZE_MERCHANT) / CIV_SIZE_TRANSPORTER;
 	}
 
 	void quarterImpulse(Civilian& obj) {
@@ -332,6 +349,7 @@ tidy class CivilianScript {
 		if(obj.hasMover)
 			obj.moverTick(time);
 
+	//obj.name = obj.id;
 		//Tick occasional stuff
 		timer -= float(time);
 		if(timer <= 0.f) {
@@ -344,16 +362,14 @@ tidy class CivilianScript {
 			Health = min(Health + (CIV_REPAIR * time * obj.radius), maxHP);
 			delta = true;
 		}
+
 		//waiting for or being a trade station
-		if(awaitingIntermediate)
-			return 0.25;
-		if(getCivilianType() == CiT_Station || getCivilianType() == CiT_CustomsOffice) {
-			if (origin !is null && origin.owner !is obj.owner) {
-				obj.inCombat = true;
-				obj.destroy();
-			}
+		if(getCivilianType() != CiT_Freighter) {
+			tickStation(obj);
 			return 0.4;
 		}
+		if(awaitingIntermediate)
+			return 0.25; // waiting for RegionObjects to come back with result...
 		if(pathTarget is null) {
 			freeCivilian(obj);
 			return 0.4;
@@ -393,9 +409,14 @@ tidy class CivilianScript {
 						break;
 					}
 					@nextRegion = path.pathNode[1].object;
-					navState = CiNS_PathToIntermediate;
-				} else // we have a next region. move to exit
-					navState = CiNS_PathToExit;
+					if(randomi(0,9)<3) {
+						// (1/3 chance to) check out a local trade station first
+						navState = CiNS_PathToIntermediate;
+						break;
+					}
+				}
+				// we have a next region. move to exit
+				navState = CiNS_PathToExit;
 				break;
 			}
 			case CiNS_PathToIntermediate: { // check for intermediate
@@ -411,14 +432,16 @@ tidy class CivilianScript {
 						if(nextRegion !is null)
 							pos = curRegion.position + (nextRegion.position - curRegion.position).normalized(curRegion.radius);
 						curRegion.getTradeStation(obj, obj.owner, pos);
-					} else if(!mainRun)
+					} else if(!mainRun) // since we dont buy on our first route, we dont need planets. they dont buy either
 						curRegion.getTradePlanet(obj, obj.owner);
 					else {
 						awaitingIntermediate = false;
-						navState = CiNS_NeedPath;
+						navState = CiNS_PathToExit;
 						break;
 					}
 				} else {
+					//printForID(obj, 872415443, format("has intermediate $1", intermediate.position is null ? 0 : 1));
+					obj.name = intermediate.name;
 					if (intermediate.hasResources && intermediate.getCustomsOffice() !is null)
 						setMoveTarget(intermediate.getCustomsOffice(), CiNS_ArrivedAtIntermediate);
 					else
@@ -434,8 +457,8 @@ tidy class CivilianScript {
 					break;
 				}
 				vec3d leaveDest;
-				leaveDest = curRegion.position + (nextRegion.position - curRegion.position).normalized(curRegion.radius * 0.85);
-				leaveDest += random3d(DEST_RANGE);
+				vec3d offset = (nextRegion.position - curRegion.position).normalized(curRegion.radius * 0.85);
+				leaveDest = curRegion.position + quaterniond_fromAxisAngle(vec3d_up(), -pi * 0.01) * offset;
 				leaveDest.y = curRegion.position.y - STATION_MAX_RAD;
 				setMoveTarget(leaveDest, CiNS_ArrivedAtExit);
 				quarterImpulse(obj);
@@ -447,25 +470,23 @@ tidy class CivilianScript {
 					break;
 				}
 				vec3d enterDest;
-				enterDest = nextRegion.position + (curRegion.position - nextRegion.position).normalized(nextRegion.radius * 0.85);
-				enterDest += random3d(DEST_RANGE);
+				vec3d offset = (curRegion.position - nextRegion.position).normalized(nextRegion.radius * 0.85);
+				enterDest = nextRegion.position + quaterniond_fromAxisAngle(vec3d_up(), pi * 0.01) * offset;
 				enterDest.y = nextRegion.position.y - STATION_MAX_RAD;
+				enterDest += random3d(DEST_RANGE);
 				fullImpulse(obj);
 				setMoveTarget(enterDest, CiNS_ArrivedAtRegion);
 				break;
 			}
 			case CiNS_MovingToTarget: { // in current system
-				if(moveTargetObj !is null && int(moveTargetObj.position.x) == 0 && int(moveTargetObj.position.z) == 0)
-					@moveTargetObj = null; // question to experts: why is pos empty after load?
-
-				if (moveTargetObj is null && moveTargetPos == VEC3_NULL) {
+				if ((moveTargetObj is null || !moveTargetObj.valid) && moveTargetPos == VEC3_NULL) {
+					//print("no move target");
 					navState = CiNS_NeedPath;
 					@nextRegion = null;
 					break;
 				}
-
-				if(moveTargetObj !is null && obj.moveTo(moveTargetObj, moveId, distance=20.0, enterOrbit=false) ||
-				   moveTargetPos != VEC3_NULL && obj.moveTo(moveTargetPos, moveId, enterOrbit=false))
+				if(moveTargetObj !is null && (obj.moveTo(moveTargetObj, moveId, distance=DEST_RANGE, enterOrbit=false)) ||
+				   moveTargetPos != VEC3_NULL && (obj.moveTo(moveTargetPos, moveId, enterOrbit=false) || moveTargetPos.distanceToSQ(obj.position) < obj.radius * DEST_RANGE))
 				{
 					moveId = -1;
 					@moveTargetObj = null;
@@ -476,8 +497,10 @@ tidy class CivilianScript {
 			}
 			case CiNS_ArrivedAtIntermediate: {
 				// do trade stuff with station
-				handleTradeWithIntermediate(obj);
+				handleTradeWithObject(obj, intermediate);
 				@intermediate = null;
+				if(pathTarget !is null)
+					obj.name = pathTarget.name;
 				navState = CiNS_PathToExit;
 				break;
 			}
@@ -527,8 +550,12 @@ tidy class CivilianScript {
 						}
 					}
 					// start trading with the planets resource
-					obj.setCargoResource(pathTarget.primaryResourceType);
+					const ResourceType@ rt = getResource(pathTarget.primaryResourceType);
+					if(rt !is null && rt.exportable)
+						obj.setCargoResource(pathTarget.primaryResourceType);
+					mainRun = false;
 				}
+				handleTradeWithObject(obj, pathTarget);
 				freeCivilian(obj);
 				break;
 			}
@@ -536,35 +563,37 @@ tidy class CivilianScript {
 		return 0.2;
 	}
 
-	// do trade stuff with station
-	void handleTradeWithIntermediate(Civilian& obj) {
-		Civilian@ tradeStation = cast<Civilian>(intermediate);
+	void handleTradeWithObject(Civilian& obj, Object@ tradeObj) {
+		// trade stations
+		Civilian@ tradeStation = cast<Civilian>(tradeObj);
 		if(tradeStation !is null) {
-			// we sell good stuff
-			if(cargoType == CT_Resource) {
-				// Goods stations will always buy
-				if(tradeStation.getCargoType() == CT_Goods)
+			bool soldSomething = false;
+			if(cargoType == CT_Resource && tradeStation.getCivilianType() != CiT_CustomsOffice) {
+				// we sell good stuff
+				if(tradeStation.getCargoType() == CT_Goods) // Goods stations will always buy
 					tradeStation.setCargoResource(obj.getCargoResource());
-				else {
+				else if (obj.getCargoResource() != tradeStation.getCargoResource()) {
 					const ResourceType@ stationRes = getResource(tradeStation.getCargoResource());
 					if(stationRes !is null) {
-						double cWorth = stationRes.cargoWorth > 0 ? stationRes.cargoWorth : GOODS_WORTH;
+						double cWorth = stationRes.cargoWorth > 0 ? stationRes.cargoWorth : CARGO_GOODS_WORTH;
 						// 20% chance to 'sell' if resource is worth the same
 						double chance = getCargoWorth() / cWorth / 5;
-						if(randomd(0,1) < chance)
+						if(randomd(0,1) < chance) {
+							soldSomething = true;
 							tradeStation.setCargoResource(obj.getCargoResource());
 							// they bought our stuff, now get the heck outta here
+						}
 					}
 				}
 			}
-			// lets check the market
-			if(tradeStation.getCargoType() == CT_Resource) {
+			if(!mainRun && !soldSomething && tradeStation.getCargoType() == CT_Resource) {
+				// lets check the market
 				if(cargoType == CT_Goods) // bought
 					obj.setCargoResource(tradeStation.getCargoResource());
-				else if(!mainRun) {
+				else if (obj.getCargoResource() != tradeStation.getCargoResource()) {
 					const ResourceType@ stationRes = getResource(tradeStation.getCargoResource());
 					if(stationRes !is null) {
-						double cWorth = stationRes.cargoWorth > 0 ? stationRes.cargoWorth : GOODS_WORTH;
+						double cWorth = stationRes.cargoWorth > 0 ? stationRes.cargoWorth : CARGO_GOODS_WORTH;
 						// 20% chance to 'buy' if resource is worth the same
 						double chance = cWorth / getCargoWorth() / 5;
 						if(randomd(0,1) < chance)
@@ -574,20 +603,57 @@ tidy class CivilianScript {
 			}
 			return;
 		}
-		Planet@ tradePlanet = cast<Planet>(intermediate);
-		if(tradePlanet !is null) {
-			// lets check the market
-			if(cargoType == CT_Goods) // bought
+		if(mainRun)
+			return;
+		// buy from planets
+		Planet@ tradePlanet = cast<Planet>(tradeObj);
+		if(tradePlanet !is null && getResource(tradePlanet.primaryResourceType) !is null) {
+			if(cargoType == CT_Goods)
 				obj.setCargoResource(tradePlanet.primaryResourceType);
-			else if(!mainRun) {
-				const ResourceType@ stationRes = getResource(tradePlanet.primaryResourceType);
-				if(stationRes !is null) {
-					double cWorth = stationRes.cargoWorth > 0 ? stationRes.cargoWorth : GOODS_WORTH;
-					// 20% chance to 'buy' if resource is worth the same
+			else if (obj.getCargoResource() != tradePlanet.primaryResourceType) {
+				const ResourceType@ planetRes = getResource(tradePlanet.primaryResourceType);
+				if(planetRes !is null && planetRes.exportable) {
+					double cWorth = planetRes.cargoWorth > 0 ? planetRes.cargoWorth : CARGO_GOODS_WORTH;
 					double chance = cWorth / getCargoWorth() / 5;
 					if(randomd(0,1) < chance)
 						obj.setCargoResource(tradePlanet.primaryResourceType);
 				}
+			}
+			return;
+		}
+		// buy from asteroids
+		Asteroid@ tradeAsteroid = cast<Asteroid>(tradeObj);
+		if(tradeAsteroid !is null && getResource(tradeAsteroid.primaryResourceType) !is null) {
+			if(cargoType == CT_Goods)
+				obj.setCargoResource(tradeAsteroid.primaryResourceType);
+			else if (obj.getCargoResource() != tradeAsteroid.primaryResourceType) {
+				const ResourceType@ asteroidRes = getResource(tradeAsteroid.primaryResourceType);
+				if(asteroidRes !is null) {
+					double cWorth = asteroidRes.cargoWorth > 0 ? asteroidRes.cargoWorth : CARGO_GOODS_WORTH;
+					double chance = cWorth / getCargoWorth() / 5;
+					if(randomd(0,1) < chance)
+						obj.setCargoResource(tradeAsteroid.primaryResourceType);
+				}
+			}
+			return;
+		}
+	}
+
+	void tickStation(Civilian& obj) {
+		// simulate rotation
+		if(origin is null)
+			return;
+		if(origin.owner !is obj.owner) {
+			// nothing to see here
+			obj.inCombat = true;
+			obj.destroy();
+		} else if(getCivilianType() == CiT_CustomsOffice) {
+			// handle terraforming
+			if (origin.primaryResourceType != getCargoResource()) {
+				if (origin.primaryResourceType == uint(-1))
+					obj.setCargoType(CT_Goods);
+				else
+					obj.setCargoResource(origin.primaryResourceType);
 			}
 		}
 	}
@@ -638,7 +704,7 @@ tidy class CivilianScript {
 	void _writeDelta(const Civilian& obj, Message& msg) {
 		msg.writeSmall(cargoType);
 		msg.writeSmall(cargoWorth);
-		msg.writeBit(true);
+		msg.writeBit(mainRun);
 		msg.writeFixed(obj.health/obj.maxHealth);
 		if(cargoResource !is null) {
 			msg.write1();

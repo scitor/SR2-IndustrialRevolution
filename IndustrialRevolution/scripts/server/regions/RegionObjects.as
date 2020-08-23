@@ -1142,7 +1142,7 @@ tidy class RegionObjects : Component_RegionObjects, Savable {
 		double bestDist = INFINITY;
 		for(uint i = 0, cnt = tradeStations.length;  i < cnt; ++i) {
 			auto@ station = tradeStations[i];
-			if(station.owner !is owner)
+			if(station.owner !is owner || !station.valid)
 				continue;
 			double d = position.distanceToSQ(station.position);
 			if(d < bestDist) {
@@ -1175,8 +1175,6 @@ tidy class RegionObjects : Component_RegionObjects, Savable {
 	void updateCivilianTrade(Object& region) {
 		//print("updateCivilianTrade");
 		//Make sure each planet has a civilian ship assigned
-		if(config::ENABLE_CIVILIAN_TRADE == 0.0 || config::CIVILIAN_TRADE_MULT == 0.0)
-			return;
 
 		int stationLevels = 0;
 		for(uint i = 0; i < planetList.length; ++i) {
@@ -1186,33 +1184,28 @@ tidy class RegionObjects : Component_RegionObjects, Savable {
 			if(owner is null || !owner.valid)
 				continue;
 			double timer = pl.getCivilianTimer();
-			if(timer < CIV_TIMER / config::CIVILIAN_TRADE_MULT)
+			if(timer < CIV_TIMER)
 				continue;
 			pl.setCivilianTimer(0.0);
 
 			Civilian@ customsOffice = pl.getCustomsOffice();
 			if(customsOffice is null) {
 				vec3d pos = pl.position;
-				//vec2d orbit = random2d(pl.OrbitSize / 2);
-				//pos.x += orbit.x;
-				//pos.z += orbit.y;
 				pos.y += pl.radius - STATION_MAX_RAD*3;
 				Civilian@ customsOffice = createCivilian(pos, owner, CiT_CustomsOffice, radius=STATION_MIN_RAD);
-				customsOffice.modIncome(+CIV_COFFICE_INCOME);
 				customsOffice.setOrigin(pl);
 				customsOffice.stopMoving();
-				customsOffice.name = format(locale::CIVILIAN_CUSTOMS_OFFICE, pl.name);
+				customsOffice.name = pl.name;
 				if(pl.primaryResourceType != uint(-1))
 					customsOffice.setCargoResource(pl.primaryResourceType);
 				else
 					customsOffice.setCargoType(CT_Goods);
 				pl.setCustomsOffice(customsOffice);
-				continue;
-			} else if (!customsOffice.valid)
+			} else if(!customsOffice.valid)
 				@customsOffice = null;
 			else {
-				// with customs office half the time for trade ships
-				pl.setCivilianTimer(CIV_TIMER/config::CIVILIAN_TRADE_MULT/2);
+				// spawn ships 33% faster with customs office
+				pl.setCivilianTimer(CIV_TIMER*2/3);
 				spawnPos = customsOffice.position;
 			}
 
@@ -1226,10 +1219,11 @@ tidy class RegionObjects : Component_RegionObjects, Savable {
 				if(destination is null || (destination.owner !is null && destination.owner.id != owner.id))
 					continue;
 
+				if(!pl.nativeResourceUsable[i] && !pl.isBlockaded()) // dont spawn for unusable unless blockaded
+					continue;
+
 				Civilian@ civ = createCivilian(spawnPos, owner, type=CiT_Freighter,
 					radius = randomCivilianFreighterSize());
-				if(civ.radius >= CIV_SIZE_CARAVAN)
-					civ.modIncome(+(CIV_CARAVAN_INCOME/config::CIVILIAN_TRADE_MULT));
 				civ.pathTo(destination);
 				civ.name = destination.name;
 				civ.setOrigin(pl);
@@ -1245,7 +1239,7 @@ tidy class RegionObjects : Component_RegionObjects, Savable {
 				continue;
 
 			double timer = as.getCivilianTimer();
-			if(timer < CIV_TIMER / config::CIVILIAN_TRADE_MULT)
+			if(timer < CIV_TIMER)
 				continue;
 
 			Object@ destination = as.getNativeResourceDestination(owner, 0);
@@ -1254,8 +1248,6 @@ tidy class RegionObjects : Component_RegionObjects, Savable {
 
 			Civilian@ civ = createCivilian(as.position, owner, type=CiT_Freighter,
 					radius = randomCivilianFreighterSize());
-			if(civ.radius >= CIV_SIZE_CARAVAN)
-				civ.modIncome(+(CIV_CARAVAN_INCOME/config::CIVILIAN_TRADE_MULT));
 			civ.setCargoResource(as.nativeResourceType[0]);
 			civ.pathTo(destination);
 			civ.name = destination.name;
@@ -1301,21 +1293,24 @@ tidy class RegionObjects : Component_RegionObjects, Savable {
 					}
 				}
 				else if(stationCount < buildStations) {
-					// build trade station on trade connection exits
-					const SystemDesc@ other = getSystem(system.adjacent[(system.object.id + stationCount) % system.adjacent.length]);
-					vec3d pos = system.position + (other.object.position - system.position).normalized(system.radius * randomd(0.7, 0.8));
-					vec2d offset = random2d(STATION_MAX_RAD * 3);
-					pos.x += offset.x;
-					pos.z += offset.y;
-					pos.y = system.position.y - STATION_MAX_RAD * 2;
+					vec3d pos = system.position + random3d(system.radius * 0.85);
+					uint tries = 10;
+					do { // build trade station on trade connection exits
+						uint adjSystemId = (system.object.id + stationCount) % system.adjacent.length;
+						const SystemDesc@ other = getSystem(system.adjacent[adjSystemId]);
+						vec3d offset = (other.object.position - system.position)
+							.normalized(system.radius * 0.7 - STATION_MAX_RAD * 2 * randomi(0,4)); // 5 cols
+						pos = system.position + quaterniond_fromAxisAngle(vec3d_up(), pi * (double(randomi(0,4)-2)/100)) * offset; // 5 rows
+						pos.y = system.position.y - STATION_MAX_RAD * 2 - sin(pos.length) * STATION_MAX_RAD; // height variation
+					} while (getStationInRange(pos, STATION_MAX_RAD*2) !is null && tries-->0);
+
 					// spawn fatter stations the more we have
-					double bonus = 0.0;
-					if(system.adjacent.length>0)
-						bonus = floor(stationCount/system.adjacent.length) * STATION_MIN_RAD;
-					Civilian@ civ = createCivilian(pos, emp, CiT_Station, radius=randomd(STATION_MIN_RAD, STATION_MAX_RAD)+bonus);
-					civ.modIncome(+(CIV_STATION_INCOME/config::CIVILIAN_TRADE_MULT));
-					civ.setCargoType(CT_Goods);
-					tradeStations.insertLast(civ);
+					double stationSize = randomi(0, STATION_MAX_RAD-STATION_MIN_RAD) + STATION_MIN_RAD;
+					uint regionStationLevel = min(5, system.adjacent.length > 0 ? int(stationCount/system.adjacent.length) : 0);
+					Civilian@ station = createCivilian(pos, emp, CiT_Station, radius = stationSize + regionStationLevel);
+					station.setCargoType(CT_Goods);
+					station.name = getRandomStationName();
+					tradeStations.insertLast(station);
 					stationCount++;
 				}
 				if(stationCount == 0)
@@ -1363,17 +1358,18 @@ tidy class RegionObjects : Component_RegionObjects, Savable {
 		}
 		//Calculate maximum amount of civilians
 		int plCount = civOwner.TotalPlanets.value;
-		int perPlanet = 4; // avg. most need one or two, some need 8+
+		int perPlanet = 3; // avg. most need one or two, some need 8+, depends on map and interconnect style
+		perPlanet += config::CIVILIAN_TRADE_MULT; // make that 3-6
 		int civLimit = 0;
-		int plLimit = 100 * perPlanet * config::CIVILIAN_TRADE_MULT;
+		int plLimit = 100 * config::CIVILIAN_TRADE_MULT; // for 100 planets results in 50-300 ships
 		if(plCount > plLimit)
-			civLimit = plLimit + pow(double(plCount*perPlanet - plLimit), CIVILIAN_LIMIT_POW);
+			civLimit = plLimit + pow(double(plCount - plLimit), CIVILIAN_LIMIT_POW);
 		else
-			civLimit = plCount*perPlanet;
-		civLimit = double(civLimit) * config::CIVILIAN_TRADE_MULT;
+			civLimit = plCount;
+		civLimit *= perPlanet;
 
+		//print(format("ships $1/$2", civOwner.CivilianTradeShips.value, civLimit));
 		if(civOwner.CivilianTradeShips.value > civLimit) {
-			//print(format("ships $1/$2", civOwner.CivilianTradeShips.value, civLimit));
 			civ.destroy();
 			return;
 		}
@@ -2316,6 +2312,21 @@ tidy class RegionObjects : Component_RegionObjects, Savable {
 		IconRing@ ring = getIconRing(level, false);
 		if(ring !is null)
 			ring.remove(cast<Region>(region), node);
+	}
+
+	Object@ getStationInRange(vec3d pos, double range) {
+		double range2 = range*range;
+		for(uint i = 0, cnt = tradeStations.length; i < cnt; ++i) {
+			if(i>=tradeStations.length) break;
+			Civilian@ obj = tradeStations[i];
+			if(obj !is null
+			&& obj.position.x >= pos.x-range && obj.position.x <= pos.x+range
+			&& obj.position.y >= pos.y-range && obj.position.y <= pos.y+range
+			&& obj.position.z >= pos.z-range && obj.position.z <= pos.z+range
+			&& obj.position.distanceToSQ(pos) <= range2)
+				return obj;
+		}
+		return null;
 	}
 };
 

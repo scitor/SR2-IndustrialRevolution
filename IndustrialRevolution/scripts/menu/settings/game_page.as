@@ -20,7 +20,7 @@ class GamePage : GameSettingsPage {
 		Occurance(locale::NG_UNIQUE_SYSTEM_OCCURANCE, "UNIQUE_SYSTEM_OCCURANCE");
 		Occurance(locale::NG_UNIQUE_RESOURCE_OCCURANCE, "UNIQUE_RESOURCE_OCCURANCE");
 		Occurance(locale::NG_RESOURCE_SCARCITY, "RESOURCE_SCARCITY", max=2.0, tooltip=locale::NGTT_RESOURCE_SCARCITY);
-		Occurance(locale::NG_CIVILIAN_TRADE, "CIVILIAN_TRADE_MULT", min = 0.2,max=3.0, tooltip=locale::NGTT_CIVILIAN_TRADE);
+		Frequency(locale::NG_CIVILIAN_TRADE, "CIVILIAN_TRADE_MULT", min = 0.5, max = 3.0, tooltip=locale::NGTT_CIVILIAN_TRADE);
 		Frequency(locale::NG_ARTIFACT_FREQUENCY, "ARTIFACT_FREQUENCY", min = 0.2, max = 3.0);
 		Frequency(locale::NG_SYSTEM_SIZE, "SYSTEM_SIZE", min = 0.2, max = 3.0);
 
@@ -51,22 +51,6 @@ class GamePage : GameSettingsPage {
 };
 
 class AdvancedGamePage : GameSettingsPage {
-	// Need GuiGameFrequency's functionality with a tooltip, so I'm improvising from util.settings_page::SettingsPage and hoping it'll work.
-	// ... I have no idea what I'm doing, but it should work...
-	GuiGameFrequency@ Frequency(const string& text, const string& configName, double min = 0.0, double max = 2.0, Alignment@ align = null, const string& tooltip = "") {
-		if(align is null)
-			@align = nextAlignment();
-		GuiGameFrequency ele(cur, align, text, config(configName));
-		ele.defaultValue = config::get(configName);
-		ele.set(config::get(configName));
-		ele.setMin(min);
-		ele.setMax(max);
-		if(tooltip.length != 0)
-			setMarkupTooltip(ele, tooltip, width=300);
-		options.insertLast(ele);
-		return ele;
-	}	
-
 	void makeSettings() {
 		color = colors::Orange;
 		header = locale::NG_ADVANCED_OPTIONS;

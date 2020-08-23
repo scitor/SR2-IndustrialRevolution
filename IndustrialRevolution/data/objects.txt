@@ -345,6 +345,8 @@ local visible:
 	safe uint getCargoType();
 	safe uint getCargoResource();
 	safe int getCargoWorth();
+	safe int getIncome();
+	safe bool isMainRun();
 	safe uint getCivilianType();
 	safe double get_health() const;
 	safe double get_maxHealth() const;
