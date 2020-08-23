@@ -28,6 +28,10 @@ tidy class ObjectResources : Component_Resources {
 		return terraforming;
 	}
 
+	bool isBlockaded() {
+		return blockaded;
+	}
+
 	void getNativeResources(Player& pl, const Object& obj) {
 		Empire@ plEmp = pl.emp;
 		if(plEmp is obj.owner || pl == SERVER_PLAYER) {

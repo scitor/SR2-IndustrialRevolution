@@ -14,6 +14,7 @@ local:
 	bool get_importEnabled() const;
 	safe uint get_resourceModID() const;
 	safe bool isTerraforming() const;
+	safe bool isBlockaded() const;
 	bool get_hasAutoImports() const;
 	safe uint get_queuedImportCount();
 	uint get_queuedImportType(uint i);

@@ -1,0 +1,93 @@
+id;worth;ident;full name
+0;8;AsteroidAffinity;Morphic Materials
+1;8;AsteroidDefense;Volatile Materials
+2;18;AsteroidFTL;FTL Shards
+3;8;AsteroidGrowth;Economic Materials
+4;8;AsteroidInfluence;Psionic Pellets
+5;8;AsteroidLabor;Construction Materials
+6;10;AwesomeWater;Phoenix Water
+7;10;BoostWater;Reactive Water
+8;10;ClearWater;Clear Water
+9;10;HeavyWater;Heavy Water
+10;10;Altar;Altar
+11;10;ArtificialPlanetoid;Artificial Planetoid
+12;10;BuildingWater;Water
+13;10;Ringworld;Ringworld
+14;10;Soylent1;Soylent Teal
+15;10;Soylent2;Soylent Magenta
+16;10;Soylent3;Soylent Infrared
+17;10;Soylent4;Soylent Green
+18;10;StellarWater;Water
+19;10;NativeFish;Native Fish
+20;40;Aluminum;Aluminum
+21;28;Coal;Coal
+22;10;Fish;Fish (Food)
+23;10;Fruit;Fruit (Food)
+24;30;Fulrate;Fulrate
+25;150;Gems;Gems
+26;10;Grain;Grain (Food)
+27;100;HyperOats;Nillin Wheat (Food)
+28;30;Iron;Iron
+29;10;Meat;Meat (Food)
+30;35;Pekelm;Pekelm
+31;30;Phasite;Phasite
+32;45;Salts;Salts (Food)
+33;65;Spice;Spice
+34;100;Syrup;Syrup
+35;100;Unobtanium;Unobtanium
+36;10;Water;Water
+37;135;Atium;Atium
+38;35;Chemicals;Chemicals
+39;50;Deuterium;Deuterium
+40;35;Electronics;Electronics
+41;35;Explosives;Explosives
+42;45;Glass;Glass
+43;135;Hadocite;Hadocite
+44;80;LocalAsteroidField;Local Asteroid Field
+45;45;LuxuryMaterials;Luxury Materials
+46;75;Marble;Marble
+47;75;NativeGold;Native Gold
+48;35;NaturalGas;Natural Gas
+49;50;Oil;Oil
+50;35;Plastics;Plastics
+51;75;RareMetals;Rare Metals
+52;75;Silicon;Silicon
+53;35;Textiles;Textiles
+54;60;Titanium;Titanium
+55;90;AncientCity;Ancient City
+56;65;DegenerateMatter;Degenerate Matter
+57;100;Hypervolatiles;Hypervolatiles
+58;65;Jewelry;Jewelry
+59;100;Lattices;Crystal Lattices
+60;65;Medicines;Medicines
+61;65;Neutronium;Neutronium
+62;80;Plutonium;Plutonium
+63;75;PsionicReagents;Psionic Reagents
+64;90;Supercarbons;Supercarbons
+65;65;Thorium;Thorium
+66;75;Uranium;Uranium
+67;120;Antimatter;Antimatter
+68;120;Corinium;Corinium
+69;120;ExoticMatter;Exotic Matter
+70;120;Hydroconductors;Hydroconductors
+71;120;Illinium;Illinium
+72;120;Kalsunim;Kalsunim
+73;13;Allondium;Allondium
+74;13;Cyllium;Cyllium
+75;48;FTL;FTL Crystals
+76;8;Phosphate;Phosphate
+77;8;Plains;Vast Plains
+78;18;Quartz;Quartz
+79;13;SpaceFerns;Cremin Ferns
+80;10;BaseMaterial;Base Material
+81;10;BioMass;#R_BIOMASS
+82;100;Drugs;Drugs
+83 -10 Microcline MICROCLINE
+84;10;OreRate;Ore
+85;8;SlaveLabor;Slave Labor
+86;8;Synthetics;Synthetics
+87;173;Marenium;Marenium
+88;220;UniqueDefense;Kallite
+89;220;UniqueEnergy;Rulite
+90;220;UniqueInfluence;Irite
+91;220;UniqueResearch;Errite

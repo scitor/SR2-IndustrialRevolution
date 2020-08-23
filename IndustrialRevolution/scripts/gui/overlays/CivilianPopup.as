@@ -15,6 +15,8 @@ import civilians;
 class CivilianPopup : Popup {
 	GuiText@ name;
 	Gui3DObject@ objView;
+	GuiText@ objDesc;
+	GuiSprite@ objStatusIcon;
 	Civilian@ obj;
 	double lastUpdate = -INFINITY;
 	GuiResourceGrid@ resources;
@@ -32,26 +34,28 @@ class CivilianPopup : Popup {
 		@name = GuiText(this, Alignment(Left+4, Top+2, Right-4, Top+24));
 		name.horizAlign = 0.5;
 
-		@objView = Gui3DObject(this, Alignment(Left+4, Top+25, Right-4, Top+95));
+		@objDesc = GuiText(this, Alignment(Left+6, Top+28, Right-4, Top+42));
+		objDesc.font = FT_Detail;
+		objDesc.stroke = colors::Black;
+		@objView = Gui3DObject(this, Alignment(Left+4, Top+25, Right-4, Top+110));
+		@objStatusIcon = GuiSprite(objView, Alignment(Left+2, Top+44, Width=24, Height=24), spritesheet::ActionBarIcons, 4);
+		objStatusIcon.visible = false;
 
-		@health = GuiProgressbar(this, Alignment(Left+3, Bottom-89, Right-4, Bottom-63));
+		@health = GuiProgressbar(this, Alignment(Left+3, Top+94, Right-4, Top+121));
 		health.tooltip = locale::HEALTH;
 		GuiSprite healthIcon(health, Alignment(Left+2, Top+1, Width=24, Height=24), icons::Health);
 
-		GuiSkinElement band(this, Alignment(Left+3, Bottom-65, Right-4, Bottom-32), SS_SubTitle);
-		band.color = Color(0xaaaaaaff);
-
-		@cargoLabel = GuiText(band, Alignment(Left+5, Top+3, Left+70, Bottom-2), locale::SHIP_CARGO);
-		cargoLabel.font = FT_Bold;
-		cargoLabel.stroke = colors::Black;
-		@worth = GuiMarkupText(band, Alignment(Left+70, Top+6, Right-5, Bottom-2));
-
-		GuiSkinElement band2(this, Alignment(Left+3, Bottom-34, Right-4, Bottom-2), SS_SubTitle);
-
-		@cargoText = GuiMarkupText(band2, Alignment(Left+3, Top+4, Right-3, Bottom-2));
+		GuiSkinElement resBand(this, Alignment(Left+3, Bottom-64, Right-4, Bottom-32), SS_SubTitle);
+		resBand.color = Color(0xaaaaaaff);
+		@cargoText = GuiMarkupText(resBand, Alignment(Left+3, Top+4, Right-3, Bottom-2));
 		cargoText.defaultFont = FT_Bold;
-		@resources = GuiResourceGrid(band2, Alignment(Left+3, Top+3, Right-3, Bottom-2));
+		@resources = GuiResourceGrid(resBand, Alignment(Left+3, Top+3, Right-3, Bottom-2));
 
+		GuiSkinElement descBand(this, Alignment(Left+3, Bottom-34, Right-4, Bottom-2), SS_SubTitle);
+		@cargoLabel = GuiText(descBand, Alignment(Left+5, Top+2, Right-5, Bottom-2), locale::SHIP_CARGO);
+		cargoLabel.font = FT_Detail;
+		cargoLabel.stroke = colors::Black;
+		@worth = GuiMarkupText(descBand, Alignment(Left+5, Top+4, Right-5, Bottom-2));
 		updateAbsolutePosition();
 	}
 
@@ -147,7 +151,8 @@ class CivilianPopup : Popup {
 		//Update resources
 		uint type = obj.getCargoType();
 		int value = obj.getCargoWorth();
-		cargoLabel.color = obj.owner.color;
+		objDesc.color = obj.owner.color;
+
 		if(type == CT_Goods) {
 			resources.visible = false;
 			cargoText.visible = true;
@@ -168,7 +173,20 @@ class CivilianPopup : Popup {
 			}
 		}
 
-		worth.text = format(locale::SHIP_CARGO_WORTH, formatMoney(value));
+		if(obj.owner !is playerEmpire)
+			worth.text = format(locale::SHIP_CARGO_WORTH, formatMoney(value));
+		else {
+			if(obj.getCivilianType() == CiT_Freighter) {
+				objStatusIcon.visible = true;
+				objStatusIcon.sprite = obj.isMainRun() ? 4 : 9;
+				objStatusIcon.tooltip = obj.isMainRun() ? locale::CIVILIAN_MAINRUN_DESC : locale::CIVILIAN_TRADERUN_DESC;
+			} else
+				objStatusIcon.visible = false;
+			objDesc.text = getCivilianName(obj.getCivilianType(), obj.radius);
+			int income = obj.getIncome();
+			cargoLabel.text = income > 0 ? locale::SHIP_CARGO_INCOME : locale::SHIP_CARGO_UPKEEP;
+			worth.text = format(locale::SHIP_CARGO_WORTH_INCOME, formatMoney(value), formatMoney(income), toString(income > 0 ? high : low));
+		}
 
 		Popup::update();
 		Popup::updatePosition(obj);
