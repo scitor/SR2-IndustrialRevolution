@@ -24,6 +24,7 @@ VANISH_TIP: Will be used up in $1.
 VANISH_TIP_NOUSE: Will be used up after $1 of use.
 RESOURCE: Resource
 RES_PROVIDES_PRESSURE: Pressure:
+CARGO_WORTH: Trade value: [b]$1[/b] (per unit)
 
 WELFARE_TT: <<|
 	Any funds left in your budget when the budget cycle is over will be

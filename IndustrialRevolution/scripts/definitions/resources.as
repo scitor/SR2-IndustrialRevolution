@@ -370,6 +370,10 @@ string getResourceTooltip(const ResourceType@ type, const Resource@ r = null, Ob
 		text += "\n";
 	}
 
+	// Resource worth
+	if(type.cargoWorth > 0 && type.exportable)
+		text += format("[vspace=4/]"+ locale::CARGO_WORTH +"\n[vspace=8/]", formatMoney(type.cargoWorth));
+
 	//Pressure
 	if(type.totalPressure > 0) {
 		string prs;

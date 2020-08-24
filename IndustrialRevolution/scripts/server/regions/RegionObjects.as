@@ -1262,7 +1262,7 @@ tidy class RegionObjects : Component_RegionObjects, Savable {
 				Empire@ emp = getEmpire(i);
 				if(!emp.major)
 					continue;
-				uint buildStations = min(planetCounts[i], uint(double(tradeCounter[i]) / STATION_TRADES));
+				uint buildStations = max(planetCounts[i], uint(double(tradeCounter[i]) / STATION_TRADES));
 				uint maxStations = max(buildStations, uint(double(tradeCounter[i] * 2) / STATION_TRADES));
 
 				uint stationCount = 0;
@@ -1308,6 +1308,8 @@ tidy class RegionObjects : Component_RegionObjects, Savable {
 					double stationSize = randomi(0, STATION_MAX_RAD-STATION_MIN_RAD) + STATION_MIN_RAD;
 					uint regionStationLevel = min(5, system.adjacent.length > 0 ? int(stationCount/system.adjacent.length) : 0);
 					Civilian@ station = createCivilian(pos, emp, CiT_Station, radius = stationSize + regionStationLevel);
+					station.stopMoving(enterOrbit=false);
+					station.setRotation(quaterniond_fromVecToVec(vec3d_front(), system.position - pos));
 					station.setCargoType(CT_Goods);
 					station.name = getRandomStationName();
 					tradeStations.insertLast(station);

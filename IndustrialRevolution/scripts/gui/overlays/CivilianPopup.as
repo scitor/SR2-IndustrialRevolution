@@ -131,7 +131,7 @@ class CivilianPopup : Popup {
 		const Font@ ft = skin.getFont(FT_Normal);
 
 		//Update name
-		name.text = obj.name;
+		name.text = getCivilianName(obj.getCivilianType(), obj.radius);
 		if(ft.getDimension(name.text).x > name.size.width)
 			name.font = FT_Detail;
 		else
@@ -182,7 +182,7 @@ class CivilianPopup : Popup {
 				objStatusIcon.tooltip = obj.isMainRun() ? locale::CIVILIAN_MAINRUN_DESC : locale::CIVILIAN_TRADERUN_DESC;
 			} else
 				objStatusIcon.visible = false;
-			objDesc.text = getCivilianName(obj.getCivilianType(), obj.radius);
+			objDesc.text = obj.name;
 			int income = obj.getIncome();
 			cargoLabel.text = income > 0 ? locale::SHIP_CARGO_INCOME : locale::SHIP_CARGO_UPKEEP;
 			worth.text = format(locale::SHIP_CARGO_WORTH_INCOME, formatMoney(value), formatMoney(income), toString(income > 0 ? high : low));

@@ -463,6 +463,7 @@ tidy class CivilianScript {
 				vec3d offset = (nextRegion.position - curRegion.position).normalized(curRegion.radius * 0.85);
 				leaveDest = curRegion.position + quaterniond_fromAxisAngle(vec3d_up(), -pi * 0.01) * offset;
 				leaveDest.y = curRegion.position.y - STATION_MAX_RAD;
+				leaveDest += random3d(STATION_MAX_RAD);
 				setMoveTarget(leaveDest, CiNS_ArrivedAtExit);
 				quarterImpulse(obj);
 				break;
@@ -476,7 +477,7 @@ tidy class CivilianScript {
 				vec3d offset = (curRegion.position - nextRegion.position).normalized(nextRegion.radius * 0.85);
 				enterDest = nextRegion.position + quaterniond_fromAxisAngle(vec3d_up(), pi * 0.01) * offset;
 				enterDest.y = nextRegion.position.y - STATION_MAX_RAD;
-				enterDest += random3d(DEST_RANGE);
+				enterDest += random3d(STATION_MAX_RAD);
 				fullImpulse(obj);
 				setMoveTarget(enterDest, CiNS_ArrivedAtRegion);
 				break;
@@ -584,11 +585,8 @@ tidy class CivilianScript {
 						if(randomd(0,1) < chance) {
 							soldSomething = true;
 							tradeStation.setCargoResource(obj.getCargoResource());
-							if (cWorth > getCargoWorth())
-								tradeSuccessParticles(obj, tradeStation);
 							// they bought our stuff, now get the heck outta here
-						} else if (cWorth > getCargoWorth())
-							tradeFailParticles(obj);
+						}
 					}
 				}
 			}
@@ -602,12 +600,8 @@ tidy class CivilianScript {
 						double cWorth = stationRes.cargoWorth > 0 ? stationRes.cargoWorth : CARGO_GOODS_WORTH;
 						// 20% chance to 'buy' if resource is worth the same
 						double chance = cWorth / getCargoWorth() / 5;
-						if(randomd(0,1) < chance) {
+						if(randomd(0,1) < chance)
 							obj.setCargoResource(tradeStation.getCargoResource());
-							if (cWorth > getCargoWorth())
-								tradeSuccessParticles(obj, tradeStation);
-						} else if (cWorth > getCargoWorth())
-							tradeFailParticles(obj);
 					}
 				}
 			}
@@ -625,12 +619,8 @@ tidy class CivilianScript {
 				if(planetRes !is null && planetRes.exportable) {
 					double cWorth = planetRes.cargoWorth > 0 ? planetRes.cargoWorth : CARGO_GOODS_WORTH;
 					double chance = cWorth / getCargoWorth() / 5;
-					if(randomd(0,1) < chance) {
+					if(randomd(0,1) < chance)
 						obj.setCargoResource(tradePlanet.primaryResourceType);
-						if (cWorth > getCargoWorth())
-							tradeSuccessParticles(obj, tradePlanet);
-					} else if (cWorth > getCargoWorth())
-						tradeFailParticles(obj);
 				}
 			}
 			return;
@@ -645,25 +635,12 @@ tidy class CivilianScript {
 				if(asteroidRes !is null) {
 					double cWorth = asteroidRes.cargoWorth > 0 ? asteroidRes.cargoWorth : CARGO_GOODS_WORTH;
 					double chance = cWorth / getCargoWorth() / 5;
-					if(randomd(0,1) < chance) {
+					if(randomd(0,1) < chance)
 						obj.setCargoResource(tradeAsteroid.primaryResourceType);
-						if (cWorth > getCargoWorth())
-							tradeSuccessParticles(obj, tradeAsteroid);
-					} else if (cWorth > getCargoWorth())
-						tradeFailParticles(obj);
 				}
 			}
 			return;
 		}
-	}
-
-	void tradeSuccessParticles(Civilian& ship, Object& station) {
-		playParticleSystem("TradeSuccess", ship.position, ship.rotation, ship.radius, ship.visibleMask, false);
-		playParticleSystem("TradeSuccess", station.position, station.rotation, station.radius, station.visibleMask, false);
-	}
-
-	void tradeFailParticles(Civilian& ship) {
-		playParticleSystem("TradeFail", ship.position, ship.rotation, ship.radius, ship.visibleMask, false);
 	}
 
 	void tickStation(Civilian& obj) {

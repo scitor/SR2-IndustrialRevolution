@@ -60,27 +60,29 @@ SHIP_CARGO_UPKEEP: Cargo / Upkeep:
 SHIP_CARGO_WORTH_INCOME: [right][b][color=#0f0]$1[/color]/ [color=$3]$2[/color][/b][/right]
 CARGO_GOODS: [img=ResourceIconsSmall::32;21;#888/] [color=#aaa]Goods[/color]
 CIVILIAN_MERCHANT: Merchant
-CIVILIAN_FREIGHTER: Cargo Freighter
-CIVILIAN_CARAVAN: Trade Caravan
-CIVILIAN_TRANSPORTER: Industrial Transporter
-CIVILIAN_STATION: Empire Trade Station
+CIVILIAN_FREIGHTER: Freighter
+CIVILIAN_CARAVAN: Caravan
+CIVILIAN_TRANSPORTER: Transporter
+CIVILIAN_STATION: Trade Station
 CIVILIAN: Civilian
 CIVILIAN_CUSTOMS_OFFICE: Customs Office
 CIVILIAN_MAINRUN_DESC: <<|
-	This ship is on its primary mission of delivering
-	the resource to its designated planet.
+This ship is on its primary mission delivering\n
+the resource to its designated planet.
 >>
 CIVILIAN_TRADERUN_DESC: <<|
-	This ship is generating trade income by trading available
-	resources between your planets, asteroids and trade stations.
+This ship is generating trade income by trading available\n
+resources between your planets, asteroids and trade stations.
 >>
 STATUS_BLOCKADED: Blockaded!
 STATUS_BLOCKADED_DESC: <<|
-	Civilian trade ship carrying goods for this planet were shot down. As a result, the planet produces 1 less of a random empire resource for each ship destroyed.
+Civilian trade ship carrying goods for this planet were shot down. As a result,\n
+the planet produces 1 less of a random empire resource for each ship destroyed.
 >>
 STATUS_BLOCKADED_EXPORT: Blockaded Export!
 STATUS_BLOCKADED_EXPORT_DESC: <<|
-	Civilian trade ship carrying goods from this planet were shot down. The resource will be available once the next trade ship arrives.
+Civilian trade ship carrying goods from this planet were shot down.\n
+The resource will be available once the next trade ship arrives.
 >>
 PICKUP_PROTECTING: Protecting
 PICKUP_UNPROTECTED: Unprotected
