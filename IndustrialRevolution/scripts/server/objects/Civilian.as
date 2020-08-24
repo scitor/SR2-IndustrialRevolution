@@ -584,8 +584,11 @@ tidy class CivilianScript {
 						if(randomd(0,1) < chance) {
 							soldSomething = true;
 							tradeStation.setCargoResource(obj.getCargoResource());
+							if (cWorth > getCargoWorth())
+								tradeSuccessParticles(obj, tradeStation);
 							// they bought our stuff, now get the heck outta here
-						}
+						} else if (cWorth > getCargoWorth())
+							tradeFailParticles(obj);
 					}
 				}
 			}
@@ -599,8 +602,12 @@ tidy class CivilianScript {
 						double cWorth = stationRes.cargoWorth > 0 ? stationRes.cargoWorth : CARGO_GOODS_WORTH;
 						// 20% chance to 'buy' if resource is worth the same
 						double chance = cWorth / getCargoWorth() / 5;
-						if(randomd(0,1) < chance)
+						if(randomd(0,1) < chance) {
 							obj.setCargoResource(tradeStation.getCargoResource());
+							if (cWorth > getCargoWorth())
+								tradeSuccessParticles(obj, tradeStation);
+						} else if (cWorth > getCargoWorth())
+							tradeFailParticles(obj);
 					}
 				}
 			}
@@ -618,8 +625,12 @@ tidy class CivilianScript {
 				if(planetRes !is null && planetRes.exportable) {
 					double cWorth = planetRes.cargoWorth > 0 ? planetRes.cargoWorth : CARGO_GOODS_WORTH;
 					double chance = cWorth / getCargoWorth() / 5;
-					if(randomd(0,1) < chance)
+					if(randomd(0,1) < chance) {
 						obj.setCargoResource(tradePlanet.primaryResourceType);
+						if (cWorth > getCargoWorth())
+							tradeSuccessParticles(obj, tradePlanet);
+					} else if (cWorth > getCargoWorth())
+						tradeFailParticles(obj);
 				}
 			}
 			return;
@@ -634,12 +645,25 @@ tidy class CivilianScript {
 				if(asteroidRes !is null) {
 					double cWorth = asteroidRes.cargoWorth > 0 ? asteroidRes.cargoWorth : CARGO_GOODS_WORTH;
 					double chance = cWorth / getCargoWorth() / 5;
-					if(randomd(0,1) < chance)
+					if(randomd(0,1) < chance) {
 						obj.setCargoResource(tradeAsteroid.primaryResourceType);
+						if (cWorth > getCargoWorth())
+							tradeSuccessParticles(obj, tradeAsteroid);
+					} else if (cWorth > getCargoWorth())
+						tradeFailParticles(obj);
 				}
 			}
 			return;
 		}
+	}
+
+	void tradeSuccessParticles(Civilian& ship, Object& station) {
+		playParticleSystem("TradeSuccess", ship.position, ship.rotation, ship.radius, ship.visibleMask, false);
+		playParticleSystem("TradeSuccess", station.position, station.rotation, station.radius, station.visibleMask, false);
+	}
+
+	void tradeFailParticles(Civilian& ship) {
+		playParticleSystem("TradeFail", ship.position, ship.rotation, ship.radius, ship.visibleMask, false);
 	}
 
 	void tickStation(Civilian& obj) {
