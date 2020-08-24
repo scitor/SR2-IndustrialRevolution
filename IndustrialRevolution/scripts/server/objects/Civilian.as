@@ -263,7 +263,7 @@ tidy class CivilianScript {
 			if(status !is null)
 				pathTarget.addStatus(status.id, timer=BLOCKADE_TIMER);
 		}
-		if(type != CiT_Freighter)
+		if(obj.getCivilianType() != CiT_Freighter)
 			removeAmbientSource(CURRENT_PLAYER, obj.id);
 		leaveRegion(obj);
 		if(obj.owner !is null && obj.owner.valid) {
@@ -435,7 +435,7 @@ tidy class CivilianScript {
 						if(nextRegion !is null)
 							pos = curRegion.position + (nextRegion.position - curRegion.position).normalized(curRegion.radius);
 						curRegion.getTradeStation(obj, obj.owner, pos);
-					} else if(!mainRun) // since we dont buy on our first route, we dont need planets. they dont buy either
+					} else if(!mainRun && curRegion.getPlanetCount(obj.owner) > 0)
 						curRegion.getTradePlanet(obj, obj.owner);
 					else {
 						awaitingIntermediate = false;
