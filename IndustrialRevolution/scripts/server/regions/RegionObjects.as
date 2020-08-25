@@ -1781,6 +1781,16 @@ tidy class RegionObjects : Component_RegionObjects, Savable {
 				artifactBucket.remove(artifact);
 			}
 			break;
+			case OT_Civilian:
+			{
+				Civilian@ civ = cast<Civilian>(obj);
+				tradeStations.remove(civ);
+				if(tradeStations.length == 0)
+					HaveStationsMask &= ~civ.owner.mask;
+				else
+					HaveStationsMask |= civ.owner.mask;
+			}
+			break;
 		}
 
 		//Handle shipyards
