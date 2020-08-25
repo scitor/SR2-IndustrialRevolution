@@ -121,7 +121,7 @@ string getCivilianName(uint type, double radius) {
 		return locale::CIVILIAN_CUSTOMS_OFFICE;
 	}
 	else if(type == CiT_PirateHoard) {
-		return locale::CIVILIAN_CUSTOMS_OFFICE;
+		return locale::PIRATE_HOARD;
 	}
 	return locale::CIVILIAN;
 }
