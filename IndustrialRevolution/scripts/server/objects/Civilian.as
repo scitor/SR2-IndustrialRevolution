@@ -490,7 +490,7 @@ tidy class CivilianScript {
 					break;
 				}
 				if(moveTargetObj !is null && (obj.moveTo(moveTargetObj, moveId, distance=DEST_RANGE, enterOrbit=false)) ||
-				   moveTargetPos != VEC3_NULL && (obj.moveTo(moveTargetPos, moveId, enterOrbit=false) || moveTargetPos.distanceToSQ(obj.position) < obj.radius * DEST_RANGE))
+				   moveTargetPos != VEC3_NULL && (obj.moveTo(moveTargetPos, moveId, enterOrbit=false) || moveTargetPos.distanceToSQ(obj.position) < DEST_RANGE * DEST_RANGE))
 				{
 					moveId = -1;
 					@moveTargetObj = null;
