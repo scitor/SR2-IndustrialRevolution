@@ -1288,6 +1288,7 @@ tidy class RegionObjects : Component_RegionObjects, Savable {
 						}
 					}
 					if(smallestIndex != UINT_MAX) {
+						tradeStations[smallestIndex].inCombat = true; // fireworks
 						tradeStations[smallestIndex].destroy();
 						stationCount -= 1;
 					}
