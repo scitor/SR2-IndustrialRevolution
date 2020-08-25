@@ -328,7 +328,7 @@ tidy class CivilianScript {
 	}
 
 	void setMoveTarget(Object& obj, uint fNavState) {
-		moveTargetPos = VEC3_NULL;
+		moveTargetPos = vec3d();
 		@moveTargetObj = obj;
 		navState = CiNS_MovingToTarget;
 		navStateMoved = fNavState;
@@ -483,18 +483,18 @@ tidy class CivilianScript {
 				break;
 			}
 			case CiNS_MovingToTarget: { // in current system
-				if ((moveTargetObj is null || !moveTargetObj.valid) && moveTargetPos == VEC3_NULL) {
+				if ((moveTargetObj is null || !moveTargetObj.valid) && moveTargetPos == vec3d()) {
 					//print("no move target");
 					navState = CiNS_NeedPath;
 					@nextRegion = null;
 					break;
 				}
-				if(moveTargetObj !is null && (obj.moveTo(moveTargetObj, moveId, distance=DEST_RANGE, enterOrbit=false)) ||
-				   moveTargetPos != VEC3_NULL && (obj.moveTo(moveTargetPos, moveId, enterOrbit=false) || moveTargetPos.distanceToSQ(obj.position) < DEST_RANGE * DEST_RANGE))
+				if(moveTargetObj !is null && (obj.moveTo(moveTargetObj, moveId, enterOrbit=false, distance=DEST_RANGE/2) || moveTargetObj.position.distanceToSQ(obj.position) < DEST_RANGE * DEST_RANGE) ||
+				   moveTargetPos != vec3d() && (obj.moveTo(moveTargetPos, moveId, enterOrbit=false) || moveTargetPos.distanceToSQ(obj.position) < DEST_RANGE * DEST_RANGE))
 				{
 					moveId = -1;
 					@moveTargetObj = null;
-					moveTargetPos = VEC3_NULL;
+					moveTargetPos = vec3d();
 					navState = navStateMoved;
 				}
 				break;
