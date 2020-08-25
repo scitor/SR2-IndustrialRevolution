@@ -501,7 +501,8 @@ tidy class CivilianScript {
 			}
 			case CiNS_ArrivedAtIntermediate: {
 				// do trade stuff with station
-				handleTradeWithObject(obj, intermediate);
+				if(!tradeWithObject(obj, intermediate) && curRegion !is null)
+					curRegion.bumpTradeCounter(obj.owner); // didn't trade means we 'want' more stations
 				@intermediate = null;
 				if(pathTarget !is null)
 					obj.name = pathTarget.name;
@@ -559,7 +560,9 @@ tidy class CivilianScript {
 						obj.setCargoResource(pathTarget.primaryResourceType);
 					mainRun = false;
 				}
-				handleTradeWithObject(obj, pathTarget);
+				if(!tradeWithObject(obj, pathTarget) && curRegion !is null)
+					curRegion.bumpTradeCounter(obj.owner);
+
 				freeCivilian(obj);
 				break;
 			}
@@ -567,80 +570,78 @@ tidy class CivilianScript {
 		return 0.2;
 	}
 
-	void handleTradeWithObject(Civilian& obj, Object@ tradeObj) {
-		// trade stations
+	bool tradeWithObject(Civilian& obj, Object@ tradeObj) {
+		// who do we have here
 		Civilian@ tradeStation = cast<Civilian>(tradeObj);
 		if(tradeStation !is null) {
-			bool soldSomething = false;
-			if(cargoType == CT_Resource && tradeStation.getCivilianType() != CiT_CustomsOffice) {
-				// we sell good stuff
-				if(tradeStation.getCargoType() == CT_Goods) // Goods stations will always buy
+			// we sell good stuff (but not to customs offices)
+			if(obj.getCargoType() == CT_Resource && tradeStation.getCivilianType() != CiT_CustomsOffice) {
+				if(tradeStation.getCargoType() == CT_Goods) { // Goods stations will always buy
 					tradeStation.setCargoResource(obj.getCargoResource());
-				else if (obj.getCargoResource() != tradeStation.getCargoResource()) {
-					const ResourceType@ stationRes = getResource(tradeStation.getCargoResource());
-					if(stationRes !is null) {
-						double cWorth = stationRes.cargoWorth > 0 ? stationRes.cargoWorth : CARGO_GOODS_WORTH;
-						// 20% chance to 'sell' if resource is worth the same
-						double chance = getCargoWorth() / cWorth / 5;
-						if(randomd(0,1) < chance) {
-							soldSomething = true;
-							tradeStation.setCargoResource(obj.getCargoResource());
-							// they bought our stuff, now get the heck outta here
-						}
+					return true;
+				} else if(obj.getCargoResource() != tradeStation.getCargoResource()) {
+					if(isResourceWorthTrading(tradeStation.getCargoResource(), false)) {
+						tradeStation.setCargoResource(obj.getCargoResource());
+						return true; // they bought our stuff, now get the heck outta here
 					}
 				}
 			}
-			if(!mainRun && !soldSomething && tradeStation.getCargoType() == CT_Resource) {
-				// lets check the market
-				if(cargoType == CT_Goods) // bought
-					obj.setCargoResource(tradeStation.getCargoResource());
-				else if (obj.getCargoResource() != tradeStation.getCargoResource()) {
-					const ResourceType@ stationRes = getResource(tradeStation.getCargoResource());
-					if(stationRes !is null) {
-						double cWorth = stationRes.cargoWorth > 0 ? stationRes.cargoWorth : CARGO_GOODS_WORTH;
-						// 20% chance to 'buy' if resource is worth the same
-						double chance = cWorth / getCargoWorth() / 5;
-						if(randomd(0,1) < chance)
-							obj.setCargoResource(tradeStation.getCargoResource());
-					}
-				}
-			}
-			return;
+			// lets check the market
+			if(!mainRun && tradeStation.getCargoType() == CT_Resource)
+				return buyFromObject(obj, tradeStation);
 		}
-		if(mainRun)
-			return;
+		if(mainRun) // we dont buy on our delivery run
+			return false;
+
 		// buy from planets
 		Planet@ tradePlanet = cast<Planet>(tradeObj);
-		if(tradePlanet !is null && getResource(tradePlanet.primaryResourceType) !is null) {
-			if(cargoType == CT_Goods)
-				obj.setCargoResource(tradePlanet.primaryResourceType);
-			else if (obj.getCargoResource() != tradePlanet.primaryResourceType) {
-				const ResourceType@ planetRes = getResource(tradePlanet.primaryResourceType);
-				if(planetRes !is null && planetRes.exportable) {
-					double cWorth = planetRes.cargoWorth > 0 ? planetRes.cargoWorth : CARGO_GOODS_WORTH;
-					double chance = cWorth / getCargoWorth() / 5;
-					if(randomd(0,1) < chance)
-						obj.setCargoResource(tradePlanet.primaryResourceType);
-				}
-			}
-			return;
-		}
+		if(tradePlanet !is null && getResource(tradePlanet.primaryResourceType) !is null)
+			return buyFromObject(obj, tradePlanet);
+
 		// buy from asteroids
 		Asteroid@ tradeAsteroid = cast<Asteroid>(tradeObj);
-		if(tradeAsteroid !is null && getResource(tradeAsteroid.primaryResourceType) !is null) {
-			if(cargoType == CT_Goods)
-				obj.setCargoResource(tradeAsteroid.primaryResourceType);
-			else if (obj.getCargoResource() != tradeAsteroid.primaryResourceType) {
-				const ResourceType@ asteroidRes = getResource(tradeAsteroid.primaryResourceType);
-				if(asteroidRes !is null) {
-					double cWorth = asteroidRes.cargoWorth > 0 ? asteroidRes.cargoWorth : CARGO_GOODS_WORTH;
-					double chance = cWorth / getCargoWorth() / 5;
-					if(randomd(0,1) < chance)
-						obj.setCargoResource(tradeAsteroid.primaryResourceType);
-				}
+		if(tradeAsteroid !is null && getResource(tradeAsteroid.primaryResourceType) !is null)
+			return buyFromObject(obj, tradeAsteroid);
+
+		return false;
+	}
+
+	bool buyFromObject(Civilian& obj, Object& tradeObj) {
+		uint resId = uint(-1);
+		Civilian@ civ = cast<Civilian>(tradeObj);
+		if(civ !is null)
+			resId = civ.getCargoResource();
+		else if(tradeObj.hasResources)
+			resId = tradeObj.primaryResourceType;
+
+		if(resId == uint(-1))
+			return false;
+
+		if(obj.getCargoType() == CT_Goods) {
+			obj.setCargoResource(resId);
+			return true; // bought
+		} else if(obj.getCargoResource() != resId) {
+			if(isResourceWorthTrading(resId)) {
+				obj.setCargoResource(resId);
+				return true;
 			}
-			return;
 		}
+		return false;
+	}
+
+	bool isResourceWorthTrading(uint otherResourceTypeId, bool buying = true) {
+		const ResourceType@ otherRes = getResource(otherResourceTypeId);
+		if(otherRes is null)
+			return false;
+
+		uint otherWorth = otherRes.cargoWorth > 0 ? otherRes.cargoWorth : CARGO_GOODS_WORTH;
+		double chance = 0.0;
+		if(buying)
+			chance = otherWorth / getCargoWorth() / 3; // 33% chance to 'buy' if resource is worth the same
+		else
+			chance = getCargoWorth() / otherWorth / 3;
+
+		return randomd() < chance;
 	}
 
 	void tickStation(Civilian& obj) {
