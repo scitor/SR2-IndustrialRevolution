@@ -1262,9 +1262,9 @@ tidy class RegionObjects : Component_RegionObjects, Savable {
 				Empire@ emp = getEmpire(i);
 				if(!emp.major)
 					continue;
-				uint buildStations = max(planetCounts[i], uint(double(tradeCounter[i]) / STATION_TRADES));
-				uint maxStations = max(buildStations, uint(double(tradeCounter[i] * 2) / STATION_TRADES));
-
+				uint plCount = planetCounts[i] > 0 ? planetCounts[i] : 1;
+				uint buildStations =  uint(round((double(tradeCounter[i]) / STATION_TRADES) / plCount));
+				uint maxStations = 2 * buildStations;
 				uint stationCount = 0;
 				for(uint i = 0, cnt = tradeStations.length; i < cnt; ++i) {
 					Empire@ owner = tradeStations[i].owner;
