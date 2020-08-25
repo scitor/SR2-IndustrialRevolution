@@ -304,6 +304,17 @@ tidy class ObjectManager : Component_ObjectManager, Savable {
 		return closest;
 	}
 
+	uint get_asteroidCount() {
+		return asteroids.length;
+	}
+
+	Asteroid@ get_asteroidList(uint index) {
+		ReadLock lock(plMutex);
+		if(index >= asteroids.length)
+			return null;
+		return asteroids[index];
+	}
+
 	void getAsteroids() {
 		ReadLock lock(plMutex);
 		for(uint i = 0, cnt = asteroids.length; i < cnt; ++i)

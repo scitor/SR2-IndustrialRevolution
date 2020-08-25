@@ -1331,30 +1331,11 @@ tidy class RegionObjects : Component_RegionObjects, Savable {
 		Empire@ civOwner = civ.owner;
 		double bestTimer = 0.0;
 
-		if(randomd(0, 1.0) > 0.2) {
-			int randI = randomi(0, civOwner.planetCount);
-			DataList@ objs = civOwner.getPlanets();
-			Object@ rec;
-			while(receive(objs, rec)) {
-				Planet@ pl = cast<Planet>(rec);
-				if(pl is null || randI-->0)
-					continue;
-				@bestDest = pl;
-				break;
-			}
-		} else {
-			DataList@ objs = civOwner.getAsteroids();
-			array<Asteroid@> asteroids;
-			Object@ rec;
-			while(receive(objs, rec)) {
-				Asteroid@ asteroid = cast<Asteroid>(rec);
-				if(asteroid is null)
-					continue;
-				asteroids.insertLast(asteroid);
-			}
-			if (asteroids !is null && asteroids.length > 0)
-				@bestDest = asteroids[randomi(0, asteroids.length-1)];
-		}
+		if(randomd(0, 1.0) > 0.2)
+			@bestDest = civOwner.planetList[randomi(0, civOwner.planetCount-1)];
+		else
+			@bestDest = civOwner.asteroidList[randomi(0, civOwner.asteroidCount-1)];
+
 		if(bestDest is null) {
 			civ.destroy();
 			return;

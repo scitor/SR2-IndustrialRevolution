@@ -24,6 +24,8 @@ restricted local:
 
 	safe uint get_planetCount();
 	Planet@ get_planetList(uint index);
+	safe uint get_asteroidCount();
+	Asteroid@ get_asteroidList(uint index);
 
 	bool isFlingBeacon(Object@ obj);
 
