@@ -1309,8 +1309,7 @@ tidy class RegionObjects : Component_RegionObjects, Savable {
 					double stationSize = randomi(0, STATION_MAX_RAD-STATION_MIN_RAD) + STATION_MIN_RAD;
 					uint regionStationLevel = min(5, system.adjacent.length > 0 ? int(stationCount/system.adjacent.length) : 0);
 					Civilian@ station = createCivilian(pos, emp, CiT_Station, radius = stationSize + regionStationLevel);
-					station.stopMoving(enterOrbit=false);
-					station.setRotation(quaterniond_fromVecToVec(vec3d_front(), system.position - pos));
+					station.setRotation(quaterniond_fromVecToVec(vec3d_front(), system.position - vec3d(pos.x, system.position.y, pos.z)));
 					station.setCargoType(CT_Goods);
 					station.name = getRandomStationName();
 					tradeStations.insertLast(station);
