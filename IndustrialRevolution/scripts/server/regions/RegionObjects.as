@@ -1300,9 +1300,10 @@ tidy class RegionObjects : Component_RegionObjects, Savable {
 						uint adjSystemId = (system.object.id + stationCount) % system.adjacent.length;
 						const SystemDesc@ other = getSystem(system.adjacent[adjSystemId]);
 						vec3d offset = (other.object.position - system.position)
-							.normalized(system.radius * 0.7 - STATION_MAX_RAD * 2 * randomi(0,4)); // 5 cols
-						pos = system.position + quaterniond_fromAxisAngle(vec3d_up(), pi * (double(randomi(0,4)-2)/100)) * offset; // 5 rows
-						pos.y = system.position.y - STATION_MAX_RAD * 2 - sin(pos.length) * STATION_MAX_RAD; // height variation
+							.normalized(system.radius * 0.7 - STATION_MAX_RAD * 3 * randomi(0,4)); // 5 cols
+						double rows = double(randomi(0,1) == 0 ? randomi(-3, -2) : randomi(2, 3)); // 4 rows
+						pos = system.position + quaterniond_fromAxisAngle(vec3d_up(), pi * (rows/100)) * offset;
+						pos.y = system.position.y - STATION_MAX_RAD * 2 + sin((pos.x+pos.y)/STATION_MAX_RAD) * STATION_MAX_RAD; // height variation
 					} while (getStationInRange(pos, STATION_MAX_RAD*2) !is null && tries-->0);
 
 					// spawn fatter stations the more we have
