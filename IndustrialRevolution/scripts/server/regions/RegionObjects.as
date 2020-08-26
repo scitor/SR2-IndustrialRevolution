@@ -1276,6 +1276,7 @@ tidy class RegionObjects : Component_RegionObjects, Savable {
 						stationCount += 1;
 					}
 				}
+				//print(format(region.name+" emp $1 build $2 have $3 pl $4 cnt $5", emp.id, buildStations, stationCount, plCount, tradeCounter[i]));
 				// only change one at a time
 				if(stationCount > maxStations) {
 					double smallestSize = INFINITY;
@@ -1352,8 +1353,8 @@ tidy class RegionObjects : Component_RegionObjects, Savable {
 			civLimit = plCount;
 		civLimit *= perPlanet;
 
-		//print(format("ships $1/$2", civOwner.CivilianTradeShips.value, civLimit));
 		if(civOwner.CivilianTradeShips.value > civLimit) {
+			print(format("ships $1/$2 mult $3 cnt $4", civOwner.CivilianTradeShips.value, civLimit, config::CIVILIAN_TRADE_MULT, civ.getStepCount()));
 			civ.destroy();
 			return;
 		}
@@ -1364,7 +1365,7 @@ tidy class RegionObjects : Component_RegionObjects, Savable {
 		else
 			civ.pathTo(bestDest);
 		civ.name = bestDest.name;
-		civ.resetStepCount();
+		civ.modStepCount(+1);
 	}
 #section all
 

@@ -157,6 +157,8 @@ tidy class CivilianScript {
 	void modIncomeFromCargoWorth(Civilian& obj) {
 		if(obj.getCivilianType() == CiT_CustomsOffice)
 			obj.modIncome(CIV_COFFICE_UPKEEP - income);
+		else if(obj.getCivilianType() == CiT_Freighter)
+			obj.modIncome(getCivilianFreighterUpkeep(obj.radius) - income);
 		else if(obj.getCivilianType() != CiT_PirateHoard)
 			// add 10% of transported cargo worth as income
 			obj.modIncome(calcIncomeFromCargoWorth(cargoWorth) - income);
@@ -388,6 +390,7 @@ tidy class CivilianScript {
 		if(curRegion is null && nextRegion is null)
 			navState = CiNS_NeedPath;
 
+		//printForID(obj, 872420271, format("ns $1", navState));
 		switch(navState) {
 			case CiNS_NeedPath: {
 				if(curRegion is destRegion) {
@@ -443,7 +446,6 @@ tidy class CivilianScript {
 						break;
 					}
 				} else {
-					//printForID(obj, 872415443, format("has intermediate $1", intermediate.position is null ? 0 : 1));
 					obj.name = intermediate.name;
 					if (intermediate.hasResources && intermediate.getCustomsOffice() !is null)
 						setMoveTarget(intermediate.getCustomsOffice(), CiNS_ArrivedAtIntermediate);
