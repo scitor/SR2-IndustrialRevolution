@@ -6,6 +6,7 @@ from navigation.systems import get_systemCount, getSystem;
 import SystemDesc@ getSystem(uint index) from "game_start";
 import SystemDesc@ getSystem(Region@ region) from "game_start";
 import uint get_systemCount() from "game_start";
+from oddity_navigation import hasOddityLink, getOddityLinks;
 #section menu
 uint get_systemCount() { return 0; }
 SystemDesc@ getSystem(uint index) { return null; }
@@ -270,6 +271,10 @@ class TradePath : SystemPath {
 			if(other.object.GateMask.value & forEmpire.mask == 0)
 				return false;
 		}
+#section server-side
+		if(hasOddityLink(node.object, other.object))
+			return false;
+#section all
 		return true;
 	}
 
@@ -320,6 +325,13 @@ class TradePath : SystemPath {
 				}
 			}
 		}
+#section server-side
+		array<Region@>@ destinations = array<Region@>(0);
+		getOddityLinks(node.object, destinations);
+		for(uint i = 0, cnt = destinations.length; i < cnt; ++i)
+			if(destinations[i].owner.mask & forEmpire.mask != 0)
+				SystemPath::itLink(node, getSystem(destinations[i]), 0.05);
+#section all
 		SystemPath::itNodes(node);
 	}
 };
