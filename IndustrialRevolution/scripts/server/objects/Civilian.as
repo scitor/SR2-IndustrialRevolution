@@ -4,6 +4,7 @@ import systems;
 import resources;
 import civilians;
 import statuses;
+import oddity_navigation;
 
 const double ACC_STATION = 0.1;
 const double ACC_SYSTEM = 2.0;
@@ -25,6 +26,7 @@ tidy class CivilianScript {
 	uint navStateMoved = CiNS_NeedPath;
 	int moveId = -1;
 	bool awaitingIntermediate = false;
+	bool awaitingGateJump = false;
 	bool mainRun = true;
 	double Health = CIV_RADIUS_HEALTH;
 	int stepCount = 0;
@@ -460,10 +462,14 @@ tidy class CivilianScript {
 					break;
 				}
 				vec3d leaveDest;
-				vec3d offset = (nextRegion.position - curRegion.position).normalized(curRegion.radius * 0.85);
-				leaveDest = curRegion.position + quaterniond_fromAxisAngle(vec3d_up(), -pi * 0.01) * offset;
-				leaveDest.y = curRegion.position.y - STATION_MAX_RAD;
-				leaveDest += random3d(STATION_MAX_RAD);
+				if(hasOddityLink(curRegion, nextRegion)) {
+					leaveDest = obj.position;
+				} else {
+					vec3d offset = (nextRegion.position - curRegion.position).normalized(curRegion.radius * 0.85);
+					leaveDest = curRegion.position + quaterniond_fromAxisAngle(vec3d_up(), -pi * 0.01) * offset;
+					leaveDest.y = curRegion.position.y - STATION_MAX_RAD;
+					leaveDest += random3d(STATION_MAX_RAD);
+				}
 				setMoveTarget(leaveDest, CiNS_ArrivedAtExit);
 				quarterImpulse(obj);
 				break;
@@ -474,11 +480,17 @@ tidy class CivilianScript {
 					break;
 				}
 				vec3d enterDest;
-				vec3d offset = (curRegion.position - nextRegion.position).normalized(nextRegion.radius * 0.85);
-				enterDest = nextRegion.position + quaterniond_fromAxisAngle(vec3d_up(), pi * 0.01) * offset;
-				enterDest.y = nextRegion.position.y - STATION_MAX_RAD;
-				enterDest += random3d(STATION_MAX_RAD);
-				fullImpulse(obj);
+				if(hasOddityLink(curRegion, nextRegion)) {
+					enterDest = nextRegion.position + random3d(nextRegion.radius/2);
+					quarterImpulse(obj); // we're about to gate jump, set dummy pos in target system and approach gate
+					awaitingGateJump = true;
+				} else {
+					vec3d offset = (curRegion.position - nextRegion.position).normalized(nextRegion.radius * 0.85);
+					enterDest = nextRegion.position + quaterniond_fromAxisAngle(vec3d_up(), pi * 0.01) * offset;
+					enterDest.y = nextRegion.position.y - STATION_MAX_RAD;
+					enterDest += random3d(STATION_MAX_RAD);
+					fullImpulse(obj);
+				}
 				setMoveTarget(enterDest, CiNS_ArrivedAtRegion);
 				break;
 			}
@@ -487,6 +499,13 @@ tidy class CivilianScript {
 					//print("no move target");
 					navState = CiNS_NeedPath;
 					@nextRegion = null;
+					break;
+				}
+				if (awaitingGateJump && curRegion is nextRegion) {
+					navState = navStateMoved;
+					awaitingGateJump = false;
+					@moveTargetObj = null;
+					moveTargetPos = vec3d();
 					break;
 				}
 				if(moveTargetObj !is null && (obj.moveTo(moveTargetObj, moveId, enterOrbit=false, distance=DEST_RANGE/2) || moveTargetObj.position.distanceToSQ(obj.position) < DEST_RANGE * DEST_RANGE) ||

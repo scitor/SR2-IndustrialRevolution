@@ -271,10 +271,6 @@ class TradePath : SystemPath {
 			if(other.object.GateMask.value & forEmpire.mask == 0)
 				return false;
 		}
-#section server-side
-		if(hasOddityLink(node.object, other.object))
-			return false;
-#section all
 		return true;
 	}
 
@@ -329,8 +325,7 @@ class TradePath : SystemPath {
 		array<Region@>@ destinations = array<Region@>(0);
 		getOddityLinks(node.object, destinations);
 		for(uint i = 0, cnt = destinations.length; i < cnt; ++i)
-			if(destinations[i].owner.mask & forEmpire.mask != 0)
-				SystemPath::itLink(node, getSystem(destinations[i]), 0.05);
+			SystemPath::itLink(node, getSystem(destinations[i]), 0.05);
 #section all
 		SystemPath::itNodes(node);
 	}
