@@ -2,9 +2,21 @@
 	Compatibility: 200
 	Derives From: SR2 Community Patch
 	Description: <<
-		This mod makes civilian transport ships more important.
+This mod makes civilian transport ships more important.
 
-		- Resource import relies directly on arriving trade ships
-		  When trade ships are being shot down, the connection they re-
-		  present will be disabled until the next ship actually arrives.
+[b][color=#944]Depends on having the SR2-Community-Patch installed (not activated)[/color][/b]
+
+[b]Trade ships / stations generate more income when dealing with higher value resources[/b]
+Recalculated values of most resources depending on level, rarity and generated pressure
+
+[b]Resource connections rely directly on arriving trade ships[/b]
+When trade ships are destroyed the connection they represent will be disabled until the next ship actually arrives.
+
+[b]Customs Offices for faster trading[/b]
+Planets automatically* spawn customs offices easing space access and improving trade ship spawning, for a small fee.
+
+[b]No more random traders in your empty systems[/b]
+...wasting precious cargo space for sightseeing tours. There [i]is[/i] more trade traffic, but for another reason...
+
+Improved performance / code of trade ship navigation
 	>>
