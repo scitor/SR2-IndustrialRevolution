@@ -131,6 +131,20 @@ double dumbETA(double dist, double accel) {
 	return sqrt(4.0 * (dist / accel));
 }
 
+export getOddityLinks;
+bool getOddityLinks(Region@ fromRegion, array<Region@>& output) {
+	if(fromRegion is null)
+		return false;
+
+	ReadLock lck(mutex);
+	for(uint i = 0, cnt = gates.length; i < cnt; ++i) {
+		auto@ obj = gates[i];
+		if(obj.region is fromRegion)
+			output.insertLast(obj.getLink().region);
+	}
+	return output.length > 0;
+}
+
 export hasOddityLink;
 bool hasOddityLink(Region@ fromRegion, Region@ toRegion, double minDuration = 0.0) {
 	if(fromRegion is null || toRegion is null)
@@ -163,8 +177,8 @@ bool hasOddityLink(array<Oddity@>& gates, Region@ fromRegion, Region@ toRegion, 
 		if(minDuration > 0 && obj.getTimer() < minDuration)
 			continue;
 
-		vec3d dest = obj.getGateDest();
-		if(dest.distanceTo(toRegion.position) < toRegion.radius)
+		Object@ dest = obj.getLink();
+		if(dest.region is toRegion)
 			return true;
 	}
 	return false;
