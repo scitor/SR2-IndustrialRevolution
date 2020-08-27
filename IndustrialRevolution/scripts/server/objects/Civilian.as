@@ -270,6 +270,7 @@ tidy class CivilianScript {
 		if(obj.getCivilianType() != CiT_Freighter)
 			removeAmbientSource(CURRENT_PLAYER, obj.id);
 		leaveRegion(obj);
+		removeBeam();
 		if(obj.owner !is null && obj.owner.valid) {
 			if(type == CiT_Freighter)
 				obj.owner.CivilianTradeShips -= 1;
@@ -348,6 +349,20 @@ tidy class CivilianScript {
 
 	void fullImpulse(Civilian& obj) {
 		obj.maxAcceleration = getInertiaFromSize(obj) * ACC_INTERSYSTEM;
+	}
+
+	int64 beam = 0;
+	void startBeam(Object@ obj, Object@ target) {
+		if(beam == 0) {
+			beam = (obj.id << 32) | (0x2 << 24);
+			makeBeamEffect(ALL_PLAYERS, beam, obj, target, 0xa0dfffff, obj.radius, "Tractor", -1.0);
+		}
+	}
+	void removeBeam() {
+		if(beam != 0) {
+			removeGfxEffect(ALL_PLAYERS, beam);
+			beam = 0;
+		}
 	}
 
 	double tick(Civilian& obj, double time) {
@@ -499,6 +514,7 @@ tidy class CivilianScript {
 				break;
 			}
 			case CiNS_MovingToTarget: { // in current system
+				removeBeam();
 				if ((moveTargetObj is null || !moveTargetObj.valid) && moveTargetPos == vec3d()) {
 					//print("no move target");
 					navState = CiNS_NeedPath;
@@ -599,6 +615,7 @@ tidy class CivilianScript {
 	}
 
 	bool tradeWithObject(Civilian& obj, Object@ tradeObj) {
+		startBeam(obj, tradeObj);
 		// who do we have here
 		Civilian@ tradeStation = cast<Civilian>(tradeObj);
 		if(tradeStation !is null) {
