@@ -5,6 +5,7 @@ import resources;
 import civilians;
 import statuses;
 import oddity_navigation;
+from traits import getTraitID;
 
 const double ACC_STATION = 0.1;
 const double ACC_SYSTEM = 2.0;
@@ -351,7 +352,17 @@ tidy class CivilianScript {
 		obj.maxAcceleration = getInertiaFromSize(obj) * ACC_INTERSYSTEM;
 	}
 
+	double lastWarp = 0;
+	void warpThere(Civilian& obj, vec3d pos) {
+		playParticleSystem("GateFlash", obj.position, obj.rotation, obj.radius, obj.visibleMask);
+
+		obj.position = pos;
+		obj.clearMovement();
+		playParticleSystem("GateFlash", pos, obj.rotation, obj.radius, obj.visibleMask);
+	}
+
 	int64 beam = 0;
+
 	void startBeam(Object@ obj, Object@ target) {
 		if(beam == 0) {
 			beam = (obj.id << 32) | (0x2 << 24);
@@ -500,7 +511,8 @@ tidy class CivilianScript {
 				vec3d enterDest;
 				if(hasGateToNextRegion(obj, curRegion)) {
 					// we're about to gate jump, set dummy pos in target system and approach gate
-					enterDest = nextRegion.position;
+					enterDest = nextRegion.position + random3d(nextRegion.radius/5);
+					enterDest.y = nextRegion.position.y - STATION_MAX_RAD;
 					quarterImpulse(obj);
 					awaitingGateJump = true;
 				} else {
@@ -508,7 +520,12 @@ tidy class CivilianScript {
 					enterDest = nextRegion.position + quaterniond_fromAxisAngle(vec3d_up(), pi * 0.01) * offset;
 					enterDest.y = nextRegion.position.y - STATION_MAX_RAD;
 					enterDest += random3d(STATION_MAX_RAD);
-					fullImpulse(obj);
+					if(obj.owner.hasTrait(getTraitID("Hyperdrive")) || obj.owner.hasTrait(getTraitID("Jumpdrive"))) {
+						warpThere(obj, enterDest);
+						navState = CiNS_ArrivedAtRegion;
+						break;
+					} else
+						fullImpulse(obj);
 				}
 				setMoveTarget(enterDest, CiNS_ArrivedAtRegion);
 				break;
@@ -537,6 +554,7 @@ tidy class CivilianScript {
 					)
 				) {
 					moveId = -1;
+					obj.stopMoving(enterOrbit=false);
 					@moveTargetObj = null;
 					moveTargetPos = vec3d();
 					navState = navStateMoved;
