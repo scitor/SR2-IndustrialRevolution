@@ -1,0 +1,27 @@
+SHIP_CARGO_INCOME: Cargo / Income:
+SHIP_CARGO_UPKEEP: Cargo / Upkeep:
+SHIP_CARGO_WORTH_INCOME: [right][b][color=#0f0]$1[/color]/ [color=$3]$2[/color][/b][/right]
+CARGO_GOODS: [img=ResourceIconsSmall::32;21;#888/] [color=#aaa]Goods[/color]
+CIVILIAN_MERCHANT: Merchant
+CIVILIAN_FREIGHTER: Freighter
+CIVILIAN_CARAVAN: Caravan
+CIVILIAN_TRANSPORTER: Transporter
+CIVILIAN_STATION: Trade Station
+CIVILIAN: Civilian
+CIVILIAN_CUSTOMS_OFFICE: Customs Office
+CIVILIAN_MAINRUN_DESC: <<|
+This ship is on its primary mission delivering
+the resource to its designated planet.
+>>
+CIVILIAN_TRADERUN_DESC: <<|
+This ship is generating trade income by trading available
+resources between your planets, asteroids and trade stations.
+>>
+STATUS_BLOCKADED: Blockaded!
+STATUS_BLOCKADED_DESC: <<|
+	Civilian trade ship carrying goods for this planet were shot down. As a result, the planet produces 1 less of a random empire resource for each ship destroyed.
+>>
+STATUS_BLOCKADED_EXPORT: Blockaded Export!
+STATUS_BLOCKADED_EXPORT_DESC: <<|
+	Civilian trade ship carrying goods from this planet were shot down. The resource will be available once the next trade ship arrives.
+>>

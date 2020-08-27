@@ -1,0 +1,2 @@
+EXPBLOCK_TERRAFORMING: Planet is being terraformed.
+EXPBLOCK_BLOCKADED_EXPORT: Trade ships destroyed, export blockaded!
