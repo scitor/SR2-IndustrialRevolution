@@ -464,7 +464,8 @@ tidy class CivilianScript {
 					break;
 				}
 				vec3d leaveDest;
-				if(hasOddityLink(curRegion, nextRegion)) {
+				if(hasGateToNextRegion(obj, curRegion)) {
+					// we're about to gate jump, no exit, move on to gate
 					leaveDest = obj.position;
 				} else {
 					vec3d offset = (nextRegion.position - curRegion.position).normalized(curRegion.radius * 0.85);
@@ -482,9 +483,10 @@ tidy class CivilianScript {
 					break;
 				}
 				vec3d enterDest;
-				if(hasOddityLink(curRegion, nextRegion)) {
-					enterDest = nextRegion.position + random3d(nextRegion.radius/2);
-					quarterImpulse(obj); // we're about to gate jump, set dummy pos in target system and approach gate
+				if(hasGateToNextRegion(obj, curRegion)) {
+					// we're about to gate jump, set dummy pos in target system and approach gate
+					enterDest = nextRegion.position;
+					quarterImpulse(obj);
 					awaitingGateJump = true;
 				} else {
 					vec3d offset = (curRegion.position - nextRegion.position).normalized(nextRegion.radius * 0.85);
@@ -504,15 +506,20 @@ tidy class CivilianScript {
 					break;
 				}
 				if (awaitingGateJump && curRegion is nextRegion) {
-					navState = navStateMoved;
+					// system chagned, as expected. assume gate jump complete, set arrived state
 					awaitingGateJump = false;
 					@moveTargetObj = null;
-					moveTargetPos = vec3d();
-					break;
+					moveTargetPos = obj.position;
 				}
-				if(moveTargetObj !is null && (obj.moveTo(moveTargetObj, moveId, enterOrbit=false, distance=DEST_RANGE/2) || moveTargetObj.position.distanceToSQ(obj.position) < DEST_RANGE * DEST_RANGE) ||
-				   moveTargetPos != vec3d() && (obj.moveTo(moveTargetPos, moveId, enterOrbit=false) || moveTargetPos.distanceToSQ(obj.position) < DEST_RANGE * DEST_RANGE))
-				{
+				if(moveTargetObj !is null && (
+						moveTargetObj.position.distanceToSQ(obj.position) < DEST_RANGE * DEST_RANGE ||
+						obj.moveTo(moveTargetObj, moveId, enterOrbit=false, distance=DEST_RANGE/2)
+					)
+				|| moveTargetPos != vec3d() && (
+						moveTargetPos.distanceToSQ(obj.position) < DEST_RANGE * DEST_RANGE ||
+						obj.moveTo(moveTargetPos, moveId, enterOrbit=false)
+					)
+				) {
 					moveId = -1;
 					@moveTargetObj = null;
 					moveTargetPos = vec3d();
@@ -682,6 +689,11 @@ tidy class CivilianScript {
 					obj.setCargoResource(origin.primaryResourceType);
 			}
 		}
+	}
+
+	bool hasGateToNextRegion(Civilian& obj, Region@ curRegion) {
+		return hasOddityLink(curRegion, nextRegion) ||
+			(curRegion.GateMask.value & obj.owner.mask != 0 && nextRegion.GateMask.value & obj.owner.mask != 0);
 	}
 
 	void printForID(Object& obj, const int id, string str) {
