@@ -53,7 +53,7 @@ const double CIV_RADIUS_WORTH = 0.5;
 const double CIV_RADIUS_HEALTH = 25.0;
 
 const int CIV_COFFICE_UPKEEP = -10;
-const int CIV_FREIGHTER_UPKEEP = -1;
+const int CIV_FREIGHTER_UPKEEP = -3;
 
 const double STATION_MIN_RAD = 5.0;
 const double STATION_MAX_RAD = 10.0;
@@ -107,13 +107,14 @@ double randomCivilianFreighterSize() {
 }
 
 double getCivilianFreighterUpkeep(double radius) {
+	double upkeep = CIV_FREIGHTER_UPKEEP;
 	if(radius > CIV_SIZE_FREIGHTER)
-		return CIV_FREIGHTER_UPKEEP * 4;
+		return upkeep * 4;
 	else if(radius > CIV_SIZE_CARAVAN)
-		return CIV_FREIGHTER_UPKEEP * 3;
+		return upkeep * 3;
 	else if(radius > CIV_SIZE_MERCHANT)
-		return CIV_FREIGHTER_UPKEEP * 2;
-	return CIV_FREIGHTER_UPKEEP;
+		return upkeep * 2;
+	return upkeep;
 }
 
 string getCivilianName(uint type, double radius) {

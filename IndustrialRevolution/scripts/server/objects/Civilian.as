@@ -163,7 +163,7 @@ tidy class CivilianScript {
 		if(obj.getCivilianType() == CiT_CustomsOffice)
 			obj.modIncome(CIV_COFFICE_UPKEEP - income);
 		else if(obj.getCivilianType() == CiT_Freighter)
-			obj.modIncome(getCivilianFreighterUpkeep(obj.radius) - income);
+			obj.modIncome(getCivilianFreighterUpkeep(obj.radius) + calcIncomeFromCargoWorth(cargoWorth) - income);
 		else if(obj.getCivilianType() != CiT_PirateHoard)
 			// add 10% of transported cargo worth as income
 			obj.modIncome(calcIncomeFromCargoWorth(cargoWorth) - income);

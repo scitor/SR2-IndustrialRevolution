@@ -185,7 +185,7 @@ class CivilianPopup : Popup {
 			objDesc.text = obj.name;
 			int income = obj.getIncome();
 			cargoLabel.text = income > 0 ? locale::SHIP_CARGO_INCOME : locale::SHIP_CARGO_UPKEEP;
-			worth.text = format(locale::SHIP_CARGO_WORTH_INCOME, formatMoney(value), formatMoney(income), toString(income > 0 ? high : low));
+			worth.text = format(locale::SHIP_CARGO_WORTH_INCOME, formatMoney(value), formatMoney(income), toString(income < 0 ? low : high));
 		}
 
 		Popup::update();
