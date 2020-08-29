@@ -6,7 +6,7 @@ from navigation.systems import get_systemCount, getSystem;
 import SystemDesc@ getSystem(uint index) from "game_start";
 import SystemDesc@ getSystem(Region@ region) from "game_start";
 import uint get_systemCount() from "game_start";
-from oddity_navigation import hasOddityLink, getOddityLinks;
+from oddity_navigation import getOddityLinks;
 #section menu
 uint get_systemCount() { return 0; }
 SystemDesc@ getSystem(uint index) { return null; }
@@ -322,8 +322,7 @@ class TradePath : SystemPath {
 			}
 		}
 #section server-side
-		array<Region@>@ destinations = array<Region@>(0);
-		getOddityLinks(node.object, destinations);
+		array<Region@>@ destinations = getOddityLinks(node.object);
 		for(uint i = 0, cnt = destinations.length; i < cnt; ++i)
 			SystemPath::itLink(node, getSystem(destinations[i]), 0.05);
 #section all
