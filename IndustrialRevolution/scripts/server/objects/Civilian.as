@@ -10,6 +10,7 @@ from traits import getTraitID;
 const double ACC_STATION = 0.1;
 const double ACC_SYSTEM = 2.0;
 const double ACC_INTERSYSTEM = 65.0;
+const double ACC_INTERSYSTEM_FTL = 200.0;
 const double CIV_REPAIR = 1.0;
 const double BLOCKADE_TIMER = 3.0 * 60.0;
 const double DEST_RANGE = 20.0;
@@ -32,6 +33,7 @@ tidy class CivilianScript {
 	double Health = CIV_RADIUS_HEALTH;
 	int stepCount = 0;
 	int income = 0;
+	int64 beam = 0;
 	bool delta = false;
 
 	uint cargoType = CT_Goods;
@@ -326,6 +328,13 @@ tidy class CivilianScript {
 		@intermediate = planet;
 	}
 
+	void setFTLTarget(vec3d pos, uint fNavState) {
+		moveTargetPos = pos;
+		@moveTargetObj = null;
+		navState = CiNS_FTLToTarget;
+		navStateMoved = fNavState;
+	}
+
 	void setMoveTarget(vec3d pos, uint fNavState) {
 		moveTargetPos = pos;
 		@moveTargetObj = null;
@@ -352,16 +361,10 @@ tidy class CivilianScript {
 		obj.maxAcceleration = getInertiaFromSize(obj) * ACC_INTERSYSTEM;
 	}
 
-	double lastWarp = 0;
-	void warpThere(Civilian& obj, vec3d pos) {
-		playParticleSystem("GateFlash", obj.position, obj.rotation, obj.radius, obj.visibleMask);
-
+	void jumpThere(Civilian& obj, vec3d pos) {
 		obj.position = pos;
 		obj.clearMovement();
-		playParticleSystem("GateFlash", pos, obj.rotation, obj.radius, obj.visibleMask);
 	}
-
-	int64 beam = 0;
 
 	void startBeam(Object@ obj, Object@ target) {
 		if(beam == 0) {
@@ -369,6 +372,7 @@ tidy class CivilianScript {
 			makeBeamEffect(ALL_PLAYERS, beam, obj, target, 0xa0dfffff, obj.radius, "Tractor", -1.0);
 		}
 	}
+
 	void removeBeam() {
 		if(beam != 0) {
 			removeGfxEffect(ALL_PLAYERS, beam);
@@ -490,7 +494,7 @@ tidy class CivilianScript {
 					break;
 				}
 				vec3d leaveDest;
-				if(hasGateToNextRegion(obj, curRegion)) {
+				if(hasGateToNextRegion(curRegion, obj.owner)) {
 					// we're about to gate jump, no exit, move on to gate
 					leaveDest = obj.position;
 				} else {
@@ -509,7 +513,7 @@ tidy class CivilianScript {
 					break;
 				}
 				vec3d enterDest;
-				if(hasGateToNextRegion(obj, curRegion)) {
+				if(hasGateToNextRegion(curRegion, obj.owner)) {
 					// we're about to gate jump, set dummy pos in target system and approach gate
 					enterDest = nextRegion.position + random3d(nextRegion.radius/5);
 					enterDest.y = nextRegion.position.y - STATION_MAX_RAD;
@@ -521,8 +525,7 @@ tidy class CivilianScript {
 					enterDest.y = nextRegion.position.y - STATION_MAX_RAD;
 					enterDest += random3d(STATION_MAX_RAD);
 					if(obj.owner.hasTrait(getTraitID("Hyperdrive")) || obj.owner.hasTrait(getTraitID("Jumpdrive"))) {
-						warpThere(obj, enterDest);
-						navState = CiNS_ArrivedAtRegion;
+						setFTLTarget(enterDest, CiNS_ArrivedAtRegion);
 						break;
 					} else
 						fullImpulse(obj);
@@ -530,8 +533,8 @@ tidy class CivilianScript {
 				setMoveTarget(enterDest, CiNS_ArrivedAtRegion);
 				break;
 			}
-			case CiNS_MovingToTarget: { // in current system
-				removeBeam();
+			case CiNS_MovingToTarget: {
+				removeBeam(); // remove beams we have started
 				if ((moveTargetObj is null || !moveTargetObj.valid) && moveTargetPos == vec3d()) {
 					//print("no move target");
 					navState = CiNS_NeedPath;
@@ -555,6 +558,33 @@ tidy class CivilianScript {
 				) {
 					moveId = -1;
 					obj.stopMoving(enterOrbit=false);
+					@moveTargetObj = null;
+					moveTargetPos = vec3d();
+					navState = navStateMoved;
+				}
+				break;
+			}
+			case CiNS_FTLToTarget: {
+				if(moveTargetPos == vec3d()) {
+					navState = CiNS_NeedPath;
+					@nextRegion = null;
+					break;
+				}
+				if(obj.owner.hasTrait(getTraitID("Jumpdrive"))) {
+					playParticleSystem("FTLEnterSilent", obj.position, obj.rotation, obj.radius/2, obj.visibleMask);
+					jumpThere(obj, moveTargetPos);
+					playParticleSystem("FTLExitSilent", moveTargetPos, obj.rotation, obj.radius/2, obj.visibleMask);
+					navState = CiNS_ArrivedAtRegion;
+					break;
+				}
+				if(!obj.inFTL)
+					playParticleSystem("FTLEnterSilent", obj.position, obj.rotation, obj.radius/2, obj.visibleMask);
+				if(moveTargetPos.distanceToSQ(obj.position) < DEST_RANGE * DEST_RANGE
+					|| obj.FTLTo(moveTargetPos, ACC_INTERSYSTEM_FTL, moveId))
+				{
+					moveId = -1;
+					obj.FTLDrop();
+					playParticleSystem("FTLExitSilent", obj.position, obj.rotation, obj.radius/2, obj.visibleMask);
 					@moveTargetObj = null;
 					moveTargetPos = vec3d();
 					navState = navStateMoved;
@@ -726,9 +756,17 @@ tidy class CivilianScript {
 		}
 	}
 
-	bool hasGateToNextRegion(Civilian& obj, Region@ curRegion) {
-		return hasOddityLink(curRegion, nextRegion) ||
-			(curRegion.GateMask.value & obj.owner.mask != 0 && nextRegion.GateMask.value & obj.owner.mask != 0);
+	bool hasGateToNextRegion(Region& curRegion, Empire& owner) {
+		if(hasOddityLink(curRegion, nextRegion))
+			return true;
+
+		if(owner.hasStargates()) {
+			Object@ thisGate = owner.getStargate(curRegion.position);
+			Object@ otherGate = owner.getStargate(nextRegion.position);
+			return thisGate !is null && thisGate.region is curRegion
+			&& otherGate !is null && otherGate.region is nextRegion;
+		}
+		return false;
 	}
 
 	void printForID(Object& obj, const int id, string str) {

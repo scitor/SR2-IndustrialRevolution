@@ -16,6 +16,7 @@ enum CivilianNavState {
 	CiNS_PathToExit,
 	CiNS_PathToNextRegion,
 	CiNS_MovingToTarget,
+	CiNS_FTLToTarget,
 	CiNS_ArrivedAtIntermediate,
 	CiNS_ArrivedAtExit,
 	CiNS_ArrivedAtRegion,
