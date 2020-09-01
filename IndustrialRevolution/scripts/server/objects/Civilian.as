@@ -4,10 +4,13 @@ import systems;
 import resources;
 import civilians;
 import statuses;
+import oddity_navigation;
+from traits import getTraitID;
 
 const double ACC_STATION = 0.1;
 const double ACC_SYSTEM = 2.0;
 const double ACC_INTERSYSTEM = 65.0;
+const double ACC_INTERSYSTEM_FTL = 200.0;
 const double CIV_REPAIR = 1.0;
 const double BLOCKADE_TIMER = 3.0 * 60.0;
 const double DEST_RANGE = 20.0;
@@ -25,10 +28,12 @@ tidy class CivilianScript {
 	uint navStateMoved = CiNS_NeedPath;
 	int moveId = -1;
 	bool awaitingIntermediate = false;
+	bool awaitingGateJump = false;
 	bool mainRun = true;
 	double Health = CIV_RADIUS_HEALTH;
 	int stepCount = 0;
 	int income = 0;
+	int64 beam = 0;
 	bool delta = false;
 
 	uint cargoType = CT_Goods;
@@ -72,7 +77,7 @@ tidy class CivilianScript {
 			@cargoResource = getResource(msg.readIdentifier(SI_Resource));
 		msg >> cargoWorth;
 
-		addAmbientSource(CURRENT_PLAYER, "ambient_station", obj.id, obj.position, STATION_MIN_RAD);
+		addAmbientSource(CURRENT_PLAYER, "ambient_station", obj.id, obj.position, STATION_SND_RAD);
 		makeMesh(obj);
 	}
 
@@ -157,6 +162,8 @@ tidy class CivilianScript {
 	void modIncomeFromCargoWorth(Civilian& obj) {
 		if(obj.getCivilianType() == CiT_CustomsOffice)
 			obj.modIncome(CIV_COFFICE_UPKEEP - income);
+		else if(obj.getCivilianType() == CiT_Freighter)
+			obj.modIncome(getCivilianFreighterUpkeep(obj.radius) + calcIncomeFromCargoWorth(cargoWorth) - income);
 		else if(obj.getCivilianType() != CiT_PirateHoard)
 			// add 10% of transported cargo worth as income
 			obj.modIncome(calcIncomeFromCargoWorth(cargoWorth) - income);
@@ -213,7 +220,7 @@ tidy class CivilianScript {
 			obj.maxAcceleration = ACC_STATION;
 			obj.rotationSpeed = 0.5;
 			obj.stopMoving();
-			addAmbientSource(CURRENT_PLAYER, "ambient_station", obj.id, obj.position, STATION_MIN_RAD);
+			addAmbientSource(CURRENT_PLAYER, "ambient_station", obj.id, obj.position, STATION_SND_RAD);
 		}
 		obj.noCollide = true;
 		makeMesh(obj);
@@ -263,9 +270,10 @@ tidy class CivilianScript {
 			if(status !is null)
 				pathTarget.addStatus(status.id, timer=BLOCKADE_TIMER);
 		}
-		if(type != CiT_Freighter)
+		if(obj.getCivilianType() != CiT_Freighter)
 			removeAmbientSource(CURRENT_PLAYER, obj.id);
 		leaveRegion(obj);
+		removeBeam();
 		if(obj.owner !is null && obj.owner.valid) {
 			if(type == CiT_Freighter)
 				obj.owner.CivilianTradeShips -= 1;
@@ -320,6 +328,13 @@ tidy class CivilianScript {
 		@intermediate = planet;
 	}
 
+	void setFTLTarget(vec3d pos, uint fNavState) {
+		moveTargetPos = pos;
+		@moveTargetObj = null;
+		navState = CiNS_FTLToTarget;
+		navStateMoved = fNavState;
+	}
+
 	void setMoveTarget(vec3d pos, uint fNavState) {
 		moveTargetPos = pos;
 		@moveTargetObj = null;
@@ -328,7 +343,7 @@ tidy class CivilianScript {
 	}
 
 	void setMoveTarget(Object& obj, uint fNavState) {
-		moveTargetPos = VEC3_NULL;
+		moveTargetPos = vec3d();
 		@moveTargetObj = obj;
 		navState = CiNS_MovingToTarget;
 		navStateMoved = fNavState;
@@ -344,6 +359,25 @@ tidy class CivilianScript {
 
 	void fullImpulse(Civilian& obj) {
 		obj.maxAcceleration = getInertiaFromSize(obj) * ACC_INTERSYSTEM;
+	}
+
+	void jumpThere(Civilian& obj, vec3d pos) {
+		obj.position = pos;
+		obj.clearMovement();
+	}
+
+	void startBeam(Object@ obj, Object@ target) {
+		if(beam == 0) {
+			beam = (obj.id << 32) | (0x2 << 24);
+			makeBeamEffect(ALL_PLAYERS, beam, obj, target, 0xa0dfffff, obj.radius, "Tractor", -1.0);
+		}
+	}
+
+	void removeBeam() {
+		if(beam != 0) {
+			removeGfxEffect(ALL_PLAYERS, beam);
+			beam = 0;
+		}
 	}
 
 	double tick(Civilian& obj, double time) {
@@ -388,6 +422,7 @@ tidy class CivilianScript {
 		if(curRegion is null && nextRegion is null)
 			navState = CiNS_NeedPath;
 
+		//printForID(obj, 872420271, format("ns $1", navState));
 		switch(navState) {
 			case CiNS_NeedPath: {
 				if(curRegion is destRegion) {
@@ -435,7 +470,7 @@ tidy class CivilianScript {
 						if(nextRegion !is null)
 							pos = curRegion.position + (nextRegion.position - curRegion.position).normalized(curRegion.radius);
 						curRegion.getTradeStation(obj, obj.owner, pos);
-					} else if(!mainRun) // since we dont buy on our first route, we dont need planets. they dont buy either
+					} else if(!mainRun && curRegion.getPlanetCount(obj.owner) > 0)
 						curRegion.getTradePlanet(obj, obj.owner);
 					else {
 						awaitingIntermediate = false;
@@ -443,7 +478,6 @@ tidy class CivilianScript {
 						break;
 					}
 				} else {
-					//printForID(obj, 872415443, format("has intermediate $1", intermediate.position is null ? 0 : 1));
 					obj.name = intermediate.name;
 					if (intermediate.hasResources && intermediate.getCustomsOffice() !is null)
 						setMoveTarget(intermediate.getCustomsOffice(), CiNS_ArrivedAtIntermediate);
@@ -460,9 +494,15 @@ tidy class CivilianScript {
 					break;
 				}
 				vec3d leaveDest;
-				vec3d offset = (nextRegion.position - curRegion.position).normalized(curRegion.radius * 0.85);
-				leaveDest = curRegion.position + quaterniond_fromAxisAngle(vec3d_up(), -pi * 0.01) * offset;
-				leaveDest.y = curRegion.position.y - STATION_MAX_RAD;
+				if(hasGateToNextRegion(curRegion, obj.owner)) {
+					// we're about to gate jump, no exit, move on to gate
+					leaveDest = obj.position;
+				} else {
+					vec3d offset = (nextRegion.position - curRegion.position).normalized(curRegion.radius * 0.85);
+					leaveDest = curRegion.position + quaterniond_fromAxisAngle(vec3d_up(), -pi * 0.01) * offset;
+					leaveDest.y = curRegion.position.y - STATION_MAX_RAD;
+					leaveDest += random3d(STATION_MAX_RAD);
+				}
 				setMoveTarget(leaveDest, CiNS_ArrivedAtExit);
 				quarterImpulse(obj);
 				break;
@@ -473,34 +513,88 @@ tidy class CivilianScript {
 					break;
 				}
 				vec3d enterDest;
-				vec3d offset = (curRegion.position - nextRegion.position).normalized(nextRegion.radius * 0.85);
-				enterDest = nextRegion.position + quaterniond_fromAxisAngle(vec3d_up(), pi * 0.01) * offset;
-				enterDest.y = nextRegion.position.y - STATION_MAX_RAD;
-				enterDest += random3d(DEST_RANGE);
-				fullImpulse(obj);
+				if(hasGateToNextRegion(curRegion, obj.owner)) {
+					// we're about to gate jump, set dummy pos in target system and approach gate
+					enterDest = nextRegion.position + random3d(nextRegion.radius/5);
+					enterDest.y = nextRegion.position.y - STATION_MAX_RAD;
+					quarterImpulse(obj);
+					awaitingGateJump = true;
+				} else {
+					vec3d offset = (curRegion.position - nextRegion.position).normalized(nextRegion.radius * 0.85);
+					enterDest = nextRegion.position + quaterniond_fromAxisAngle(vec3d_up(), pi * 0.01) * offset;
+					enterDest.y = nextRegion.position.y - STATION_MAX_RAD;
+					enterDest += random3d(STATION_MAX_RAD);
+					if(obj.owner.hasTrait(getTraitID("Hyperdrive")) || obj.owner.hasTrait(getTraitID("Jumpdrive"))) {
+						setFTLTarget(enterDest, CiNS_ArrivedAtRegion);
+						break;
+					} else
+						fullImpulse(obj);
+				}
 				setMoveTarget(enterDest, CiNS_ArrivedAtRegion);
 				break;
 			}
-			case CiNS_MovingToTarget: { // in current system
-				if ((moveTargetObj is null || !moveTargetObj.valid) && moveTargetPos == VEC3_NULL) {
+			case CiNS_MovingToTarget: {
+				removeBeam(); // remove beams we have started
+				if ((moveTargetObj is null || !moveTargetObj.valid) && moveTargetPos == vec3d()) {
 					//print("no move target");
 					navState = CiNS_NeedPath;
 					@nextRegion = null;
 					break;
 				}
-				if(moveTargetObj !is null && (obj.moveTo(moveTargetObj, moveId, distance=DEST_RANGE, enterOrbit=false)) ||
-				   moveTargetPos != VEC3_NULL && (obj.moveTo(moveTargetPos, moveId, enterOrbit=false) || moveTargetPos.distanceToSQ(obj.position) < obj.radius * DEST_RANGE))
+				if (awaitingGateJump && curRegion is nextRegion) {
+					// system chagned, as expected. assume gate jump complete, set arrived state
+					awaitingGateJump = false;
+					@moveTargetObj = null;
+					moveTargetPos = obj.position;
+				}
+				if(moveTargetObj !is null && (
+						moveTargetObj.position.distanceToSQ(obj.position) < DEST_RANGE * DEST_RANGE ||
+						obj.moveTo(moveTargetObj, moveId, enterOrbit=false, distance=DEST_RANGE/2)
+					)
+				|| moveTargetPos != vec3d() && (
+						moveTargetPos.distanceToSQ(obj.position) < DEST_RANGE * DEST_RANGE ||
+						obj.moveTo(moveTargetPos, moveId, enterOrbit=false)
+					)
+				) {
+					moveId = -1;
+					obj.stopMoving(enterOrbit=false);
+					@moveTargetObj = null;
+					moveTargetPos = vec3d();
+					navState = navStateMoved;
+				}
+				break;
+			}
+			case CiNS_FTLToTarget: {
+				if(moveTargetPos == vec3d()) {
+					navState = CiNS_NeedPath;
+					@nextRegion = null;
+					break;
+				}
+				if(obj.owner.hasTrait(getTraitID("Jumpdrive"))) {
+					playParticleSystem("FTLEnterSilent", obj.position, obj.rotation, obj.radius/2, obj.visibleMask);
+					jumpThere(obj, moveTargetPos);
+					playParticleSystem("FTLExitSilent", moveTargetPos, obj.rotation, obj.radius/2, obj.visibleMask);
+					navState = CiNS_ArrivedAtRegion;
+					break;
+				}
+				if(!obj.inFTL)
+					playParticleSystem("FTLEnterSilent", obj.position, obj.rotation, obj.radius/2, obj.visibleMask);
+				if(moveTargetPos.distanceToSQ(obj.position) < DEST_RANGE * DEST_RANGE
+					|| obj.FTLTo(moveTargetPos, ACC_INTERSYSTEM_FTL, moveId))
 				{
 					moveId = -1;
+					obj.FTLDrop();
+					playParticleSystem("FTLExitSilent", obj.position, obj.rotation, obj.radius/2, obj.visibleMask);
 					@moveTargetObj = null;
-					moveTargetPos = VEC3_NULL;
+					moveTargetPos = vec3d();
 					navState = navStateMoved;
 				}
 				break;
 			}
 			case CiNS_ArrivedAtIntermediate: {
 				// do trade stuff with station
-				handleTradeWithObject(obj, intermediate);
+				if(!tradeWithObject(obj, intermediate) && curRegion !is null)
+					curRegion.bumpTradeCounter(obj.owner); // didn't trade means we 'want' more stations
 				@intermediate = null;
 				if(pathTarget !is null)
 					obj.name = pathTarget.name;
@@ -558,7 +652,9 @@ tidy class CivilianScript {
 						obj.setCargoResource(pathTarget.primaryResourceType);
 					mainRun = false;
 				}
-				handleTradeWithObject(obj, pathTarget);
+				if(!tradeWithObject(obj, pathTarget) && curRegion !is null)
+					curRegion.bumpTradeCounter(obj.owner);
+
 				freeCivilian(obj);
 				break;
 			}
@@ -566,80 +662,79 @@ tidy class CivilianScript {
 		return 0.2;
 	}
 
-	void handleTradeWithObject(Civilian& obj, Object@ tradeObj) {
-		// trade stations
+	bool tradeWithObject(Civilian& obj, Object@ tradeObj) {
+		startBeam(obj, tradeObj);
+		// who do we have here
 		Civilian@ tradeStation = cast<Civilian>(tradeObj);
 		if(tradeStation !is null) {
-			bool soldSomething = false;
-			if(cargoType == CT_Resource && tradeStation.getCivilianType() != CiT_CustomsOffice) {
-				// we sell good stuff
-				if(tradeStation.getCargoType() == CT_Goods) // Goods stations will always buy
+			// we sell good stuff (but not to customs offices)
+			if(obj.getCargoType() == CT_Resource && tradeStation.getCivilianType() != CiT_CustomsOffice) {
+				if(tradeStation.getCargoType() == CT_Goods) { // Goods stations will always buy
 					tradeStation.setCargoResource(obj.getCargoResource());
-				else if (obj.getCargoResource() != tradeStation.getCargoResource()) {
-					const ResourceType@ stationRes = getResource(tradeStation.getCargoResource());
-					if(stationRes !is null) {
-						double cWorth = stationRes.cargoWorth > 0 ? stationRes.cargoWorth : CARGO_GOODS_WORTH;
-						// 20% chance to 'sell' if resource is worth the same
-						double chance = getCargoWorth() / cWorth / 5;
-						if(randomd(0,1) < chance) {
-							soldSomething = true;
-							tradeStation.setCargoResource(obj.getCargoResource());
-							// they bought our stuff, now get the heck outta here
-						}
+					return true;
+				} else if(obj.getCargoResource() != tradeStation.getCargoResource()) {
+					if(isResourceWorthTrading(tradeStation.getCargoResource(), false)) {
+						tradeStation.setCargoResource(obj.getCargoResource());
+						return true; // they bought our stuff, now get the heck outta here
 					}
 				}
 			}
-			if(!mainRun && !soldSomething && tradeStation.getCargoType() == CT_Resource) {
-				// lets check the market
-				if(cargoType == CT_Goods) // bought
-					obj.setCargoResource(tradeStation.getCargoResource());
-				else if (obj.getCargoResource() != tradeStation.getCargoResource()) {
-					const ResourceType@ stationRes = getResource(tradeStation.getCargoResource());
-					if(stationRes !is null) {
-						double cWorth = stationRes.cargoWorth > 0 ? stationRes.cargoWorth : CARGO_GOODS_WORTH;
-						// 20% chance to 'buy' if resource is worth the same
-						double chance = cWorth / getCargoWorth() / 5;
-						if(randomd(0,1) < chance)
-							obj.setCargoResource(tradeStation.getCargoResource());
-					}
-				}
-			}
-			return;
+			// lets check the market
+			if(!mainRun && tradeStation.getCargoType() == CT_Resource)
+				return buyFromObject(obj, tradeStation);
 		}
-		if(mainRun)
-			return;
+		if(mainRun) // we dont buy on our delivery run
+			return false;
+
 		// buy from planets
 		Planet@ tradePlanet = cast<Planet>(tradeObj);
-		if(tradePlanet !is null && getResource(tradePlanet.primaryResourceType) !is null) {
-			if(cargoType == CT_Goods)
-				obj.setCargoResource(tradePlanet.primaryResourceType);
-			else if (obj.getCargoResource() != tradePlanet.primaryResourceType) {
-				const ResourceType@ planetRes = getResource(tradePlanet.primaryResourceType);
-				if(planetRes !is null && planetRes.exportable) {
-					double cWorth = planetRes.cargoWorth > 0 ? planetRes.cargoWorth : CARGO_GOODS_WORTH;
-					double chance = cWorth / getCargoWorth() / 5;
-					if(randomd(0,1) < chance)
-						obj.setCargoResource(tradePlanet.primaryResourceType);
-				}
-			}
-			return;
-		}
+		if(tradePlanet !is null && getResource(tradePlanet.primaryResourceType) !is null)
+			return buyFromObject(obj, tradePlanet);
+
 		// buy from asteroids
 		Asteroid@ tradeAsteroid = cast<Asteroid>(tradeObj);
-		if(tradeAsteroid !is null && getResource(tradeAsteroid.primaryResourceType) !is null) {
-			if(cargoType == CT_Goods)
-				obj.setCargoResource(tradeAsteroid.primaryResourceType);
-			else if (obj.getCargoResource() != tradeAsteroid.primaryResourceType) {
-				const ResourceType@ asteroidRes = getResource(tradeAsteroid.primaryResourceType);
-				if(asteroidRes !is null) {
-					double cWorth = asteroidRes.cargoWorth > 0 ? asteroidRes.cargoWorth : CARGO_GOODS_WORTH;
-					double chance = cWorth / getCargoWorth() / 5;
-					if(randomd(0,1) < chance)
-						obj.setCargoResource(tradeAsteroid.primaryResourceType);
-				}
+		if(tradeAsteroid !is null && getResource(tradeAsteroid.primaryResourceType) !is null)
+			return buyFromObject(obj, tradeAsteroid);
+
+		return false;
+	}
+
+	bool buyFromObject(Civilian& obj, Object& tradeObj) {
+		uint resId = uint(-1);
+		Civilian@ civ = cast<Civilian>(tradeObj);
+		if(civ !is null)
+			resId = civ.getCargoResource();
+		else if(tradeObj.hasResources)
+			resId = tradeObj.primaryResourceType;
+
+		if(resId == uint(-1))
+			return false;
+
+		if(obj.getCargoType() == CT_Goods) {
+			obj.setCargoResource(resId);
+			return true; // bought
+		} else if(obj.getCargoResource() != resId) {
+			if(isResourceWorthTrading(resId)) {
+				obj.setCargoResource(resId);
+				return true;
 			}
-			return;
 		}
+		return false;
+	}
+
+	bool isResourceWorthTrading(uint otherResourceTypeId, bool buying = true) {
+		const ResourceType@ otherRes = getResource(otherResourceTypeId);
+		if(otherRes is null)
+			return false;
+
+		uint otherWorth = otherRes.cargoWorth > 0 ? otherRes.cargoWorth : CARGO_GOODS_WORTH;
+		double chance = 0.0;
+		if(buying)
+			chance = otherWorth / getCargoWorth() / 3; // 33% chance to 'buy' if resource is worth the same
+		else
+			chance = getCargoWorth() / otherWorth / 3;
+
+		return randomd() < chance;
 	}
 
 	void tickStation(Civilian& obj) {
@@ -659,6 +754,19 @@ tidy class CivilianScript {
 					obj.setCargoResource(origin.primaryResourceType);
 			}
 		}
+	}
+
+	bool hasGateToNextRegion(Region& curRegion, Empire& owner) {
+		if(hasOddityLink(curRegion, nextRegion))
+			return true;
+
+		if(owner.hasStargates()) {
+			Object@ thisGate = owner.getStargate(curRegion.position);
+			Object@ otherGate = owner.getStargate(nextRegion.position);
+			return thisGate !is null && thisGate.region is curRegion
+			&& otherGate !is null && otherGate.region is nextRegion;
+		}
+		return false;
 	}
 
 	void printForID(Object& obj, const int id, string str) {

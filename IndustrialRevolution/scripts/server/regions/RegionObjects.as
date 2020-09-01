@@ -1262,9 +1262,9 @@ tidy class RegionObjects : Component_RegionObjects, Savable {
 				Empire@ emp = getEmpire(i);
 				if(!emp.major)
 					continue;
-				uint buildStations = min(planetCounts[i], uint(double(tradeCounter[i]) / STATION_TRADES));
-				uint maxStations = max(buildStations, uint(double(tradeCounter[i] * 2) / STATION_TRADES));
-
+				uint plCount = planetCounts[i] > 0 ? planetCounts[i] : 1;
+				uint buildStations =  uint(round((double(tradeCounter[i]) / STATION_TRADES) / plCount));
+				uint maxStations = 2 * buildStations;
 				uint stationCount = 0;
 				for(uint i = 0, cnt = tradeStations.length; i < cnt; ++i) {
 					Empire@ owner = tradeStations[i].owner;
@@ -1276,6 +1276,7 @@ tidy class RegionObjects : Component_RegionObjects, Savable {
 						stationCount += 1;
 					}
 				}
+				//print(format(region.name+" emp $1 build $2 have $3 pl $4 cnt $5", emp.id, buildStations, stationCount, plCount, tradeCounter[i]));
 				// only change one at a time
 				if(stationCount > maxStations) {
 					double smallestSize = INFINITY;
@@ -1288,6 +1289,7 @@ tidy class RegionObjects : Component_RegionObjects, Savable {
 						}
 					}
 					if(smallestIndex != UINT_MAX) {
+						tradeStations[smallestIndex].inCombat = true; // fireworks
 						tradeStations[smallestIndex].destroy();
 						stationCount -= 1;
 					}
@@ -1299,15 +1301,17 @@ tidy class RegionObjects : Component_RegionObjects, Savable {
 						uint adjSystemId = (system.object.id + stationCount) % system.adjacent.length;
 						const SystemDesc@ other = getSystem(system.adjacent[adjSystemId]);
 						vec3d offset = (other.object.position - system.position)
-							.normalized(system.radius * 0.7 - STATION_MAX_RAD * 2 * randomi(0,4)); // 5 cols
-						pos = system.position + quaterniond_fromAxisAngle(vec3d_up(), pi * (double(randomi(0,4)-2)/100)) * offset; // 5 rows
-						pos.y = system.position.y - STATION_MAX_RAD * 2 - sin(pos.length) * STATION_MAX_RAD; // height variation
+							.normalized(system.radius * 0.7 - STATION_MAX_RAD * 3 * randomi(0,4)); // 5 cols
+						double rows = double(randomi(0,1) == 0 ? randomi(-3, -2) : randomi(2, 3)); // 4 rows
+						pos = system.position + quaterniond_fromAxisAngle(vec3d_up(), pi * (rows/100)) * offset;
+						pos.y = system.position.y - STATION_MAX_RAD * 2 + sin((pos.x+pos.y)/STATION_MAX_RAD) * STATION_MAX_RAD; // height variation
 					} while (getStationInRange(pos, STATION_MAX_RAD*2) !is null && tries-->0);
 
 					// spawn fatter stations the more we have
 					double stationSize = randomi(0, STATION_MAX_RAD-STATION_MIN_RAD) + STATION_MIN_RAD;
 					uint regionStationLevel = min(5, system.adjacent.length > 0 ? int(stationCount/system.adjacent.length) : 0);
 					Civilian@ station = createCivilian(pos, emp, CiT_Station, radius = stationSize + regionStationLevel);
+					station.setRotation(quaterniond_fromVecToVec(vec3d_front(), system.position - vec3d(pos.x, system.position.y, pos.z)));
 					station.setCargoType(CT_Goods);
 					station.name = getRandomStationName();
 					tradeStations.insertLast(station);
@@ -1328,30 +1332,11 @@ tidy class RegionObjects : Component_RegionObjects, Savable {
 		Empire@ civOwner = civ.owner;
 		double bestTimer = 0.0;
 
-		if(randomd(0, 1.0) > 0.2) {
-			int randI = randomi(0, civOwner.planetCount);
-			DataList@ objs = civOwner.getPlanets();
-			Object@ rec;
-			while(receive(objs, rec)) {
-				Planet@ pl = cast<Planet>(rec);
-				if(pl is null || randI-->0)
-					continue;
-				@bestDest = pl;
-				break;
-			}
-		} else {
-			DataList@ objs = civOwner.getAsteroids();
-			array<Asteroid@> asteroids;
-			Object@ rec;
-			while(receive(objs, rec)) {
-				Asteroid@ asteroid = cast<Asteroid>(rec);
-				if(asteroid is null)
-					continue;
-				asteroids.insertLast(asteroid);
-			}
-			if (asteroids !is null && asteroids.length > 0)
-				@bestDest = asteroids[randomi(0, asteroids.length-1)];
-		}
+		if(randomd(0, 1.0) > 0.2)
+			@bestDest = civOwner.planetList[randomi(0, civOwner.planetCount-1)];
+		else
+			@bestDest = civOwner.asteroidList[randomi(0, civOwner.asteroidCount-1)];
+
 		if(bestDest is null) {
 			civ.destroy();
 			return;
@@ -1368,8 +1353,8 @@ tidy class RegionObjects : Component_RegionObjects, Savable {
 			civLimit = plCount;
 		civLimit *= perPlanet;
 
-		//print(format("ships $1/$2", civOwner.CivilianTradeShips.value, civLimit));
 		if(civOwner.CivilianTradeShips.value > civLimit) {
+			print(format("ships $1/$2 mult $3 cnt $4", civOwner.CivilianTradeShips.value, civLimit, config::CIVILIAN_TRADE_MULT, civ.getStepCount()));
 			civ.destroy();
 			return;
 		}
@@ -1380,7 +1365,7 @@ tidy class RegionObjects : Component_RegionObjects, Savable {
 		else
 			civ.pathTo(bestDest);
 		civ.name = bestDest.name;
-		civ.resetStepCount();
+		civ.modStepCount(+1);
 	}
 #section all
 
@@ -1776,6 +1761,16 @@ tidy class RegionObjects : Component_RegionObjects, Savable {
 				Artifact@ artifact = cast<Artifact>(obj);
 				artifactList.remove(artifact);
 				artifactBucket.remove(artifact);
+			}
+			break;
+			case OT_Civilian:
+			{
+				Civilian@ civ = cast<Civilian>(obj);
+				tradeStations.remove(civ);
+				if(tradeStations.length == 0)
+					HaveStationsMask &= ~civ.owner.mask;
+				else
+					HaveStationsMask |= civ.owner.mask;
 			}
 			break;
 		}

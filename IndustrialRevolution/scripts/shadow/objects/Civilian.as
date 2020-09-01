@@ -99,7 +99,7 @@ tidy class CivilianScript {
 		msg >> type;
 		_readDelta(obj, msg);
 		makeMesh(obj);
-		addAmbientSource("ambient_station", obj.id, obj.position, STATION_MAX_RAD);
+		addAmbientSource("ambient_station", obj.id, obj.position, STATION_SND_RAD);
 	}
 
 	void syncDetailed(Civilian& obj, Message& msg, double tDiff) {

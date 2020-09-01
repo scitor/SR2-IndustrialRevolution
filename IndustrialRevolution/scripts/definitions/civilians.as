@@ -16,6 +16,7 @@ enum CivilianNavState {
 	CiNS_PathToExit,
 	CiNS_PathToNextRegion,
 	CiNS_MovingToTarget,
+	CiNS_FTLToTarget,
 	CiNS_ArrivedAtIntermediate,
 	CiNS_ArrivedAtExit,
 	CiNS_ArrivedAtRegion,
@@ -52,12 +53,11 @@ const double CIV_RADIUS_WORTH = 0.5;
 const double CIV_RADIUS_HEALTH = 25.0;
 
 const int CIV_COFFICE_UPKEEP = -10;
+const int CIV_FREIGHTER_UPKEEP = -3;
 
 const double STATION_MIN_RAD = 5.0;
 const double STATION_MAX_RAD = 10.0;
-
-vec2d VEC2_NULL(INFINITY, INFINITY);
-vec3d VEC3_NULL(INFINITY, INFINITY, INFINITY);
+const double STATION_SND_RAD = 2.0;
 
 uint calcIncomeFromCargoWorth(int cargoWorth) {
 	return max(1, int(double(cargoWorth) * 0.1));
@@ -106,6 +106,17 @@ double randomCivilianFreighterSize() {
 	return CIV_SIZE_MERCHANT;
 }
 
+double getCivilianFreighterUpkeep(double radius) {
+	double upkeep = CIV_FREIGHTER_UPKEEP;
+	if(radius > CIV_SIZE_FREIGHTER)
+		return upkeep * 4;
+	else if(radius > CIV_SIZE_CARAVAN)
+		return upkeep * 3;
+	else if(radius > CIV_SIZE_MERCHANT)
+		return upkeep * 2;
+	return upkeep;
+}
+
 string getCivilianName(uint type, double radius) {
 	if(type == CiT_Freighter) {
 		if(radius > CIV_SIZE_FREIGHTER)
@@ -123,7 +134,7 @@ string getCivilianName(uint type, double radius) {
 		return locale::CIVILIAN_CUSTOMS_OFFICE;
 	}
 	else if(type == CiT_PirateHoard) {
-		return locale::CIVILIAN_CUSTOMS_OFFICE;
+		return locale::PIRATE_HOARD;
 	}
 	return locale::CIVILIAN;
 }

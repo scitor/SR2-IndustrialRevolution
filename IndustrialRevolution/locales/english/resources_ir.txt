@@ -1,0 +1,1 @@
+CARGO_WORTH: Trade value: [b]$1[/b] (per unit)
