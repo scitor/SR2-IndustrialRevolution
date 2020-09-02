@@ -1,0 +1,6 @@
+Cargo: Corinium
+	Name: #CORINIUM
+	Description: #CORINIUM_DESC
+
+	IconL: ResourceIconsSmall::49
+	Icon: ResourceIconsSmall::49

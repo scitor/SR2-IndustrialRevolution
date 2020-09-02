@@ -1,0 +1,6 @@
+Cargo: Fulrate
+	Name: #FULRATE
+	Description: #FULRATE_DESC
+
+	IconL: ResourceIcons::44
+	Icon: ResourceIconsSmall::43

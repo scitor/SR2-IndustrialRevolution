@@ -1,0 +1,6 @@
+Cargo: Illinium
+	Name: #ILLINIUM
+	Description: #ILLINIUM_DESC
+
+	IconL: ResourceIconsSmall::50
+	Icon: ResourceIconsSmall::50

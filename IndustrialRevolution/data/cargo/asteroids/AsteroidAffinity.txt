@@ -1,0 +1,6 @@
+Cargo: AsteroidAffinity
+	Name: #ASTEROID_AFFINITY
+	Description: #ASTEROID_AFFINITY_DESC
+
+	IconL: ResourceIcons::44
+	Icon: ResourceIconsSmall::44

@@ -1,0 +1,6 @@
+Cargo: AsteroidGrowth
+	Name: #ASTEROID_GROWTH
+	Description: #ASTEROID_GROWTH_DESC
+
+	IconL: ResourceIcons::3
+	Icon: ResourceIconsSmall::20

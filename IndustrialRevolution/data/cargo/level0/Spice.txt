@@ -1,0 +1,6 @@
+Cargo: Spice
+	Name: #SPICE
+	Description: #SPICE_DESC
+
+	IconL: ResourceIcons::19
+	Icon: ResourceIconsSmall::2

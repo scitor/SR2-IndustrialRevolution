@@ -1,0 +1,6 @@
+Cargo: Medicines
+	Name: #MEDICINES
+	Description: #MEDICINES_DESC
+
+	IconL: ResourceIcons::15
+	Icon: ResourceIconsSmall::6

@@ -1,0 +1,5 @@
+Cargo: Marble
+	Name: #R_MARBLE
+	Description: #R_MARBLE_DESC
+
+	Icon: ResourceIconsSmall::77

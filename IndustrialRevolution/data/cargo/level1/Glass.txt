@@ -1,0 +1,6 @@
+Cargo: Glass
+	Name: #GLASS
+	Description: #GLASS_DESC
+
+	IconL: ResourceIcons::27
+	Icon: ResourceIconsSmall::27

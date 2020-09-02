@@ -1,0 +1,6 @@
+Cargo: Uranium
+	Name: #URANIUM
+	Description: #URANIUM_DESC
+
+	IconL: ResourceIcons::13
+	Icon: ResourceIconsSmall::4

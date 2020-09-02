@@ -1,0 +1,6 @@
+Cargo: NaturalGas
+	Name: #NATURAL_GAS
+	Description: #NATURAL_GAS_DESC
+
+	IconL: ResourceIcons::41
+	Icon: ResourceIconsSmall::41

@@ -1,0 +1,7 @@
+Cargo: Soylent1
+	Name: #SOYLENT1
+	Description: #SOYLENT1_DESC
+	Class: Food
+
+	IconL: ResourceIconsSmall::104
+	Icon: ResourceIconsSmall::104

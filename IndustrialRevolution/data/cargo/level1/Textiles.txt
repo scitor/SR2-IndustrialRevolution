@@ -1,0 +1,6 @@
+Cargo: Textiles
+	Name: #TEXTILES
+	Description: #TEXTILES_DESC
+
+	IconL: ResourceIcons::9
+	Icon: ResourceIconsSmall::8

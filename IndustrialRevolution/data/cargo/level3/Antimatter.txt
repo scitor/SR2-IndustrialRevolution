@@ -1,0 +1,6 @@
+Cargo: Antimatter
+	Name: #ANTIMATTER
+	Description: #ANTIMATTER_DESC
+
+	IconL: ResourceIcons::17
+	Icon: ResourceIconsSmall::0

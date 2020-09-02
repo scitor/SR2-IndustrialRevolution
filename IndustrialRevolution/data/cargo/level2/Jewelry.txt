@@ -1,0 +1,6 @@
+Cargo: Jewelry
+	Name: #JEWELRY
+	Description: #JEWELRY_DESC
+
+	IconL: ResourceIcons::18
+	Icon: ResourceIconsSmall::1

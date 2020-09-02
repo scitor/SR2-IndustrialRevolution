@@ -1,0 +1,6 @@
+Cargo: Iron
+	Name: #IRON
+	Description: #IRON_DESC
+
+	IconL: ResourceIcons::7
+	Icon: ResourceIconsSmall::15

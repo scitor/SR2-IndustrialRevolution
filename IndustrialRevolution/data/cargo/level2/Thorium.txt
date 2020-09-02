@@ -1,0 +1,6 @@
+Cargo: Thorium
+	Name: #THORIUM
+	Description: #THORIUM_DESC
+
+	IconL: ResourceIcons::35
+	Icon: ResourceIconsSmall::35

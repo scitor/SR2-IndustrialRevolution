@@ -1,0 +1,6 @@
+Cargo: Electronics
+	Name: #ELECTRONICS
+	Description: #ELECTRONICS_DESC
+
+	IconL: ResourceIcons::14
+	Icon: ResourceIconsSmall::5

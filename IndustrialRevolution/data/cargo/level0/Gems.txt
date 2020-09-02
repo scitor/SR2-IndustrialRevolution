@@ -1,0 +1,6 @@
+Cargo: Gems
+	Name: #GEMS
+	Description: #GEMS_DESC
+
+	IconL: ResourceIconsSmall::51
+	Icon: ResourceIconsSmall::51

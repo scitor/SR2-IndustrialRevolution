@@ -1,0 +1,6 @@
+Cargo: UniqueDefense
+	Name: #UNIQUE_DEFENSE
+	Description: #UNIQUE_DEFENSE_DESC
+
+	IconL: ResourceIconsSmall::58
+	Icon: ResourceIconsSmall::58

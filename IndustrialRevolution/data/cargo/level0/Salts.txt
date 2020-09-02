@@ -1,0 +1,7 @@
+Cargo: Salts
+	Name: #SALTS
+	Description: #SALTS_DESC
+	Class: Food
+
+	IconL: ResourceIcons::23
+	Icon: ResourceIconsSmall::23

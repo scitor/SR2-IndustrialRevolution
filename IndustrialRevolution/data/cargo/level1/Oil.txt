@@ -1,0 +1,6 @@
+Cargo: Oil
+	Name: #OIL
+	Description: #OIL_DESC
+
+	IconL: ResourceIcons::8
+	Icon: ResourceIconsSmall::7

@@ -1,0 +1,6 @@
+Cargo: Plutonium
+	Name: #PLUTONIUM
+	Description: #PLUTONIUM_DESC
+
+	IconL: ResourceIcons::34
+	Icon: ResourceIconsSmall::34

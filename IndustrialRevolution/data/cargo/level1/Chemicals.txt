@@ -1,0 +1,6 @@
+Cargo: Chemicals
+	Name: #CHEMICALS
+	Description: #CHEMICALS_DESC
+
+	IconL: ResourceIcons::11
+	Icon: ResourceIconsSmall::10

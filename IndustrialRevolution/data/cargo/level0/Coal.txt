@@ -1,0 +1,6 @@
+Cargo: Coal
+	Name: #COAL
+	Description: #COAL_DESC
+
+	IconL: ResourceIcons::43
+	Icon: ResourceIconsSmall::12

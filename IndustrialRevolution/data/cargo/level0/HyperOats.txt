@@ -1,0 +1,6 @@
+Cargo: HyperOats
+	Name: #HYPER_OATS
+	Description: #HYPER_OATS_DESC
+
+	IconL: ResourceIconsSmall::52
+	Icon: ResourceIconsSmall::52

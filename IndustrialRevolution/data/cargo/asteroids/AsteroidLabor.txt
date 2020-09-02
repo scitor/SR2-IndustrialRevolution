@@ -1,0 +1,6 @@
+Cargo: AsteroidLabor
+	Name: #ASTEROID_LABOR
+	Description: #ASTEROID_LABOR_DESC
+
+	IconL: ResourceIcons::33
+	Icon: ResourceIconsSmall::46

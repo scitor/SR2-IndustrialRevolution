@@ -1,0 +1,7 @@
+Cargo: Fish
+	Name: #FISH
+	Blurb: #FOOD_BLURB
+	Class: Food
+
+	IconL: ResourceIcons::2
+	Icon: ResourceIconsSmall::19
