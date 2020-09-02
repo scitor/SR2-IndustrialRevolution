@@ -15,3 +15,6 @@ Resource: UniqueResearch
 	Affinity: Research
 
 	Pressure: 10 Research
+
+	TriggerPeriodic(RemoveCargo(UniqueResearch, 10), Interval = 10)
+	OnNative(TriggerPeriodic(AddCargoMax(UniqueResearch, 11, 200), Interval = 10))

@@ -10,3 +10,6 @@ Resource: Microcline
 	
 	MorphAllResourcesInto(Microcline)
 	GiveAchievement(ACH_MICROCLINE)
+
+	TriggerPeriodic(RemoveCargo(Drugs, 10), Interval = 10)
+	OnNative(TriggerPeriodic(AddCargoMax(Drugs, 11, 200), Interval = 10))

@@ -12,3 +12,6 @@ Resource: Hydroconductors
 	Pressure: 16 Labor
 	DuplicateResourceEffects() #version<88
 	AddLaborFactor(0.5) #version>=88
+
+	IfLevel(4, TriggerPeriodic(RemoveCargo(Hydroconductors, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(Hydroconductors, 11, 200), Interval = 10))

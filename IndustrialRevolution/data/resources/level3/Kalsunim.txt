@@ -12,3 +12,6 @@ Resource: Kalsunim
 	Pressure: 16 Defense
 
 	PerIncomeAddResource(Labor, 0.2, Defense)
+
+	IfLevel(4, TriggerPeriodic(RemoveCargo(Kalsunim, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(Kalsunim, 11, 200), Interval = 10))

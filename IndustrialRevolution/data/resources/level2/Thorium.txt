@@ -10,3 +10,6 @@ Resource: Thorium
 	Affinity: Energy
 
 	Pressure: 7 Energy
+
+	IfLevel(3, TriggerPeriodic(RemoveCargo(Thorium, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(Thorium, 11, 200), Interval = 10))

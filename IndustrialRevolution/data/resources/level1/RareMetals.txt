@@ -14,3 +14,6 @@ Resource: RareMetals
 	Asteroid Labor: 50
 
 	Pressure: 3 Research
+
+	IfLevel(2, TriggerPeriodic(RemoveCargo(RareMetals, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(RareMetals, 11, 200), Interval = 10))

@@ -16,3 +16,6 @@ Resource: Aluminum
 	Pressure: 6 Labor
 
 	AddPressureCap(1)
+
+	TriggerPeriodic(RemoveCargo(Aluminum, 10), Interval = 10)
+	OnNative(TriggerPeriodic(AddCargoMax(Aluminum, 11, 200), Interval = 10))

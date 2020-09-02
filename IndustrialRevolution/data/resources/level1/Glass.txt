@@ -12,3 +12,6 @@ Resource: Glass
 
 	Pressure: 3 Money
 	AddResource(Energy, 1)
+
+	IfLevel(2, TriggerPeriodic(RemoveCargo(Glass, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(Glass, 11, 200), Interval = 10))

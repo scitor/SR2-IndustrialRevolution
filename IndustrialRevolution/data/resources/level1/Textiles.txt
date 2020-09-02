@@ -13,3 +13,6 @@ Resource: Textiles
 	Terraform Labor: 60
 
 	Pressure: 3 Money
+
+	IfLevel(2, TriggerPeriodic(RemoveCargo(Textiles, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(Textiles, 11, 200), Interval = 10))

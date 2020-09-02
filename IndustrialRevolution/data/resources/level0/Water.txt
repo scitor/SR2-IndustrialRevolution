@@ -15,3 +15,9 @@ Resource: Water
 	Asteroid Labor: 25
 	
 	ResourceBonding(2 = HeavyWater, 4 = BoostWater, 8 = ClearWater, 16 = AwesomeWater) #version<105
+
+	//OnTradeSpawn(AddCargo(Water, -150))
+	//OnTradeDeliver(AddCargo(Water, 150))
+
+	OnNative(TriggerPeriodic(AddCargoMax(Water, 11, 200), Interval = 10))
+	IfLevel(1, TriggerPeriodic(RemoveCargo(Water, 10), Interval = 10))

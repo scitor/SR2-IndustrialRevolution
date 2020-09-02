@@ -12,3 +12,6 @@ Resource: Oil
 
 	Pressure: 2 Energy
 	Pressure: 2 Money
+
+	IfLevel(2, TriggerPeriodic(RemoveCargo(Oil, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(Oil, 11, 200), Interval = 10))

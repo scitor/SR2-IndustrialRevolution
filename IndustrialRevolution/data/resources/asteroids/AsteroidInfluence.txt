@@ -4,3 +4,6 @@ Resource: AsteroidInfluence
 
 	Distribution: 0
 	PerIncomeAddResource(Research, 1, Influence)
+
+	TriggerPeriodic(RemoveCargo(AsteroidInfluence, 10), Interval = 10)
+	OnNative(TriggerPeriodic(AddCargoMax(AsteroidInfluence, 11, 200), Interval = 10))

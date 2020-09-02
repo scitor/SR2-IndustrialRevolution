@@ -13,3 +13,6 @@ Resource: Phasite
 	Pressure: 2 Research
 	PopResearch(0.2) #version<132
 	PerPopulationAddResource(0.2, Research) #version>=132
+
+	TriggerPeriodic(RemoveCargo(Phasite, 10), Interval = 10)
+	OnNative(TriggerPeriodic(AddCargoMax(Phasite, 11, 200), Interval = 10))

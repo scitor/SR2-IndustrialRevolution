@@ -11,4 +11,4 @@ Resource: BioMass
 	Frequency: 0
 	Level: 0
 
-	TriggerPeriodic(AddCargo(BioMass, 1), Interval = 6)
+	OnNative(TriggerPeriodic(AddCargoMax(BioMass, 1, 200), Interval = 5))

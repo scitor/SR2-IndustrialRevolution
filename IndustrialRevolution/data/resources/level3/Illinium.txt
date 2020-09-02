@@ -17,3 +17,6 @@ Resource: Illinium
 	GiveExtraResourcePressure(Labor, 1.0, Level Filter = 0, Allow Uniques = False)
 	GiveExtraResourcePressure(Energy, 1.0, Level Filter = 0, Allow Uniques = False)
 	GiveExtraResourcePressure(Research, 1.0, Level Filter = 0, Allow Uniques = False)
+
+	IfLevel(4, TriggerPeriodic(RemoveCargo(Illinium, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(Illinium, 11, 200), Interval = 10))

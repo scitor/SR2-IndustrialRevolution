@@ -10,3 +10,6 @@ Resource: Fish
 	Level: 0
 	AddResourceVanishBonus(+0.3) #version<105
 	AddToNativeResource(AddResourceVanishBonus(+0.3)) #version<71
+
+	IfLevel(1, TriggerPeriodic(RemoveCargo(Fish, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(Fish, 11, 200), Interval = 10))

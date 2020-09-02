@@ -14,3 +14,6 @@ Resource: UniqueEnergy
 	Affinity: Energy
 
 	Pressure: 10 Energy
+
+	TriggerPeriodic(RemoveCargo(UniqueEnergy, 10), Interval = 10)
+	OnNative(TriggerPeriodic(AddCargoMax(UniqueEnergy, 11, 200), Interval = 10))

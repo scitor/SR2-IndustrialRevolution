@@ -13,3 +13,6 @@ Resource: Titanium
 	Terraform Labor: 30
 
 	Pressure: 8 Labor
+
+	IfLevel(2, TriggerPeriodic(RemoveCargo(Titanium, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(Titanium, 11, 200), Interval = 10))

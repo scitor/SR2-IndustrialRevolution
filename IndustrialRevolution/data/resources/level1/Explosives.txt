@@ -16,3 +16,6 @@ Resource: Explosives
 	Terraform Labor: 30
 
 	Pressure: 3 Defense
+
+	IfLevel(2, TriggerPeriodic(RemoveCargo(Explosives, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(Explosives, 11, 200), Interval = 10))

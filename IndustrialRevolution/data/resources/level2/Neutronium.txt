@@ -10,3 +10,6 @@ Resource: Neutronium
 	Affinity: Defense
 
 	Pressure: 7 Defense
+
+	IfLevel(3, TriggerPeriodic(RemoveCargo(Neutronium, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(Neutronium, 11, 200), Interval = 10))

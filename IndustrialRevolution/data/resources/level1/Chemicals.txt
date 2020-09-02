@@ -13,3 +13,6 @@ Resource: Chemicals
 	Terraform Labor: 30
 
 	Pressure: 3 Research
+
+	IfLevel(2, TriggerPeriodic(RemoveCargo(Chemicals, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(Chemicals, 11, 200), Interval = 10))

@@ -13,3 +13,6 @@ Resource: DegenerateMatter
 	Asteroid Labor: 70
 
 	Pressure: 7 Research
+
+	IfLevel(3, TriggerPeriodic(RemoveCargo(DegenerateMatter, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(DegenerateMatter, 11, 200), Interval = 10))

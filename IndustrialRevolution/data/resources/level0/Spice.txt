@@ -15,3 +15,9 @@ Resource: Spice
 
 	Pressure: 3 Influence
 	ModLoyalty(+6)
+
+	//OnTradeSpawn(AddCargo(Spice, -150))
+	//OnTradeDeliver(AddCargo(Spice, 150))
+
+	TriggerPeriodic(RemoveCargo(Spice, 10), Interval = 10)
+	OnNative(TriggerPeriodic(AddCargoMax(Spice, 11, 200), Interval = 10))

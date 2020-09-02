@@ -13,3 +13,6 @@ Resource: Antimatter
 
 	AddFleetCommand(+2048)
 	AddFleetEffectiveness(+3.0)
+
+	IfLevel(4, TriggerPeriodic(RemoveCargo(Antimatter, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(Antimatter, 11, 200), Interval = 10))

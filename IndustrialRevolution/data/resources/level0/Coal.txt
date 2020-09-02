@@ -12,3 +12,6 @@ Resource: Coal
 
 	Pressure: 2 Energy
 	ModCivResourceMult(Labor, +0.3)
+
+	TriggerPeriodic(RemoveCargo(Coal, 10), Interval = 10)
+	OnNative(TriggerPeriodic(AddCargoMax(Coal, 11, 200), Interval = 10))

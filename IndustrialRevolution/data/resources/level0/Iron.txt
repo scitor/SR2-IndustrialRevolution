@@ -15,3 +15,6 @@ Resource: Iron
 
 	Pressure: 4 Labor
 	ModSupportBuildSpeed(+0.3)
+
+	TriggerPeriodic(RemoveCargo(Iron, 10), Interval = 10)
+	OnNative(TriggerPeriodic(AddCargoMax(Iron, 11, 200), Interval = 10))

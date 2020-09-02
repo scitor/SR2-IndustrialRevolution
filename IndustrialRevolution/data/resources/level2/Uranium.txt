@@ -14,3 +14,6 @@ Resource: Uranium
 	Asteroid Labor: 50
 
 	Pressure: 7 Energy
+
+	IfLevel(3, TriggerPeriodic(RemoveCargo(Uranium, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(Uranium, 11, 200), Interval = 10))

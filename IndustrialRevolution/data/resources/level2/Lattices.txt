@@ -18,3 +18,6 @@ Resource: Lattices
 
 	ModPressurePct(Research, +0.40, +1)
 	ModPressurePct(Energy, -0.40, -1)
+
+	IfLevel(3, TriggerPeriodic(RemoveCargo(Lattices, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(Lattices, 11, 200), Interval = 10))

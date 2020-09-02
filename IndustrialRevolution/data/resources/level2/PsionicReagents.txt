@@ -13,3 +13,6 @@ Resource: PsionicReagents
 	Pressure: 7 Influence
 	ProtectSystem(Timer = 180)
 	AddRegionStatus(PsionicProtected)
+
+	IfLevel(3, TriggerPeriodic(RemoveCargo(PsionicReagents, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(PsionicReagents, 11, 200), Interval = 10))

@@ -11,3 +11,6 @@ Resource: Jewelry
 
 	Pressure: 5 Money
 	Pressure: 2 Influence
+
+	IfLevel(3, TriggerPeriodic(RemoveCargo(Jewelry, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(Jewelry, 11, 200), Interval = 10))

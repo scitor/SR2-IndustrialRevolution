@@ -12,3 +12,6 @@ Resource: Plutonium
 
 	Pressure: 4 Energy
 	Pressure: 4 Defense
+
+	IfLevel(3, TriggerPeriodic(RemoveCargo(Plutonium, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(Plutonium, 11, 200), Interval = 10))

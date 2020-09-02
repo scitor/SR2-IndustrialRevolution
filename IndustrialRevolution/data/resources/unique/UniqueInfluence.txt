@@ -14,3 +14,6 @@ Resource: UniqueInfluence
 	Affinity: Influence
 
 	Pressure: 10 Influence
+
+	TriggerPeriodic(RemoveCargo(UniqueInfluence, 10), Interval = 10)
+	OnNative(TriggerPeriodic(AddCargoMax(UniqueInfluence, 11, 200), Interval = 10))

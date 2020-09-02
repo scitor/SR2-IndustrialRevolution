@@ -17,3 +17,9 @@ Resource: Salts
 	Pressure: 1 Influence
 	Pressure: 1 Defense
 	Pressure: 1 Energy
+
+	//OnTradeSpawn(AddCargo(Salts, -150))
+	//OnTradeDeliver(AddCargo(Salts, 150))
+
+	IfLevel(1, TriggerPeriodic(RemoveCargo(Salts, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(Salts, 11, 200), Interval = 10))

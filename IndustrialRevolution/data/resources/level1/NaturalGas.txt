@@ -13,3 +13,6 @@ Resource: NaturalGas
 	Terraform Labor: 30
 
 	Pressure: 3 Energy
+
+	IfLevel(2, TriggerPeriodic(RemoveCargo(NaturalGas, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(NaturalGas, 11, 200), Interval = 10))

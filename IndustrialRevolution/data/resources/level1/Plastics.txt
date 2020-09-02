@@ -13,3 +13,6 @@ Resource: Plastics
 	Terraform Labor: 30
 
 	Pressure: 3 Influence
+
+	IfLevel(2, TriggerPeriodic(RemoveCargo(Plastics, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(Plastics, 11, 200), Interval = 10))

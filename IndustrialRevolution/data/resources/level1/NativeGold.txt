@@ -12,3 +12,6 @@ Resource: NativeGold
 
 	Pressure: 3 Money
 	AddResource(Influence, 1)
+
+	IfLevel(2, TriggerPeriodic(RemoveCargo(NativeGold, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(NativeGold, 11, 200), Interval = 10))

@@ -13,3 +13,6 @@ Resource: Hadocite
 	Pressure: 5 Defense
 
 	IfType(Orbital, AddTurret(WaveBeam, Range=3000, DPS=100, Duration=4, Cooldown=0, Tracking=0.4)) #version<59
+
+	IfLevel(2, TriggerPeriodic(RemoveCargo(Hadocite, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(Hadocite, 11, 200), Interval = 10))

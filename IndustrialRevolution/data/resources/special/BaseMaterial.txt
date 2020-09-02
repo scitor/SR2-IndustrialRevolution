@@ -11,6 +11,5 @@ Resource: BaseMaterial
 	Frequency: 0
 	Level: 0
 
-	TriggerPeriodic(AddCargo(BaseMaterial, 1), Interval = 6)
+	OnNative(TriggerPeriodic(AddCargoMax(BaseMaterial, 1, 200), Interval = 5))
 
-	OnExportMoveLocalCargo(BaseMaterial)

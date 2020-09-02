@@ -10,3 +10,6 @@ Resource: Supercarbons
 	Affinity: Labor
 
 	Pressure: 12 Labor
+
+	IfLevel(3, TriggerPeriodic(RemoveCargo(Supercarbons, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(Supercarbons, 11, 200), Interval = 10))

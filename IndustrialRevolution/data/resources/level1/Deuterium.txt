@@ -12,3 +12,6 @@ Resource: Deuterium
 
 	Pressure: 2 Research
 	Pressure: 2 Defense
+
+	IfLevel(2, TriggerPeriodic(RemoveCargo(Deuterium, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(Deuterium, 11, 200), Interval = 10))

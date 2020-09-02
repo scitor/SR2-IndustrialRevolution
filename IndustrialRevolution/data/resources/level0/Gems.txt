@@ -17,6 +17,8 @@ Resource: Gems
 	Pressure: 1 Influence
 	Pressure: 1 Defense
 	Pressure: 1 Energy
-	
-	IfType(Planet, AddStatus(Happy)) #version<48
-	OnTradeDeliver(AddStatus(Happy, Duration = 180)) #version>=48
+
+	OnTradeDeliver(AddStatus(Happy, Duration = 180))
+
+	TriggerPeriodic(RemoveCargo(Gems, 10), Interval = 10)
+	OnNative(TriggerPeriodic(AddCargoMax(Gems, 11, 200), Interval = 10))

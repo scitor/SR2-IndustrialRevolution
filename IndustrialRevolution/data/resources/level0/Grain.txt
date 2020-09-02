@@ -10,3 +10,9 @@ Resource: Grain
 	Level: 0
 	AddOverpopulation(1) #version<105
 	AddToNativeResource(AddOverpopulation(1)) #version<71
+
+	//OnTradeSpawn(AddCargo(Grain, -150))
+	//OnTradeDeliver(AddCargo(Grain, 150))
+
+	IfLevel(1, TriggerPeriodic(RemoveCargo(Grain, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(Grain, 11, 200), Interval = 10))

@@ -11,6 +11,4 @@ Resource: OreRate
 	Frequency: 0
 	Level: 0
 
-	TriggerPeriodic(AddCargo(Ore, 1), Interval = 1)
-
-	OnExportMoveLocalCargo(Ore)
+	OnNative(TriggerPeriodic(AddCargoMax(Ore, 1, 200), Interval = 6))

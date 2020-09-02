@@ -13,3 +13,6 @@ Resource: LuxuryMaterials
 	Pressure: 3 Influence
 
 	IfType(Planet, AddStatus(Happy))
+
+	IfLevel(2, TriggerPeriodic(RemoveCargo(LuxuryMaterials, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(LuxuryMaterials, 11, 200), Interval = 10))

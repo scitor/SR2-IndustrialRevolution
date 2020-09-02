@@ -10,3 +10,6 @@ Resource: Electronics
 	Affinity: Money
 
 	Pressure: 3 Money
+
+	IfLevel(2, TriggerPeriodic(RemoveCargo(Electronics, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(Electronics, 11, 200), Interval = 10))

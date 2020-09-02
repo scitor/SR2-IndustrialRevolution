@@ -14,3 +14,6 @@ Resource: UniqueDefense
 	Affinity: Defense
 
 	Pressure: 10 Defense
+
+	TriggerPeriodic(RemoveCargo(UniqueDefense, 10), Interval = 10)
+	OnNative(TriggerPeriodic(AddCargoMax(UniqueDefense, 11, 200), Interval = 10))

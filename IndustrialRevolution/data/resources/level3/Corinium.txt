@@ -12,3 +12,6 @@ Resource: Corinium
 	Pressure: 16 Money
 
 	ModPressureCapMult(+1.0)
+
+	IfLevel(4, TriggerPeriodic(RemoveCargo(Corinium, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(Corinium, 11, 200), Interval = 10))
