@@ -1,0 +1,16 @@
+Resource: PekelmCargo
+	Name: #PEKELM
+	Description: #PEKELM_DESC
+
+	Icon: ResourceIcons::25
+	Small Icon: ResourceIconsSmall::25
+
+	Level: 0
+	Affinity: Defense
+	Artificial: True
+
+	Pressure: 3 Defense
+	ModColonyShipAccel(+1.0)
+
+	//OnTradeSpawn(AddCargo(Pekelm, -150))
+	//OnTradeDeliver(AddCargo(Pekelm, 150))

@@ -1,0 +1,16 @@
+Resource: FulrateCargo
+	Name: #FULRATE
+	Description: #FULRATE_DESC
+
+	Icon: ResourceIcons::44
+	Small Icon: ResourceIconsSmall::43
+
+	Level: 0
+	Artificial: True
+	Affinity: Money
+
+	Pressure: 2 Money
+	GiveNativePressure(4)
+
+	//OnTradeSpawn(AddCargo(Fulrate, -150))
+	//OnTradeDeliver(AddCargo(Fulrate, 150))

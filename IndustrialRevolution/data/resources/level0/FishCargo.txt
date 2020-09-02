@@ -1,0 +1,13 @@
+Resource: FishCargo
+	Name: #FISH
+	Blurb: #FOOD_BLURB
+	Class: FoodCargo
+
+	Icon: ResourceIcons::2
+	Small Icon: ResourceIconsSmall::19
+
+	Level: 0
+	Artificial: True
+
+	//OnTradeSpawn(AddCargo(Fish, -150))
+	//OnTradeDeliver(AddCargo(Fish, 150))

@@ -1,0 +1,13 @@
+Resource: RareMetalsCargo
+	Name: #RARE_METALS
+	Description: #RARE_METALS_DESC
+
+	Icon: ResourceIcons::12
+	Small Icon: ResourceIconsSmall::11
+
+	Level: 1
+	Affinity: Research
+
+	Artificial: True
+
+	Pressure: 3 Research

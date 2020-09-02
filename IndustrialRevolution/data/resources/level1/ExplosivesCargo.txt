@@ -1,0 +1,13 @@
+Resource: ExplosivesCargo
+	Name: #EXPLOSIVES
+	Description: #EXPLOSIVES_DESC
+
+	Icon: ResourceIcons::6
+	Small Icon: ResourceIconsSmall::13
+
+	Level: 1
+	Affinity: Defense
+
+	Pressure: 3 Defense
+
+	Artificial: True

@@ -1,0 +1,12 @@
+Resource: NaturalGasCargo
+	Name: #NATURAL_GAS
+	Description: #NATURAL_GAS_DESC
+
+	Icon: ResourceIcons::41
+	Small Icon: ResourceIconsSmall::41
+
+	Level: 1
+	Affinity: Energy
+	Artificial: True
+
+	Pressure: 3 Energy

@@ -1,0 +1,13 @@
+Resource: GrainCargo
+	Name: #GRAIN
+	Blurb: #FOOD_BLURB
+	Class: FoodCargo
+
+	Icon: ResourceIcons::3
+	Small Icon: ResourceIconsSmall::20
+
+	Level: 0
+	Artificial: True
+
+	//OnTradeSpawn(AddCargo(Grain, -150))
+	//OnTradeDeliver(AddCargo(Grain, 150))

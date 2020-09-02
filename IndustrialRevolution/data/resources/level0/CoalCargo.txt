@@ -1,0 +1,17 @@
+Resource: CoalCargo
+	Name: #COAL
+	Description: #COAL_DESC
+	Class: Fuel
+
+	Icon: ResourceIcons::43
+	Small Icon: ResourceIconsSmall::12
+
+	Level: 0
+	Artificial: True
+	Affinity: Energy
+
+	Pressure: 2 Energy
+	ModCivResourceMult(Labor, +0.3)
+
+	//OnTradeSpawn(AddCargo(Coal, -150))
+	//OnTradeDeliver(AddCargo(Coal, 150))

@@ -1,0 +1,16 @@
+Resource: AluminumCargo
+	Name: #ALUMINUM
+	Description: #ALUMINUM_DESC
+
+	Icon: ResourceIcons::1
+	Small Icon: ResourceIconsSmall::16
+
+	Level: 0
+	Artificial: True
+	Affinity: Labor
+
+	Pressure: 6 Labor
+	AddPressureCap(1)
+
+	//OnTradeSpawn(AddCargo(Aluminum, -150))
+	//OnTradeDeliver(AddCargo(Aluminum, 150))

@@ -1,0 +1,13 @@
+Resource: NativeGoldCargo
+	Name: #NATIVE_GOLD
+	Description: #NATIVE_GOLD_DESC
+
+	Icon: ResourceIcons::30
+	Small Icon: ResourceIconsSmall::30
+
+	Level: 1
+	Artificial: True
+	Affinity: Money
+
+	Pressure: 3 Money
+	AddResource(Influence, 1)

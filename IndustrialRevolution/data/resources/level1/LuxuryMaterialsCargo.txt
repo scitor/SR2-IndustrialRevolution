@@ -1,0 +1,14 @@
+Resource: LuxuryMaterialsCargo
+	Name: #LUXURY_MATERIALS
+	Description: #LUXURY_MATERIALS_DESC
+
+	Icon: ResourceIcons::16
+	Small Icon: ResourceIconsSmall::32
+
+	Level: 1
+	Artificial: True
+	Affinity: Influence
+
+	Pressure: 3 Influence
+
+	IfType(Planet, AddStatus(Happy))

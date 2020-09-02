@@ -1,0 +1,13 @@
+Resource: HyperOatsCargo
+	Name: #HYPER_OATS
+	Description: #HYPER_OATS_DESC
+	Class: FoodCargo
+
+	Icon: ResourceIconsSmall::52
+	Small Icon: ResourceIconsSmall::52
+
+	Level: 0
+	Artificial: True
+
+	//OnTradeSpawn(AddCargo(HyperOats, -150))
+	//OnTradeDeliver(AddCargo(HyperOats, 150))
