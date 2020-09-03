@@ -1,2 +1,3 @@
 EXPBLOCK_TERRAFORMING: Planet is being terraformed.
 EXPBLOCK_BLOCKADED_EXPORT: Trade ships destroyed, export blockaded!
+EXPBLOCK_IN_TRANSIT: [color=#fe0][b]Resource cargo is en route to destination.[/b][/color]

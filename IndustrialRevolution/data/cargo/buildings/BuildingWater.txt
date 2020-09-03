@@ -1,0 +1,7 @@
+Cargo: BuildingWater
+	Name: Water reserves
+	Description: Locally stored water from a Hydrogenerator
+	Class: WaterType
+
+	IconL: ResourceIcons::0
+	Icon: ResourceIconsSmall::103

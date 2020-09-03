@@ -520,6 +520,10 @@ Material: AncientIcon
 	Inherit: Image2D
 	Texture: data/images/ancient_icon.png
 
+Material: RawMaterialProcessingFacility
+	Inherit: Image2D
+	Texture: data/images/buildings/RawMaterialProcessingFacility.png
+
 SpriteSheet: AIDifficulty
 	Inherit: Image2D
 	Size: 64,32

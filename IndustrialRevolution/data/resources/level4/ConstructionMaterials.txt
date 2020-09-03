@@ -1,0 +1,13 @@
+Resource: ConstructionMaterials
+	Name: ConstructionMaterials
+	Description: ConstructionMaterials desc
+	Native Biome: Crystallic
+
+	Icon: ResourceIcons::17
+	Small Icon: ResourceIconsSmall::0
+
+	Level: 4
+	Artificial: True
+
+	//IfLevel(5, TriggerPeriodic(RemoveCargo(ConstructionMaterials, 10), Interval = 10))
+	//OnNative(TriggerPeriodic(AddCargoMax(ConstructionMaterials, 11, 200), Interval = 10))

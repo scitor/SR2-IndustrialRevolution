@@ -1,0 +1,19 @@
+Building: RawMaterialProcessingFacility
+	Name: Raw Material Processing Facility
+	Description: RawMaterialProcessingFacility
+	Sprite: RawMaterialProcessingFacility
+
+	Category: Infrastructure
+
+	Size: 2x2
+
+	Base Cost: 100
+	Tile Cost: 10
+	Build Time: 10
+
+	Build Affinity: Desert
+
+	In Queue: True
+
+	AddPlanetResource(AdvancedComponents)
+	ActiveWhenCargoConsumed(Ore, 1, 6, AddStatus(RawMaterialProcessingActive))

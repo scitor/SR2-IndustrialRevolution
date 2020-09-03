@@ -11,3 +11,7 @@ Resource: Soylent1
 	Level: 0
 	Exportable: False
 	Artificial: True
+
+	TriggerPeriodic(AddCargoMax(Soylent1, 10, 10), Interval = 10)
+
+	//AddCargo(Soylent1, 10)

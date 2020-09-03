@@ -1,6 +1,6 @@
 Resource: BuildingWater
 	Name: #WATER
-	Description: 
+	Description: A Hydrogenerator provides water for the local population.
 	Native Biome: Oceanic
 	Class: WaterType
 
@@ -11,3 +11,7 @@ Resource: BuildingWater
 	Level: 0
 	Exportable: False
 	Artificial: True
+
+	TriggerPeriodic(AddCargoMax(BuildingWater, 10, 10), Interval = 10)
+
+	//AddCargo(BuildingWater, 10)

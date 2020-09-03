@@ -1,1 +1,4 @@
 CARGO_WORTH: Trade value: [b]$1[/b] (per unit)
+WATER_BLURB: Every Planet needs [img=ResourceClassIcons::4;20/] Water to develop.
+WATER_PROCESSING_FACILITY: Water Processing Facility
+WATER_PROCESSING_FACILITY_BLURB: Imported Water has to undergo various purification and processing

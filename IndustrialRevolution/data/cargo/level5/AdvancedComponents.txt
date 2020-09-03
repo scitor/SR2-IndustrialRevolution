@@ -1,0 +1,6 @@
+Cargo: AdvancedComponents
+	Name: AdvancedComponents
+	Description: AdvancedComponents desc
+
+	IconL: ResourceIcons::17
+	Icon: ResourceIconsSmall::0
