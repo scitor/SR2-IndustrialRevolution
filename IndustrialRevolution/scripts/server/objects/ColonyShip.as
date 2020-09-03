@@ -4,6 +4,7 @@ import saving;
 
 tidy class ColonyShipScript {
 	int moveId;
+	bool leavingRegion = false;
 
 	ColonyShipScript() {
 		moveId = -1;
@@ -96,32 +97,60 @@ tidy class ColonyShipScript {
 		}
 		leaveRegion(ship);
 	}
-	
+
+	void printForID(Object& obj, const int id, string str) {
+		if (obj.id == id) {
+			print(str);
+		}
+	}
 	double tick(ColonyShip& ship, double time) {
 		Object@ target = ship.Target;
-	
-		if(moveId == -1 && target is null)
+		if(target is null)
 			return 0.2;
 		ship.moverTick(time);
+		bool regionUpdate = updateRegion(ship);
 
-		updateRegion(ship);
+		if(ship.isMoving && !regionUpdate && ship.region !is target.region)
+			return 0.2;
 
-		if(target is null) {
-			ship.destroy();
-		}
-		else if(ship.position.distanceTo(target.position) <= (ship.radius + target.radius + 0.1) || ship.moveTo(target, moveId, enterOrbit=false)) {
-			ship.destroy();
-			if(target.isPlanet) {
-				target.colonyShipArrival(ship.owner, ship.CarriedPopulation);
-				if(ship.Origin !is null && ship.Origin.hasSurfaceComponent)
-					ship.Origin.reducePopInTransit(ship.Target, ship.CarriedPopulation);
-				if(ship.owner !is null && ship.owner.valid)
-					ship.owner.modMaintenance(-round(80.0 * ship.CarriedPopulation * ship.owner.ColonizerMaintFactor), MoT_Colonizers);
-				ship.CarriedPopulation = 0;
+		// do pathing
+		Region@ curRegion = ship.region;
+		Region@ destRegion = target.region;
+		if(curRegion is destRegion) { // arrived
+			if(ship.moveTo(target, moveId, enterOrbit=false, distance=ship.radius + target.radius + 0.1)) {
+				if(target.isPlanet) {
+					target.colonyShipArrival(ship.owner, ship.CarriedPopulation);
+					if(ship.Origin !is null && ship.Origin.hasSurfaceComponent)
+						ship.Origin.reducePopInTransit(target, ship.CarriedPopulation);
+					if(ship.owner !is null && ship.owner.valid)
+						ship.owner.modMaintenance(-round(80.0 * ship.CarriedPopulation * ship.owner.ColonizerMaintFactor), MoT_Colonizers);
+					ship.CarriedPopulation = 0;
+				}
+				ship.destroy();
+			}
+		} else if(!leavingRegion) { // spawned, get to system border
+			vec3d exitPos = ship.position;
+			if(curRegion !is null) {
+				exitPos = curRegion.position + (destRegion.position - curRegion.position).normalized(curRegion.OuterRadius * 1.5);
+				exitPos.y = curRegion.position.y;
+			}
+			if(ship.moveTo(exitPos, moveId, enterOrbit=false) || curRegion is null) {
+				moveId = -1;
+				leavingRegion = true;
 			}
 		}
-		else if(target.isPlanet && ship.owner !is null && ship.owner.major && !target.isEmpireColonizing(ship.owner)) {
-			if(ship.Origin !is null && ship.Origin.hasSurfaceComponent && ship.position.distanceTo(ship.Origin.position) < 3000.0)
+		if(leavingRegion) { // leaving
+			vec3d enterPos = destRegion.position;
+			enterPos += (ship.position - destRegion.position).normalized(destRegion.radius * 0.85);
+			enterPos.y = destRegion.position.y;
+			if(ship.moveTo(enterPos, moveId, enterOrbit=false) || curRegion is destRegion) {
+				moveId = -1;
+				leavingRegion = false;
+			}
+		}
+
+	if(target.isPlanet && ship.owner !is null && ship.owner.major && !target.isEmpireColonizing(ship.owner)) {
+			if(ship.Origin !is null && ship.Origin.hasSurfaceComponent && ship.position.distanceToSQ(ship.Origin.position) < pow(3000.0, 2))
 				ship.destroy();
 		}
 		return 0.2;

@@ -9,6 +9,7 @@ const int COLONY_SHIP_MAINTENANCE = 5;
 tidy class FreighterScript {
 	int moveId = -1;
 	double idleTimer = 180.0;
+	bool leavingRegion = false;
 
 	FreighterScript() {
 	}
@@ -95,53 +96,75 @@ tidy class FreighterScript {
 		Object@ target = ship.Target;
 		ship.moverTick(time);
 		updateRegion(ship);
-	
-		if(target is null) {
-			idleTimer -= time;
-			if(ship.region !is null && idleTimer > 0.0) {
-				Region@ lookIn = ship.region;
-				bool local = randomi(0,1) == 0;
-				if(!local) {
-					SystemDesc@ desc = getSystem(lookIn.SystemId);
-					if(desc.adjacent.length > 0)
-						@lookIn = getSystem(desc.adjacent[randomi(0, desc.adjacent.length-1)]).object;
-				}
-				
-				uint plCount = lookIn.planetCount;
-				if(plCount > 0) {
-					Planet@ targ = lookIn.planets[randomi(0, plCount-1)];
-					if(targ !is null && targ.owner.valid && (ship.VisitHostile || !ship.owner.isHostile(targ.owner)) && targ.level >= uint(ship.MinLevel)) {
-						@target = targ;
-						@ship.Target = targ;
-						ship.moveTo(target, moveId, enterOrbit=false);
-					}
-				}
-				
-				return 0.2;
-			}
-			else {
-				ship.destroy();
-				return 0.2;
-			}
-		}
 
-		if(!target.owner.valid || (!ship.VisitHostile && ship.owner.isHostile(target.owner))) {
-			@target = null;
-			@ship.Target = null;
-		}
-		else if(ship.position.distanceTo(target.position) <= (ship.radius + target.radius + 0.1) || ship.moveTo(target, moveId, enterOrbit=false)) {
-			if(target.isPlanet) {
-				int status = ship.StatusId;
-				if(status == -1)
-					status = getStatusID("Happy");
-				Empire@ originEmp;
-				if(ship.SetOrigin)
-					@originEmp = ship.owner;
-				target.addStatus(status, ship.StatusDuration, originEmpire=originEmp);
+		if(ship.isMoving || !checkTarget(ship, time))
+			return 0.2;
+
+		// do pathing
+		Region@ curRegion = ship.region;
+		Region@ destRegion = target.region;
+		if(leavingRegion) { // leaving
+			vec3d enterPos = destRegion.position;
+			enterPos += (curRegion.position - destRegion.position).normalized(destRegion.radius * 0.85);
+			enterPos.y = destRegion.position.y;
+			if(ship.moveTo(enterPos, moveId, enterOrbit=false) || enterPos.distanceToSQ(ship.position) < pow(ship.radius * 5, 2)) {
+				moveId = -1;
+				leavingRegion = false;
 			}
-			ship.destroy();
+		} else if(curRegion is destRegion) { // arrived
+			if(ship.moveTo(target, moveId, enterOrbit=false, distance=ship.radius + target.radius + 0.1)) {
+				if(target.isPlanet) {
+					int status = ship.StatusId;
+					if(status == -1)
+						status = getStatusID("Happy");
+					Empire@ originEmp;
+					if(ship.SetOrigin)
+						@originEmp = ship.owner;
+					target.addStatus(status, ship.StatusDuration, originEmpire=originEmp);
+				}
+				ship.destroy();
+			}
+		} else { // spawned, get to system border
+			vec3d exitPos = curRegion.position;
+			exitPos += (destRegion.position - curRegion.position).normalized(curRegion.radius * 0.85);
+			exitPos.y = curRegion.position.y;
+			if(ship.moveTo(exitPos, moveId, enterOrbit=false) || exitPos.distanceToSQ(ship.position) < pow(ship.radius * 5, 2)) {
+				moveId = -1;
+				leavingRegion = true;
+			}
 		}
 		return 0.2;
+	}
+
+	bool checkTarget(Freighter& ship, double time) {
+		Object@ target = ship.Target;
+		if(target is null) {
+			idleTimer -= time;
+			if(ship.region is null || idleTimer < 0.1)
+				ship.destroy();
+			Region@ lookIn = ship.region;
+			bool local = randomi(0,1) == 0;
+			if(!local) {
+				SystemDesc@ desc = getSystem(lookIn.SystemId);
+				if(desc.adjacent.length > 0)
+					@lookIn = getSystem(desc.adjacent[randomi(0, desc.adjacent.length-1)]).object;
+			}
+
+			uint plCount = lookIn.planetCount;
+			if(plCount > 0) {
+				Planet@ targ = lookIn.planets[randomi(0, plCount-1)];
+				if(targ !is null && targ.owner.valid && (ship.VisitHostile || !ship.owner.isHostile(targ.owner)) && targ.level >= uint(ship.MinLevel)) {
+					@target = targ;
+					@ship.Target = targ;
+				}
+			}
+			return false;
+		} else if(!target.owner.valid || (!ship.VisitHostile && ship.owner.isHostile(target.owner))) {
+			@target = null;
+			@ship.Target = null;
+			return false;
+		}
+		return true;
 	}
 
 	void damage(Freighter& ship, DamageEvent& evt, double position, const vec2d& direction) {
