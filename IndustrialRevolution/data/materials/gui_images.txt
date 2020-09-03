@@ -131,6 +131,12 @@ SpriteSheet: ShipIconMods
 	LoadPriority: Game
 	Texture: data/images/ship_icon_mods.png
 
+SpriteSheet: AngryMeteorIconsSet
+	Inherit: Image2D
+	Size: 18,18
+	LoadPriority: Game
+	Texture: data/images/sprites14c.png
+
 SpriteSheet: PlanetLevelIcons
 	Inherit: Image2D
 	Size: 64,22
@@ -177,6 +183,11 @@ Material: PlanetIcon5
 	Inherit: Image2D
 	LoadPriority: Game
 	Texture: data/images/planet_level_5.png
+
+Material: PlanetIcon6
+	Inherit: Image2D
+	LoadPriority: Game
+	Texture: data/images/planet_level_6.png
 	
 SpriteSheet: BuildingSprites
 	Inherit: Image2D

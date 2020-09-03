@@ -1,0 +1,23 @@
+
+All content created by myself falls under the license found in LICENSE.txt
+
+#
+
+HQ Resource Images taken from
+Author: CraftPix.net 2D Game Assets
+Link: https://craftpix.net/freebies/
+License: "Freebie products"
+
+#
+
+2d static sprites/icons (data/images/sprites14c.png)
+Author: Angrymeteor (Submitted by PancInteractive)
+Link: https://opengameart.org/content/2d-static-spritesicons
+Licence: CC-BY 3.0
+
+#
+
+Space Ship & Mech Construction Kit 2 (data/images/buildings)
+Author: Skorpio
+Link: https://opengameart.org/content/space-ship-mech-construction-kit-2
+License: CC-BY-SA 3.0
