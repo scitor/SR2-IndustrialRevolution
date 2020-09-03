@@ -16,11 +16,8 @@ Trait: Devout
 	UnlockSubsystem(DevoutShrine)
 	AddModifier(AddRequirePrayer(1))
 
-	OnHomeworld(AddDummyResource(Water)) #version<150
-	OnHomeworld(AddDummyResource(Meat)) #version<150
-	TriggerHomeworld(SpawnBuilding(Altar, (8, 4), Develop = True))
-	OnHomeworld(AddPlanetResource(BuildingWater)) #version>=150
-	OnHomeworld(AddPlanetResource(Soylent1)) #version>=150
+	TriggerHomeworld(SpawnBuilding(Altar, (11, 4), Develop = True))
+	TriggerHomeworld(SpawnBuilding(Farm, (4, 9), Develop = True))
 
 	ReplaceTechnologyNodes(SysShieldGen, SysShrine)
 	ReplaceTechnologyNodes(ShieldGen, SysShrine)

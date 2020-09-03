@@ -23,6 +23,8 @@ Trait: Ancient
 
 	TriggerHomeworld(TerraformTo(Supercarbons))
 	TriggerHomeworld(DestroyBuildingAt((4, 3), Undevelop = True))
+	TriggerHomeworld(DestroyBuildingAt((2, 3), Undevelop = True))
+	TriggerHomeworld(DestroyBuildingAt((4, 6), Undevelop = True))
 	TriggerHomeworld(AddPlanetIncome(-250))
 	TriggerHomeworld(NameObject(Atrozal))
 

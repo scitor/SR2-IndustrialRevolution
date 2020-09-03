@@ -10,9 +10,10 @@ Trait: Mechanoid
 	Unique: Lifestyle
 
 	AddStatusOwnedPlanets(Mechanoid)
-	OnHomeworld(AddResource(Labor, -1)) #version>=147
+	//OnHomeworld(AddResource(Labor, -1)) #version>=147
 	TriggerHomeworld(GivePopulation(3))
 	TriggerHomeworld(DestroyBuildingAt((4, 3), Undevelop = True))
+	TriggerHomeworld(DestroyBuildingAt((4, 6), Undevelop = True))
 	TriggerHomeworld(TerraformTo(Unobtanium))
 	TriggerHomeworld(DestroySystemPlanet(1, Quiet = True))
 	TriggerHomeworld(DestroySystemPlanet(2, Quiet = True))

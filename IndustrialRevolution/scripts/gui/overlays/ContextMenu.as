@@ -962,8 +962,10 @@ bool openContextMenu(Object& clicked, Object@ selected = null) {
 			}
 			if(assignLevel != 0 && assignLevel > clickedLevel && assignLevel < uint(clicked.maxLevel)) {
 				Sprite icon;
-				if(assignLevel <= 3)
+				if(assignLevel < 4)
 					icon = Sprite(spritesheet::ResourceClassIcons, clamp(assignLevel-1, 0, 2));
+				else
+					icon = Sprite(spritesheet::ResourceClassIcons, clamp(assignLevel+4, 8, 10));
 
 				addOption(menu, selected, clicked, format(locale::AUTO_IMPORT_LEVEL, toString(assignLevel)),
 						AutoAssignLevel(assignLevel), icon);
@@ -1030,7 +1032,7 @@ bool openContextMenu(Object& clicked, Object@ selected = null) {
 						addOption(menu, selected, clicked,
 								format(locale::AUTO_COLONIZE_LEVEL, resType.level),
 								AutoColonizeLevel(),
-								Sprite(spritesheet::ResourceClassIcons, clamp(resType.level-1, 0, 2)));
+								Sprite(spritesheet::ResourceClassIcons, resType.level < 4 ? clamp(resType.level-1, 0, 2) : clamp(resType.level+4, 8, 10)));
 					}
 				}
 			}

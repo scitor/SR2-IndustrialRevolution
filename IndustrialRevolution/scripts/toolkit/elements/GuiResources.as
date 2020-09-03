@@ -37,6 +37,8 @@ void drawResource(const ResourceType@ type, const recti& pos) {
 	//Resource level icon
 	if(type.level > 0 && type.level <= 3)
 		spritesheet::ResourceIconsMods.draw(2+type.level, pos);
+	else if(type.level > 3)
+		spritesheet::ResourceIconsMods.draw(6+type.level, pos);
 
 	//Resource class icon
 	else if(type.cls is foodClass)
@@ -148,8 +150,8 @@ void drawSmallResource(const ResourceType@ type, const Resource@ r, const recti&
 		//Resource level icon
 		if(type.level > 0 && type.level <= 3)
 			spritesheet::ResourceIconsSmallMods.draw(3+type.level, pos.padded(-2));
-
-		//Resource class icon
+		else if(type.level > 3)
+			spritesheet::ResourceIconsSmallMods.draw(13+type.level, pos.padded(-2));
 		else if(type.cls is foodClass)
 			spritesheet::ResourceIconsSmallMods.draw(7, pos.padded(-2));
 		else if(type.cls is scalableClass)
@@ -179,6 +181,8 @@ void drawSmallResource(const ResourceType@ type, const Resource@ r, const recti&
 		//Resource level icon
 		if(type.level > 0 && type.level <= 3)
 			spritesheet::ResourceIconsSmallMods.draw(3+type.level, pos.padded(-2));
+		else if(type.level > 3)
+			spritesheet::ResourceIconsSmallMods.draw(16+type.level, pos.padded(-2));
 
 		//Resource class icon
 		else if(type.cls is foodClass)
@@ -666,7 +670,10 @@ const Sprite[] LEVEL_REQ = {
 	Sprite(),
 	Sprite(spritesheet::ResourceClassIcons, 0),
 	Sprite(spritesheet::ResourceClassIcons, 1),
-	Sprite(spritesheet::ResourceClassIcons, 2)
+	Sprite(spritesheet::ResourceClassIcons, 2),
+	Sprite(spritesheet::ResourceClassIcons, 8),
+	Sprite(spritesheet::ResourceClassIcons, 9),
+	Sprite(spritesheet::ResourceClassIcons, 10)
 };
 
 Sprite getAutoImportIcon(const AutoImportDesc& desc) {
