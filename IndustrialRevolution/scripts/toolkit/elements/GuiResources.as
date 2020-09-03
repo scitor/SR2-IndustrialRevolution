@@ -59,7 +59,7 @@ void drawResource(const Resource@ r, const recti& pos, Object@ drawFrom = null, 
 
 	if(r.origin is null || r.origin.owner is playerEmpire) {
 		//Disabled overlay
-		if(!r.usable)
+		if(!r.usable && !r.origin.nativeResourceInTransit[0])
 			spritesheet::ResourceIconsMods.draw(2, pos);
 	}
 
@@ -91,7 +91,7 @@ void drawSmallResource(const ResourceType@ type, const Resource@ r, const recti&
 				spritesheet::ResourceIconsSmallMods.draw(10, pos.padded(-2), getResourceRarityColor(type.rarity));
 		}
 
-		if(drawFrom !is null && !r.usable && r.origin is null) {
+		if(drawFrom !is null && !r.usable && !r.inTransit && r.origin is null) {
 			if(r.type.cls is foodClass) {
 				FOOD_REQ.draw(pos);
 			}
@@ -123,7 +123,8 @@ void drawSmallResource(const ResourceType@ type, const Resource@ r, const recti&
 					}
 					else {
 						if(r.origin.hasSurfaceComponent && r.origin.resourceLevel >= r.type.level &&
-								r.origin.population < getPlanetLevelRequiredPop(r.origin, r.type.level)) {
+								r.origin.population < getPlanetLevelRequiredPop(r.origin, r.type.level)
+							|| r.origin.nativeResourceInTransit[0]) {
 							//Insufficient population
 							spritesheet::ResourceIconsSmallMods.draw(13, pos.padded(-4), Color(0xff6300ff));
 							lowPop = true;
@@ -635,7 +636,7 @@ class GuiResourceGrid : GuiIconGrid {
 				if(!typeMode && !r.usable && r.origin.owner is playerEmpire) {
 					if(r.exportedTo !is null) {
 						float pct = abs((frameTime % 1.0) - 0.5f) * 2.f;
-						textColor = colors::Red.interpolate(colors::Orange, pct);
+						textColor = r.inTransit ? colors::Orange : colors::Red.interpolate(colors::Orange, pct);
 					}
 					else {
 						textColor = colors::Red;

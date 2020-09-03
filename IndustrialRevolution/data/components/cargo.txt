@@ -4,9 +4,10 @@ local:
 	safe double get_cargoCapacity();
 	safe double get_cargoStored();
 
-	double getCargoStored(uint type);
+	safe double getCargoStored(uint type);
 	safe uint get_cargoTypes();
 	uint get_cargoType(uint index);
+	safe uint get_cargoModID() const;
 
 server:
 	void modCargoStorage(double amount);

@@ -66,6 +66,7 @@ tidy class SurfaceComponent : Component_SurfaceComponent, Savable {
 	int pressureCapMod = 0;
 
 	uint ResourceModID = 0;
+	uint CargoModID = 0;
 	array<uint> affinities;
 
 	uint ColonizingMask = 0;
@@ -2438,10 +2439,42 @@ tidy class SurfaceComponent : Component_SurfaceComponent, Savable {
 				obj.disableResources();
 		}
 
+		// check cargo resources to add / remove
+		/*if(obj.cargoModID != CargoModID) {
+			uint[] cargoTypeIDs;
+			for(uint i = 0, cnt = obj.cargoTypes; i < cnt; ++i) {
+				auto@ ctype = getCargoType(obj.cargoType[i]);
+				const ResourceType@ res = getResource(ctype.ident+"Cargo");
+				if(res is null || !res.exportable)
+					continue;
+
+				bool found = false;
+				for(uint i = 0, cnt = obj.nativeResourceCount; i < cnt; ++i) {
+					if(obj.nativeResourceType[i] == res.id){
+						found = true;
+						break;
+					}
+				}
+				//print(format("native $1 $2", obj.getNativeIndex(resId), getCargoType(type).ident));
+				if(!found)
+					obj.addResource(res.id);
+			}
+			for(uint i = 0, cnt = obj.nativeResourceCount; i < cnt; ++i) {
+				const ResourceType@ res = getResource(obj.nativeResourceType[i]);
+				if(res is null || !res.exportable || res.ident.findFirst("Cargo") == -1)
+					continue;
+				print(format("-res $1 $2", res.ident.replaced("Cargo",""), getCargoType(res.ident.replaced("Cargo","")) is null ? 0 : 1));
+				double cargoAmount = obj.getCargoStored(getCargoType(res.ident.replaced("Cargo","")).id);
+				if(cargoTypeIDs.find(obj.nativeResourceType[i]) != -1 || cargoAmount < 1)
+					obj.removeResource(obj.nativeResourceType[i]);
+			}
+		}*/
+
 		//Check planet level based on resources
 		uint mod = obj.resourceModID;
-		if(mod != ResourceModID) {
+		if(mod != ResourceModID || obj.cargoModID != CargoModID) {
 			ResourceModID = mod;
+			CargoModID = obj.cargoModID;
 			setResourceLevel(obj, obj.getResourceTargetLevel());
 			updateIcon(obj);
 			calculatePopVars(obj);

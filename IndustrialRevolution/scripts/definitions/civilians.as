@@ -44,13 +44,14 @@ array<Sprite> CivilianIcons = {
 	Sprite(spritesheet::OrbitalIcons, 0),
 };
 
-const double CIV_SIZE_MERCHANT = 2.0;
-const double CIV_SIZE_CARAVAN = 2.7;
-const double CIV_SIZE_FREIGHTER = 5.0;
-const double CIV_SIZE_TRANSPORTER = 5.4;
+const double CIV_SIZE_MERCHANT = 4.0;
+const double CIV_SIZE_CARAVAN = 5.0;
+const double CIV_SIZE_FREIGHTER = 7.0;
+const double CIV_SIZE_TRANSPORTER = 8.0;
 
 const double CIV_RADIUS_WORTH = 0.5;
 const double CIV_RADIUS_HEALTH = 25.0;
+const double CIV_RADIUS_FIRST = 5.0;
 
 const int CIV_COFFICE_UPKEEP = -10;
 const int CIV_FREIGHTER_UPKEEP = -3;

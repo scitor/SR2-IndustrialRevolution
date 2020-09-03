@@ -1,6 +1,7 @@
 import cargo;
 
 tidy class Cargo : CargoStorage, Component_Cargo {
+	uint CargoModId = 0;
 	void getCargo() {
 		yield(this);
 	}
@@ -32,6 +33,10 @@ tidy class Cargo : CargoStorage, Component_Cargo {
 		if(index >= types.length)
 			return uint(-1);
 		return types[index].id;
+	}
+
+	uint get_cargoModID() const {
+		return CargoModId;
 	}
 
 	void readCargo(Message& msg) {

@@ -7,6 +7,7 @@ local:
 	int get_nativeResourceId(uint index) const;
 	uint get_nativeResourceTotalLevel() const;
 	bool get_nativeResourceUsable(uint index) const;
+	bool get_nativeResourceInTransit(uint index) const;
 	bool get_nativeResourceLocked(uint index);
 	uint getTradedResourceCount() const;
 	Object@ get_nativeResourceDestination(uint index) const;
@@ -14,7 +15,6 @@ local:
 	bool get_importEnabled() const;
 	safe uint get_resourceModID() const;
 	safe bool isTerraforming() const;
-	safe bool isBlockaded() const;
 	bool get_hasAutoImports() const;
 	safe uint get_queuedImportCount();
 	uint get_queuedImportType(uint i);
@@ -65,6 +65,7 @@ server:
 	Object@ getNativeResourceDestination(Empire@ forEmpire, uint index) const;
 	Object@ getNativeResourceDestinationByID(Empire@ forEmpire, int id) const;
 	bool getNativeResourceUsableByID(int id) const;
+	bool getNativeResourceInTransitByID(int id) const;
 	uint get_nativeResourceByID(int id) const;
 	async void addAvailableResource(Object@ from, int id, uint resource, bool usable);
 	async void removeAvailableResource(Object@ from, int id, bool wasManual = false);
@@ -88,7 +89,6 @@ server:
 	void startTerraform();
 	void stopTerraform();
 	void terraformTo(uint resId);
-	void setBlockadedStatus(bool status = true);
 	void modResourceEfficiencyBonus(double amt);
 	void modResourceVanishBonus(double amt);
 	void bumpResourceModId();

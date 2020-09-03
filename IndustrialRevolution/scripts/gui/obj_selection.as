@@ -500,7 +500,7 @@ void updateHoveredObject() {
 			if(score * 4.0 < bestScore)
 				continue;
 			
-			score /= cur.position.distanceTo(line.getClosestPoint(cur.position, true));
+			score /= cur.position.distanceToSQ(line.getClosestPoint(cur.position, true));
 			if(score < bestScore)
 				continue;
 			
@@ -1126,7 +1126,7 @@ class BEAMS {
 					if(obj.owner !is playerEmpire || dest.owner !is playerEmpire)
 						color = QUEUED_EXPORT_BEAM_COLOR;
 					else if(!res.usable)
-						color = GlowBeamColor;
+						color = obj.nativeResourceInTransit[i]  ? QUEUED_EXPORT_BEAM_COLOR : GlowBeamColor;
 
 					addBeam(resourceBeams, resInd,
 						myPos, theirPos, color);
@@ -1144,7 +1144,7 @@ class BEAMS {
 
 						Color color = IMPORT_BEAM_COLOR;
 						if(!res.usable)
-							color = GlowBeamColor;
+							color = origin.nativeResourceInTransit[i] ? QUEUED_IMPORT_BEAM_COLOR : GlowBeamColor;
 
 						addBeam(resourceBeams, resInd,
 							theirPos, myPos,

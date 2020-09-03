@@ -285,6 +285,8 @@ tidy final class ExportData : Savable {
 	bool get_usable() const {
 		if(obj is null)
 			return false;
+		if(obj.getNativeResourceInTransitByID(resourceId))
+			return true;
 		if(resourceId == obj.primaryResourceId)
 			return obj.primaryResourceUsable;
 		else

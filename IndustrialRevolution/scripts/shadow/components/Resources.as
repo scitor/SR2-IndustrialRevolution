@@ -18,7 +18,6 @@ tidy class ObjectResources : Component_Resources {
 	int ImportDisabled = 0;
 	uint ResourceModId = 0;
 	bool terraforming = false;
-	bool blockaded = false;
 	double resVanishBonus = 0.0;
 
 	ObjectResources() {
@@ -26,10 +25,6 @@ tidy class ObjectResources : Component_Resources {
 
 	bool isTerraforming() {
 		return terraforming;
-	}
-
-	bool isBlockaded() {
-		return blockaded;
 	}
 
 	void getNativeResources(Player& pl, const Object& obj) {
@@ -84,6 +79,12 @@ tidy class ObjectResources : Component_Resources {
 		if(i >= nativeResources.length)
 			return false;
 		return nativeResources[i].usable;
+	}
+
+	bool get_nativeResourceInTransit(uint i) {
+		if(i >= nativeResources.length)
+			return false;
+		return nativeResources[i].inTransit;
 	}
 
 	uint get_primaryResourceType() const {
@@ -243,8 +244,8 @@ tidy class ObjectResources : Component_Resources {
 				src.getTerritory(obj.owner) !is dst.getTerritory(obj.owner))
 			return locale::EXPBLOCK_DISCONNECTED;
 		}
-		if(blockaded)
-			return locale::EXPBLOCK_BLOCKADED_EXPORT;
+		if(!r.usable && r.inTransit)
+			return locale::EXPBLOCK_IN_TRANSIT;
 		if(!r.usable)
 			return locale::EXPBLOCK_UNUSABLE;
 		return "";
@@ -506,7 +507,6 @@ tidy class ObjectResources : Component_Resources {
 
 	void _readRes(Object& obj, Message& msg) {
 		msg >> terraforming;
-		msg >> blockaded;
 		resVanishBonus = msg.read_float();
 		availableResources.read(msg);
 

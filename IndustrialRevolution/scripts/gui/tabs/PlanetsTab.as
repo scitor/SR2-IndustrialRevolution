@@ -322,7 +322,7 @@ class PlanetElement {
 				bool sourceLine = false;
 				if(child.primary !is null && (!child.primary.usable || child.decaying)) {
 					float pct = abs((frameTime % 1.0) - 0.5f) * 2.f;
-					color = colors::Red.interpolate(colors::Orange, pct);
+					color = child.primary.inTransit ? colors::Orange : colors::Red.interpolate(colors::Orange, pct);
 					sourceLine = true;
 				}
 

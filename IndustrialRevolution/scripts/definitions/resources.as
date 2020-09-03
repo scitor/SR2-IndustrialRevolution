@@ -2,6 +2,7 @@
 import tile_resources;
 import util.formatting;
 import hooks;
+from cargo import getCargoType;
 from saving import SaveIdentifier, SaveVersion;
 import bool readLevelChain(ReadFile& file) from "planet_levels";
 
@@ -276,6 +277,7 @@ interface IResourceHook {
 	void applyGraphics(Object& obj, Node& node) const;
 	void onTerritoryAdd(Object& obj, Resource@ r, Territory@ terr) const;
 	void onTerritoryRemove(Object& obj, Resource@ r, Territory@ terr) const;
+	void onTradeSpawn(Civilian& civ, Object@ origin, Object@ target) const;
 	void onTradeDeliver(Civilian& civ, Object@ origin, Object@ target) const;
 	void onTradeDestroy(Civilian& civ, Object@ origin, Object@ target, Object@ destroyer) const;
 
@@ -309,6 +311,7 @@ class ResourceHook : Hook, IResourceHook {
 	void onGenerate(Object& obj, Resource@ native) const {}
 	void nativeTick(Object&, Resource@ native, double time) const {}
 	void onDestroy(Object&, Resource@ native) const {}
+	void onTradeSpawn(Civilian& civ, Object@ origin, Object@ target) const {}
 	void onTradeDeliver(Civilian& civ, Object@ origin, Object@ target) const {}
 	void onTradeDestroy(Civilian& civ, Object@ origin, Object@ target, Object@ destroyer) const {}
 	void nativeSave(Resource@ native, SaveFile& file) const {}
@@ -465,9 +468,13 @@ string getResourceTooltip(const ResourceType@ type, const Resource@ r = null, Ob
 				if(r.origin is drawFrom) {
 					if(r.exportedTo is null)
 						base = locale::EXPBLOCK_USE;
+					else if(r.inTransit)
+						base = locale::EXPBLOCK_IN_TRANSIT;
 					else
 						base = locale::EXPBLOCK_EXPORT;
 				}
+				else if(r.inTransit)
+					base = locale::EXPBLOCK_IN_TRANSIT;
 				else {
 					base = locale::EXPBLOCK_IMPORT;
 				}
@@ -766,6 +773,60 @@ tidy final class ResourceRequirements {
 		reqs.sortAsc();
 	}
 
+	bool enoughCargo(Object& planet) const {
+		//Planet@ planet = cast<Planet>(obj);
+		if(planet is null || !planet.hasCargo)
+			return true;
+		//print(format("enoughCargo $1 $2", planet.name, planet.hasCargo ? 1 : 0));
+
+		uint unsatisfied = 0;
+		uint reqCnt = reqs.length;
+		for(uint i = 0; i < reqCnt; ++i) {
+			ResourceRequirement@ r = reqs[i];
+			unsatisfied = r.amount * 10;
+
+	//print(format("1uns $1", unsatisfied));
+			switch(r.type) {
+				case RRT_Resource:
+					if(r.resource.mode == RM_Normal)
+						unsatisfied = max(0, unsatisfied - uint(planet.getCargoStored(getCargoType(r.resource.ident).id)));
+					break;
+				case RRT_Class:
+					for(uint i = 0, cnt = planet.cargoTypes; i < cnt; ++i) {
+						auto@ type = getCargoType(planet.cargoType[i]);
+						auto@ res = getResource(type.ident);
+						uint cargo = uint(planet.getCargoStored(type.id));
+						if(res !is null && res.cls is r.cls) {
+							print(format("$1 $2 $3 $4", planet.name, res.name, cargo, unsatisfied));
+							unsatisfied = max(0, unsatisfied - cargo);
+							if(unsatisfied < 1)
+								break;
+						}
+					}
+				break;
+				case RRT_Level:
+					for(uint i = 0, cnt = planet.cargoTypes; i < cnt; ++i) {
+						auto@ type = getCargoType(planet.cargoType[i]);
+						auto@ res = getResource(type.ident);
+						if(res !is null && res.level == r.level) {
+							unsatisfied = max(0, unsatisfied - uint(planet.getCargoStored(type.id)));
+							if(unsatisfied < 1)
+								break;
+						}
+					}
+				break;
+				case RRT_Class_Types:
+				case RRT_Level_Types:
+					print("enoughCargo: not implemented, but not used so... @todo ;)");
+				break;
+			}
+			if(unsatisfied>0)
+				return false;
+		}
+
+		return unsatisfied == 0;
+	}
+
 	bool satisfiedBy(const Resources@ res, array<int>@ remaining = null,
 			bool allowUniversal = true, array<int>@ reqRemaining = null) const {
 		int universal = res.universalCount;
@@ -952,6 +1013,7 @@ tidy class Resource : Serializable, Savable {
 	Object@ origin;
 	Object@ exportedTo;
 	bool usable = true;
+	bool inTransit = false;
 	bool locked = false;
 	uint8 disabled = 0;
 	double vanishTime;
@@ -967,6 +1029,7 @@ tidy class Resource : Serializable, Savable {
 		msg << disabled;
 		msg << efficiency;
 		msg << locked;
+		msg << inTransit;
 		if(type.vanishMode != VM_Never)
 			msg << float(vanishTime);
 	}
@@ -980,6 +1043,7 @@ tidy class Resource : Serializable, Savable {
 		msg >> disabled;
 		msg >> efficiency;
 		msg >> locked;
+		msg >> inTransit;
 		if(type.vanishMode != VM_Never)
 			vanishTime = msg.read_float();
 	}
@@ -994,6 +1058,7 @@ tidy class Resource : Serializable, Savable {
 		msg << vanishTime;
 		msg << efficiency;
 		msg << locked;
+		msg << inTransit;
 	}
 
 	void load(SaveFile& msg) {
@@ -1011,6 +1076,8 @@ tidy class Resource : Serializable, Savable {
 
 		if(msg >= SV_0027)
 			msg >> locked;
+		if(msg >= SV_0164_IR)
+			msg >> inTransit;
 	}
 
 	void descFrom(const Resource@ other) {

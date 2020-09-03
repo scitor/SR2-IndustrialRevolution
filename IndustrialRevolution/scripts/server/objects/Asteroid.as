@@ -186,10 +186,10 @@ tidy class AsteroidScript {
 		mesh.memorable = true;
 
 		@icon = StrategicIconNode();
-		if(obj.cargoTypes != 0)
-			icon.establish(obj, 0.015, spritesheet::OreAsteroidIcon, 0);
+		if(obj.nativeResourceCount == 1 && obj.nativeResourceType[0] == getResource("Ore").id)
+			icon.establish(obj, 0.01, spritesheet::OreAsteroidIcon, 0);
 		else
-			icon.establish(obj, 0.015, spritesheet::AsteroidIcon, 0);
+			icon.establish(obj, 0.01, spritesheet::AsteroidIcon, 0);
 		icon.memorable = true;
 
 		bindMesh(obj, mesh);

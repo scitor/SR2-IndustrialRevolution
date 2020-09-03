@@ -395,7 +395,7 @@ class SurfaceDisplay : DisplayBox {
 			if(pl.owner.valid && pl.owner.HasPopulation != 0) {
 				Color popColor = colors::White;
 				if(!pl.primaryResourceUsable) {
-					if(pl.population < getPlanetLevelRequiredPop(pl, pl.resourceLevel) && !pl.inCombat) {
+					if((pl.population < getPlanetLevelRequiredPop(pl, pl.resourceLevel) && !pl.inCombat) || pl.nativeResourceInTransit[0]) {
 						popColor = colors::Orange;
 					}
 				}

@@ -70,6 +70,7 @@ tidy class GenericEffect : Hook, IResourceHook, IBuildingHook, IStatusHook, IOrb
 	void onAdd(Object& obj, Resource@ r) const { enable(obj, r.data[hookIndex]); }
 	void onRemove(Object& obj, Resource@ r) const { disable(obj, r.data[hookIndex]); }
 	void onTick(Object& obj, Resource@ r, double time) const { tick(obj, r.data[hookIndex], time); }
+	void onTradeSpawn(Civilian& civ, Object@ origin, Object@ target) const {}
 	void onTradeDeliver(Civilian& civ, Object@ origin, Object@ target) const {}
 	void onTradeDestroy(Civilian& civ, Object@ origin, Object@ target, Object@ destroyer) const {}
 	void onOwnerChange(Object& obj, Resource@ r, Empire@ prevOwner, Empire@ newOwner) const {

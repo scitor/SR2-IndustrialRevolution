@@ -183,35 +183,23 @@ tidy class PlanetScript {
 		if(!game_ending && !quietDestruction) {
 			playParticleSystem("PlanetExplosion", planet.position, planet.rotation, planet.radius, planet.visibleMask);
 
-			double totChance = config::ASTEROID_OCCURANCE + config::RESOURCE_ASTEROID_OCCURANCE;
-			double resChance = config::RESOURCE_ASTEROID_OCCURANCE;
-			if(totChance > 0) {
-				for(uint i = 0, cnt = randomi(0,4); i < cnt; ++i) {
-					vec3d pos = planet.position;
-					pos += random3d(80 + planet.radius);
+			for(uint i = 0, cnt = randomi(10,20); i < cnt; ++i) {
+				vec3d pos = planet.position;
+				pos += random3d(80 + planet.radius);
 
-					Asteroid@ roid = createAsteroid(pos, planet.region, delay = true);
-					Region@ reg = planet.region;
-					if(reg !is null) {
-						roid.orbitAround(reg.position);
-						roid.orbitSpin(randomd(20.0, 60.0));
-					}
+				Asteroid@ roid = createAsteroid(pos, planet.region, delay = true);
+				Region@ reg = planet.region;
+				if(reg !is null)
+					roid.orbitAround(reg.position);
+				else
+					roid.orbitAround(planet.position);
+				roid.orbitSpin(randomd(20.0, 60.0));
 
-					double roll = randomd(0, totChance);
-
-					if(roll >= resChance) {
-						auto@ cargo = getCargoType("Ore");
-						if(cargo !is null)
-							roid.addCargo(cargo.id, randomd(500, 5000));
-					}
-					else {
-						do {
-							const ResourceType@ type = getDistributedAsteroidResource();
-							roid.addAvailable(type.id, type.asteroidCost);
-						}
-						while(randomd() < 0.4);
-					}
+				do {
+					const ResourceType@ type = getDistributedAsteroidResource();
+					roid.addAvailable(type.id, type.asteroidCost);
 				}
+				while(randomd() < 0.4);
 			}
 		}
 	
