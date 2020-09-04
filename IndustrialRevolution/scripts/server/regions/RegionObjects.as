@@ -1188,25 +1188,28 @@ tidy class RegionObjects : Component_RegionObjects, Savable {
 				continue;
 			pl.setCivilianTimer(0.0);
 
-			Civilian@ customsOffice = pl.getCustomsOffice();
-			if(customsOffice is null) {
-				vec3d pos = pl.position;
-				pos.y += pl.radius - STATION_MAX_RAD*3;
-				@customsOffice = createCivilian(pos, owner, CiT_CustomsOffice, radius=STATION_MIN_RAD);
-				customsOffice.setOrigin(pl);
-				customsOffice.stopMoving();
-				customsOffice.name = pl.name;
-				if(pl.primaryResourceType != uint(-1))
-					customsOffice.setCargoResource(pl.primaryResourceType);
-				else
-					customsOffice.setCargoType(CT_Goods);
-				pl.setCustomsOffice(customsOffice);
-			} else if(!customsOffice.valid)
-				@customsOffice = null;
-
+			Civilian@ customsOffice;
+			auto@ status = getStatusType("CustomsOffice");
+			if(status !is null && pl.hasStatusEffect(status.id)) {
+				@customsOffice = pl.getCustomsOffice();
+				if(customsOffice is null) {
+					vec3d pos = pl.position;
+					pos.x += pl.radius + STATION_MAX_RAD*4;
+					@customsOffice = createCivilian(pos, owner, CiT_CustomsOffice, radius=STATION_MIN_RAD);
+					customsOffice.setOrigin(pl);
+					customsOffice.stopMoving();
+					customsOffice.name = pl.name;
+					if(pl.primaryResourceType != uint(-1))
+						customsOffice.setCargoResource(pl.primaryResourceType);
+					else
+						customsOffice.setCargoType(CT_Goods);
+					pl.setCustomsOffice(customsOffice);
+				} else if(!customsOffice.valid)
+					@customsOffice = null;
+			}
 			if(customsOffice !is null) {
 				// spawn ships 33% faster with customs office
-				pl.setCivilianTimer(CIV_TIMER*2/3);
+				pl.setCivilianTimer(CIV_TIMER/3);
 				spawnPos = customsOffice.position;
 			}
 

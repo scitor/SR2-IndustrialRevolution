@@ -1,0 +1,5 @@
+Status: CustomsOffice
+	Name: Customs Office
+	Description: Customs Office
+	Icon: AngryMeteorIconsSet::70
+	Color: #00aa00

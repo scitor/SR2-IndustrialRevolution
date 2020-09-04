@@ -1,0 +1,18 @@
+Building: CustomsOffice
+	Name: Customs Office
+	Description:
+	Sprite: CustomsOffice
+
+	Category: Economy
+
+	Size: 2x2
+
+	Base Cost: 100
+	Tile Cost: 10
+	Build Time: 10
+
+	Build Affinity: Mountains
+
+	In Queue: True
+
+	AddStatus(CustomsOffice)
