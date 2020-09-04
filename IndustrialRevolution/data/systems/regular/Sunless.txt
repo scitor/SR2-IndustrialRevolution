@@ -1,0 +1,13 @@
+System: Sunless
+	Frequency: 0.01
+
+	ExpandSystem(500)
+
+	Repeat(1:4)
+		MakeAnomaly()
+	Repeat(0:2)
+		MakeArtifact()
+	Repeat(2:4)
+		MakeAsteroidBelt()
+	Repeat(0:2)
+		MakeCreepCamp(Offset = 700)

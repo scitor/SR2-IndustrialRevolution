@@ -1,0 +1,12 @@
+System: BlackHole
+	Frequency: 0.01
+
+	MakeBlackhole(Radius = 5)
+
+	ExpandSystem(100:200)
+
+	Repeat(2:6)
+		MakeAsteroidBelt()
+
+	Repeat(0:3)
+		MakeAnomaly()
