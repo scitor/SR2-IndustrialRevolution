@@ -199,3 +199,31 @@ final class SystemDesc : Serializable, Savable {
 			msg << wormholes[i];
 	}
 };
+
+double gauss() {
+	double rand = 0.0;
+	for (uint i = 0; i < 6; i++)
+		rand += randomd();
+	return rand / 6.0;
+}
+
+vec3d random2to3d(double radius, vec3d& input) {
+	vec2d pos = random2d(radius);
+	return input + vec3d(pos.x, 0, pos.y);
+}
+
+vec3d random2to3d(double minRadius, double maxRadius, vec3d& input) {
+	vec2d pos = random2d(minRadius, maxRadius);
+	return input + vec3d(pos.x, 0, pos.y);
+}
+
+vec3d randomBetween(vec3d& input, vec3d& input2, double radius = 0.0, double radius2 = 0.0) {
+	vec3d pos1 = random2to3d(radius, input);
+	vec3d pos2 = random2to3d(radius2, input2);
+
+	return vec3d(
+		pos2.x + (pos1.x - pos2.x) * randomd(),
+		pos2.y + (pos1.y - pos2.y) * randomd(),
+		pos2.z + (pos1.z - pos2.z) * randomd()
+	);
+}

@@ -91,7 +91,7 @@ class StrategicIcon {
 				animPos = vec3d();
 		}
 		else {
-			pos = real;
+			pos = real + (cameraPos - real).normalize(500.0);
 			width = SIZE * node.sortDistance / (pixelSizeRatio / uiScale);
 		}
 		
@@ -106,11 +106,11 @@ class StrategicIcon {
 	}
 };
 
-const double OUTSIDE_DISTANCE = 12000.0;
-const double OUTSIDE_SIZE_MAX = 25000.0;
-const double ANIMATE_TIME = 0.45;
+const double OUTSIDE_DISTANCE = 14000.0;
+const double OUTSIDE_SIZE_MAX = 34000.0;
+const double ANIMATE_TIME = 0.25;
 
-const double FADE_DIST_MIN = 750;
+const double FADE_DIST_MIN = 100;
 const double FADE_DIST_MAX = 1000;
 
 class StrategicIconNodeScript : StrategicIcon {
@@ -170,7 +170,7 @@ class StrategicIconNodeScript : StrategicIcon {
 			return false;
 			
 		double objDist = getCameraDistance(object.position);
-		double fadeDist = 1.0e4 * max(5.0, object.radius);
+		double fadeDist = 1.0e4 * max(20.0, object.radius);
 		if(objDist > fadeDist)
 			return false;
 	
@@ -202,7 +202,7 @@ class StrategicIconNodeScript : StrategicIcon {
 		if(objDist > 0.8 * fadeDist)
 			alpha *= 1.0 - (objDist - 0.8 * fadeDist) / (0.2 * fadeDist);
 
-		if(alpha < 0.004f || !SHOW_STRATEGIC_ICONS)
+		if(alpha < 0.1f || !SHOW_STRATEGIC_ICONS)
 			return false;
 
 		node.color.a = alpha;

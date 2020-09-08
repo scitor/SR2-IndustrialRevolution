@@ -89,8 +89,11 @@ PLANET_FREQUENCY: 1.0
 //Frequency of artifacts
 ARTIFACT_FREQUENCY: 0.25
 
+//Fasten all seatbelts, seal all entrances and exits, close all shops in the mall, cancel the three ring circus, secure all animals in the zoo!
+LUDICROUS_SPEED: 1618.03398875
+
 //System size modifier
-SYSTEM_SIZE: 3.0
+SYSTEM_SIZE: 10.0
 
 //Whether to enable civilian trade
 ENABLE_CIVILIAN_TRADE: 1.0

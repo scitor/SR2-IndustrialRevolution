@@ -7,11 +7,11 @@ import planet_levels;
 const double APPROACH_EPSILON = 0.002;
 const double OUTSIDE_DISTANCE = 12000.0;
 const double OUTSIDE_SIZE_MAX = 25000.0;
-const double ANIMATE_TIME = 0.45;
-const double GRAVITY_DISC_MAX_DIST = 1000.0;
+const double ANIMATE_TIME = 0.25;
+const double GRAVITY_DISC_MAX_DIST = 5000.0;
 
-const double FADE_DIST_MIN = 250;
-const double FADE_DIST_MAX = 300;
+const double FADE_DIST_MIN = 400;
+const double FADE_DIST_MAX = 800;
 const double VERY_DISTANT_START = 56000.0;
 const double VERY_DISTANT_END = 80000.0;
 
@@ -64,7 +64,9 @@ final class PlanetIconNodeScript : StrategicIcon {
 
 	Empire@ captureEmp;
 	float capturePct = 0.f;
-	
+	float capturePctAvg = 0.f;
+	float capturePctLast = 0.f;
+
 	float resourceClass = -1.f;
 	bool plane = false;
 	bool isPlayer = false;
@@ -112,7 +114,8 @@ final class PlanetIconNodeScript : StrategicIcon {
 			case 2: @levelMat = material::PlanetLevel2; break;
 			case 3: @levelMat = material::PlanetLevel3; break;
 			case 4: @levelMat = material::PlanetLevel4; break;
-			case 5: default: @levelMat = material::PlanetLevel5; break;
+			case 5: @levelMat = material::PlanetLevel5; break;
+			case 6: default: @levelMat = material::PlanetLevel6; break;
 		}
 	}
 
@@ -127,6 +130,8 @@ final class PlanetIconNodeScript : StrategicIcon {
 			resourceIcon = type.smallIcon.index;
 			if(type.level > 0 && type.level <= 3)
 				resourceClass = 3.f + float(type.level);
+			else if(type.level > 3)
+				resourceClass = 13.f + float(type.level);
 			else if(type.cls is foodClass)
 				resourceClass = 7.f;
 			else if(type.cls is scalableClass)
@@ -192,7 +197,7 @@ final class PlanetIconNodeScript : StrategicIcon {
 		vec3d plPos = pl.node_position;
 		StrategicIcon::update(node, plPos, PlanetIconSize.value,
 			OUTSIDE_DISTANCE, OUTSIDE_SIZE_MAX, ANIMATE_TIME,
-			FADE_DIST_MIN * 10, FADE_DIST_MAX * 10);
+			FADE_DIST_MIN, FADE_DIST_MAX);
 
 		if(pl.owner is playerEmpire) {
 			if(isDisabled) {
@@ -201,7 +206,8 @@ final class PlanetIconNodeScript : StrategicIcon {
 					disableColor = DISABLE_NORMAL;
 				}
 				else {
-					if(pl.resourceLevel >= type.level &&
+					if(pl.nativeResourceInTransit[0] ||
+						pl.resourceLevel >= type.level &&
 						pl.population < getPlanetLevelRequiredPop(pl, type.level)) {
 						disableColor = DISABLE_POPULATION;
 					}
@@ -250,14 +256,17 @@ final class PlanetIconNodeScript : StrategicIcon {
 		//Capturing stuff
 		if(captureEmp !is null && !isMemory) {
 			captureEmp.color.toVec4(shader::CAPTURE_COLOR);
-			shader::CAPTURE_PROGRESS = capturePct;
+			capturePctAvg = ((49.0 * capturePctAvg) + capturePct) / 50.0;
+			shader::CAPTURE_PROGRESS = capturePctAvg;
 		}
 		else if(pl.Population < 1.0 && !isMemory) {
-			shader::CAPTURE_PROGRESS = pl.Population;
+			capturePctAvg = ((99.0 * capturePctAvg) + pl.Population) / 100.0;
+			shader::CAPTURE_PROGRESS = capturePctAvg;
 			owner.color.toVec4(shader::CAPTURE_COLOR);
 		}
 		else if(isDecaying) {
-			shader::CAPTURE_PROGRESS = pl.decayTime / (config::LEVEL_DECAY_TIMER / owner.PlanetDecaySpeed);
+			capturePctAvg = ((49.0 * capturePctAvg) + (pl.decayTime / (config::LEVEL_DECAY_TIMER / owner.PlanetDecaySpeed))) / 50.0;
+			shader::CAPTURE_PROGRESS = capturePctAvg;
 			float pct = abs((frameTime % 1.0) - 0.5f) * 2.f;
 			colors::Red.interpolate(colors::Orange, pct).toVec4(shader::CAPTURE_COLOR);
 		}
@@ -268,20 +277,19 @@ final class PlanetIconNodeScript : StrategicIcon {
 		double orbitCircleFadeIn = FADE_DIST_MAX * 10;
 
 		//Draw the orbit plane
-		if(dist < orbitCircleFadeIn && dist > 100.0 && SHOW_PLANET_PLANES) {
+		if(dist < orbitCircleFadeIn && dist > 50.0 && SHOW_PLANET_PLANES) {
 			double orbitSize = pl.OrbitSize;
-			shader::CIRCLE_MIN = (pl.radius + 0.5f) / orbitSize;
+			shader::CIRCLE_MIN = 0.6f;
 			shader::CIRCLE_MAX = 1.f;
 			Color orbitColor(0xffffff05);
 			
-			
-			double orbitCircleFadeOut = FADE_DIST_MIN * 10;
+			double orbitCircleFadeOut = FADE_DIST_MIN;
 
 			double a = 0.025;
 			if(pl.selected)
 				a = 0.035;
-			else if(dist < 250.0)
-				a *= (dist - 150.0) / 100.0;
+			else if(dist < 150.0)
+				a *= (dist - 50.0) / 100.0;
 			else if(dist > orbitCircleFadeOut)
 				a *= 1.0 - (dist - orbitCircleFadeOut) / (orbitCircleFadeIn - orbitCircleFadeOut);
 			
@@ -298,11 +306,11 @@ final class PlanetIconNodeScript : StrategicIcon {
 
 			float prevA = shader::CAPTURE_COLOR.w;
 			Color flagColor = color;
-			if(isPlayer && dist > 150.0 && dist < 1850.0) {
+			if(isPlayer && dist > 50.0 && dist < 1850.0) {
 				//NOTE: The node can be setup before the empire has a flag specified
 				if(flag is null)
 					@flag = owner.flag;
-				flagColor.a = min(a * (6.0 * 255.0) * (1.0 - (dist - 150.0) / 1700.0), 255.0);
+				flagColor.a = min(a * (6.0 * 255.0) * (1.0 - (dist - 50.0) / 1700.0), 255.0);
 				if(prevA > 0.f)
 					shader::CAPTURE_COLOR.w = float(flagColor.a) / 255.f * 1.5f;
 			}
@@ -315,10 +323,10 @@ final class PlanetIconNodeScript : StrategicIcon {
 				center.y += 0.1;
 				shader::CAPTURE_COLOR.w = float(flagColor.a) / 255.f;
 				
-				renderPlane(flag, center + vec3d(orbitSize * -0.9, 0.0, 0.0), orbitSize * 0.1, flagColor, pi * 0.5);
-				renderPlane(flag, center + vec3d(orbitSize *  0.9, 0.0, 0.0), orbitSize * 0.1, flagColor, pi * 1.5);
-				renderPlane(flag, center + vec3d(0.0, 0.0, orbitSize *  0.9), orbitSize * 0.1, flagColor, 0.0);
-				renderPlane(flag, center + vec3d(0.0, 0.0, orbitSize * -0.9), orbitSize * 0.1, flagColor, pi);
+				renderPlane(flag, center + vec3d(0.0, 0.0, 0.0), orbitSize / 2, flagColor, pi * 0.5);
+				//renderPlane(flag, center + vec3d(orbitSize *  0.9, 0.0, 0.0), orbitSize * 0.1, flagColor, pi * 1.5);
+				//renderPlane(flag, center + vec3d(0.0, 0.0, orbitSize *  0.9), orbitSize * 0.1, flagColor, 0.0);
+				//renderPlane(flag, center + vec3d(0.0, 0.0, orbitSize * -0.9), orbitSize * 0.1, flagColor, pi);
 			}
 			shader::CAPTURE_COLOR.w = prevA;
 		}

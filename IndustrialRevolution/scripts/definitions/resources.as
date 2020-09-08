@@ -797,7 +797,7 @@ tidy final class ResourceRequirements {
 						auto@ res = getResource(type.ident);
 						uint cargo = uint(planet.getCargoStored(type.id));
 						if(res !is null && res.cls is r.cls) {
-							print(format("$1 $2 $3 $4", planet.name, res.name, cargo, unsatisfied));
+							//print(format("$1 $2 $3 $4", planet.name, res.name, cargo, unsatisfied));
 							unsatisfied = max(0, unsatisfied - cargo);
 							if(unsatisfied < 1)
 								break;

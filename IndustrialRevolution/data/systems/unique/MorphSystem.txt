@@ -4,6 +4,8 @@ System: MorphSystem
 
 	MakeStar(Temperature = 5778, Radius = 75)
 
+	ExpandSystem(100:200)
+
 	Repeat(3)
 		MakePlanet(AsteroidAffinity)
 

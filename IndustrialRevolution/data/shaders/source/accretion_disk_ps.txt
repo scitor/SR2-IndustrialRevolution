@@ -10,7 +10,7 @@ const float outerFade = 0.8;
 //How many different speeds the dust should move at
 const float steps = 36.0;
 //How fast it spins overall
-const float dustSpeed = 0.008;
+const float dustSpeed = 0.0008;
 //Rate of speed increase, should be an integer
 const float dustSpeedCurve = 3.0;
 

@@ -11,7 +11,7 @@ from cargo import getCargoType;
 const double ACC_STATION = 0.1;
 const double ACC_SYSTEM = 4.0;
 const double ACC_INTERSYSTEM = 65.0;
-const double ACC_INTERSYSTEM_FTL = 400.0;
+const double ACC_INTERSYSTEM_FTL = 3000.0;
 const double CIV_REPAIR = 1.0;
 const double BLOCKADE_TIMER = 3.0 * 60.0;
 const double DEST_RANGE = 20.0;

@@ -298,3 +298,50 @@ string formatShipName(const Design@ dsg) {
 	name = format("$1 ($2)", name, standardize(dsg.size, true));
 	return name;
 }
+
+string formatDecimal(double value) {
+	uint decimals = 0;
+	if(value <= 1.0)
+		decimals = 3;
+	else if(value <= 10.0)
+		decimals = 2;
+	else if(value <= 100.0)
+		decimals = 1;
+
+	if(decimals == 3 && abs(value - round(value)) < 0.001)
+		decimals = 0;
+	if(decimals == 2 && abs(value - round(value)) < 0.01)
+		decimals = 0;
+	if(decimals == 1 && abs(value - round(value)) < 0.1)
+		decimals = 0;
+
+	string fmt = toString(value, decimals);
+	int index = fmt.length - decimals - 3;
+	while(index > 0) {
+		fmt = fmt.substr(0,index) + "," + fmt.substr(index);
+		index -= 3;
+	}
+	return fmt;
+}
+
+string formatSpeed(double velocity) {
+	double displayVel = velocity;
+	string unit = "u/s";
+
+	if(displayVel >= 1000) {
+		displayVel /= config::SPEED_OF_LIGHT;
+		unit = "c";
+	}
+
+	return format("$1 $2", formatDecimal(displayVel), unit);
+}
+
+string formatDistance(double distance) {
+	double displayDist = distance;
+	array<string> units = {"","K","M","G","T","P","E","Z","Y"};
+	uint unit = 0;
+	while(displayDist > 1000 && ++unit < 9)
+		displayDist /= 1000.0;
+
+	return format("$1 $2u", formatDecimal(displayDist), units[unit]);
+}

@@ -5,6 +5,8 @@ System: ExpeditionSystem
 	MakeStar(Temperature = 4000:12000, Radius = 65:85)
 	AddQuality(200)
 
+	ExpandSystem(100:200)
+
 	Repeat(5)
 		MakePlanet()
 

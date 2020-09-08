@@ -162,7 +162,9 @@ final class PlanetNodeScript {
 		planetModel.draw(node.sortDistance / (node.abs_scale * pixelSizeRatio));
 		
 		if(hasAtmos) {
-			applyAbsTransform(vec3d(), vec3d(1.015), quaterniond_fromAxisAngle(vec3d_up(), fraction(gameTime / 240.0) * twopi));
+			// fix atmo glitches for good
+			double cl = clamp(node.sortDistance * config::GFX_DISTANCE_MOD, 20.0, 200.0) / 2000.0;  // range 1.05 - 1.1
+			applyAbsTransform(vec3d(), vec3d(1.0 + cl), quaterniond_fromAxisAngle(vec3d_up(), fraction(gameTime / 240.0) * twopi));
 			
 			atmosMat.switchTo();
 			//Use the same lod as the planet to avoid weirdness
@@ -216,9 +218,9 @@ final class PlanetNodeScript {
 				auto@ dat = moons[i];
 
 				uint st = dat.style;
-				double rot = fraction(gameTime / (1.0 + 12.0 * double(st % 256) / 255.0)) * twopi;
+				double rot = fraction(gameTime / (10.0 + 12.0 * double(st % 256) / 255.0)) * twopi;
 				st >>= 8;
-				double angle = fraction(gameTime / (10.0 + 40.0 * double(st % 256) / 255.0)) * twopi;
+				double angle = fraction(gameTime / (300.0 + 40.0 * double(st % 256) / 255.0)) * twopi;
 				st >>= 8;
 				double distance = double(st % 256) / 255.0 * 7.0 + 2.0;
 				st >>= 8;

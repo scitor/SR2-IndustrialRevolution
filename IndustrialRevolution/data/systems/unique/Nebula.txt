@@ -9,7 +9,7 @@ System: Nebula
 	Repeat(1:6)
 		MakeArtifact()
 	Repeat(1:6)
-		MakeAsteroid()
+		MakeAsteroidBelt()
 
 	Repeat(0:2)
 		MakePlanet(RandomRarity:Uncommon, Orbit Spacing = 0, Distribute Resource = True)

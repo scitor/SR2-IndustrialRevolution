@@ -4,16 +4,16 @@ const float pipRads = 2.0 * pi / 72.0;
 const float pipMargin = 0.15 * pipRads;
 
 const float gridWidth = 8.0;
-const float gridSize = 500.0;
-const float gridFadeDist = 100000.0;
+const float gridSize = 1000.0;
+const float gridFadeDist = 200000.0;
 
-const float subGridWidth = 4.0;
+const float subGridWidth = 2.0;
 const float subGridSize = 250.0;
 const float subGridFadeDist = 30000.0;
 
-const float subsubGridWidth = 2.0;
+const float subsubGridWidth = 0.5;
 const float subsubGridSize = 50.0;
-const float subsubGridFadeDist = 10000.0;
+const float subsubGridFadeDist = 3000.0;
 
 uniform float radius;
 uniform float inner_radius;
@@ -84,7 +84,7 @@ vec4 grid(float distance, float bordMult) {
 
 	vec4 res;
 	res.rgb = gl_Color.rgb;
-	float baseAlpha = smoothstep(500.0, 2000.0, planeDist) * 0.08;
+	float baseAlpha = smoothstep(100.0, 1000.0, planeDist) * 0.2;
 
 	float inner_distance = inner_radius / radius;
 	if(distance > inner_distance)
@@ -96,31 +96,28 @@ vec4 grid(float distance, float bordMult) {
 
 	// Main grid alpha
 	if(planeDist < gridFadeDist) {
-		if(gridPos.x <= gridWidth * bordMult || gridPos.y <= gridWidth * bordMult) {
-			res.a = baseAlpha * 2.0;
-			return res;
+		if(planeDist > subsubGridFadeDist && (gridPos.x <= gridWidth || gridPos.y <= gridWidth)) {
+			res.a = baseAlpha * sin(((gridPos.x+gridPos.y)/37.0)+1.0);
+			res.a *= max(0.0, min(1.0, (planeDist / subsubGridFadeDist)-1.0));
+			res.a *= 1.0 - max(0.0, min(1.0, (planeDist / gridFadeDist)));
+			//return res;
 		}
 
 		if(planeDist < subGridFadeDist) {
 			vec2 subGridPos = abs(mod(absCoords, subGridSize));
 			subGridPos = min(subGridPos, subGridSize - subGridPos);
-			if(subGridPos.x <= subGridWidth * bordMult || subGridPos.y <= subGridWidth * bordMult) {
-				res.a = baseAlpha * 1.8;
-				return res;
+			if(subGridPos.x <= subGridWidth || subGridPos.y <= subGridWidth ) {
+				float alpha = baseAlpha * sin(((subGridPos.x+subGridPos.y)/50.0)+1.0);
+				res.a += alpha * (1.0 - max(0.0, min(1.0, planeDist / subGridFadeDist)));
 			}
-			
-			if(planeDist < subsubGridFadeDist) {
-				vec2 subsubGridPos = abs(mod(absCoords, subsubGridSize));
-				subsubGridPos = min(subsubGridPos, subsubGridSize - subsubGridPos);
-				if(subsubGridPos.x <= subsubGridWidth * bordMult || subsubGridPos.y <= subsubGridWidth * bordMult) {
-					res.a = baseAlpha * 1.5;
-					return res;
-				}
+			vec2 subsubGridPos = abs(mod(absCoords, subsubGridSize));
+			subsubGridPos = min(subsubGridPos, subsubGridSize - subsubGridPos);
+			if(subsubGridPos.x <= subsubGridWidth || subsubGridPos.y <= subsubGridWidth) {
+				float alpha = baseAlpha * (1.0+sin(((subGridPos.x+subGridPos.y)/7.8)+1.0));
+				res.a += alpha * (1.0 - max(0.0, min(1.0, planeDist / subsubGridFadeDist)));
 			}
 		}
 	}
-	
-	res.a = baseAlpha;
 	return res;
 }
 

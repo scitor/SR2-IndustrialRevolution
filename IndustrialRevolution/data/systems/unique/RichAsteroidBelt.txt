@@ -5,11 +5,13 @@ System: RichAsteroidBelt
 	MakeStar(Temperature = 4520, Radius = 74)
 	AddQuality(-300)
 
+	ExpandSystem(100:200)
 	MakePlanet()
-	MakeAsteroidBelt(7)
+	Repeat(2)
+		MakeAsteroidBelt()
 	
 	Repeat(2)
 		MakePlanet()
 	
 	Repeat(2)
-		MakeAsteroid()
+		MakeAsteroidBelt()

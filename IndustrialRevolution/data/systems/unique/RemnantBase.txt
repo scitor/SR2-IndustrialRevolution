@@ -5,6 +5,7 @@ System: RemnantBase
 	MakeStar(Temperature = 5778, Radius = 75)
 	AddQuality(+500)
 
+	ExpandSystem(100:200)
 	Repeat(4)
 		MakePlanet()
 	MakePlanet(Drugs:FTL)

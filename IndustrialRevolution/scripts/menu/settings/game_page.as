@@ -15,14 +15,14 @@ class GamePage : GameSettingsPage {
 		Frequency(locale::NG_PLANET_FREQUENCY, "PLANET_FREQUENCY", min = 0.2, max = 3.0);
 		Occurance(locale::NG_ANOMALY_OCCURANCE, "ANOMALY_OCCURANCE");
 		Occurance(locale::NG_REMNANT_OCCURANCE, "REMNANT_OCCURANCE");
-		//Occurance(locale::NG_ASTEROID_OCCURANCE, "ASTEROID_OCCURANCE");
+		Occurance(locale::NG_ASTEROID_OCCURANCE, "ASTEROID_OCCURANCE", min = 0.2, max = 1.0);
 		//Occurance(locale::NG_RESOURCE_ASTEROID_OCCURANCE, "RESOURCE_ASTEROID_OCCURANCE");
 		Occurance(locale::NG_UNIQUE_SYSTEM_OCCURANCE, "UNIQUE_SYSTEM_OCCURANCE");
 		Occurance(locale::NG_UNIQUE_RESOURCE_OCCURANCE, "UNIQUE_RESOURCE_OCCURANCE");
 		Occurance(locale::NG_RESOURCE_SCARCITY, "RESOURCE_SCARCITY", max=2.0, tooltip=locale::NGTT_RESOURCE_SCARCITY);
 		Frequency(locale::NG_CIVILIAN_TRADE, "CIVILIAN_TRADE_MULT", min = 0.5, max = 3.0, tooltip=locale::NGTT_CIVILIAN_TRADE);
 		Frequency(locale::NG_ARTIFACT_FREQUENCY, "ARTIFACT_FREQUENCY", min = 0.2, max = 3.0);
-		Frequency(locale::NG_SYSTEM_SIZE, "SYSTEM_SIZE", min = 0.2, max = 3.0);
+		Frequency(locale::NG_SYSTEM_SIZE, "SYSTEM_SIZE", min = 8.0, max = 12.0);
 
 		emptyline();
 		Title(locale::NG_GAME_OPTIONS);

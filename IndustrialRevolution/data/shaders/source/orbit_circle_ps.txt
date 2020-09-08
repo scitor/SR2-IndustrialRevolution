@@ -21,17 +21,13 @@ void main() {
 
 	vec4 result = gl_Color;
 	result.a *= smoothstep(circle_min, circle_max, radius);
-	
-	//Dither the gradient
-	float rnd = dot(rcoords, vec2(0.2,0.3));
-	result.a += mod(rnd/max(mod(uv.x,0.01)/0.01, 0.001), 0.01)-0.005;
-	
+
 	if(captureColor.a > 0.0) {
 		vec2 rcoords = (uv - vec2(0.5, 0.5)) * 2.0;
-		if(radius > 0.9 && radius < 1.0) {
+		if(radius > 0.6 && radius < 1.0) {
 			float ang = (atan(rcoords.y, rcoords.x) + pi) / twopi;
 			if(ang < capturePct) {
-				float alpha = smoothstep(1.0, 0.95, radius) * smoothstep(0.9, 0.95, radius);
+				float alpha = smoothstep(1.0, 0.95, radius) * smoothstep(0.6, 0.95, radius);
 				alpha *= smoothstep(0.0, 0.01, ang) * smoothstep(capturePct, capturePct - 0.01, ang);
 				
 				result = alphaBlend(result, vec4(captureColor.rgb, captureColor.a * alpha));

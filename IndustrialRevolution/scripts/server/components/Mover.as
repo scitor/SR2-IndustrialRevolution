@@ -223,6 +223,7 @@ tidy class Mover : Component_Mover, Savable {
 
 	double accel = 1.0;
 	double accelBonus = 0;
+	double lastVel = 0.0;
 	bool moving = false;
 	bool rotating = false;
 	bool moverDelta = false;
@@ -989,14 +990,21 @@ tidy class Mover : Component_Mover, Savable {
 					do {
 						double take = 0;
 						obj.acceleration = accToGoal(a, take, dest - obj.position, destVel - obj.velocity);
+						if((obj.velocity + obj.acceleration * take).length > lastVel)
+							obj.acceleration *= 1 - 1.004 * pow((obj.velocity.length / config::LUDICROUS_SPEED), 3);
 						take = min(timeLeft, max(take, 0.01));
 						obj.position += obj.acceleration * (take * take * 0.5);
 						obj.velocity += obj.acceleration * take;
+						lastVel = obj.velocity.length;
 						timeLeft -= take;
 					} while(timeLeft > 0.0001);
 
+					double rate = obj.velocity.length / config::LUDICROUS_SPEED;
+					if(rate > 0.999)
+						obj.velocity /= rate*1.01;
+
 					if(!vectorMovement) {
-						if((leader is obj || cast<Ship>(leader) is null) && obj.acceleration.lengthSQ > 0.01 && tGoal > 1.0)
+						if((leader is obj || cast<Ship>(leader) is null) && obj.acceleration.lengthSQ > 0.0 && tGoal > 1.0)
 							targRot = quaterniond_fromVecToVec(vec3d_front(), dest - obj.position, vec3d_up());
 					}
 				}

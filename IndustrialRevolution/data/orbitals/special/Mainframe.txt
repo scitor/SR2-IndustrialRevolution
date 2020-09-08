@@ -37,6 +37,6 @@ Module: Mainframe
 	RepeatExtended(RecordBonusDPS(25), Base = 4, Multiply Attribute = StaticDamageFactor)
 	RepeatExtended(RecordBonusDPS(10), Base = 4, Multiply Attribute = StaticDamageFactor)
 
-	ShowRange(15000, #00ff00)
+	ShowRange(150000, #00ff00)
 
 	GrantAbility(RemoteScan)

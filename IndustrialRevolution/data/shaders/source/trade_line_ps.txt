@@ -1,27 +1,22 @@
 #version 120
+#define pi 3.141592653589793238462643383279
 varying vec2 uv;
 uniform float time;
 
-const float separation = 1500.0, speed = 5.0, size = 150.0;
+const float gridWidth = 25.0;
+const float gridSize = 1000.0;
+const float separation = 10000.0, speed = 1.0, size = 50.0;
 
 void main() {
 	float dToEdge = abs(uv.y - 0.5) * 2.0;
-
-	vec4 color = gl_Color;
-	color.a = 1.0;
-	
-	color.a *= dToEdge * dToEdge;
-	if(dToEdge > 0.85)
-		color.a += 0.3 * (dToEdge - 0.8)/0.2;
-		
-	if(dToEdge > 0.9)
-		color.a *= 1.0 - ((dToEdge - 0.9) / 0.1);
-	
-	if(mod(uv.x + ((1.0 - time) * separation * speed), separation) < size) {
-		color.a += max((0.8 - dToEdge) / 0.8, 0.0);
-		color.b = 1.0;
-	}
-
-	color.a *= gl_Color.a;
+	float gridX = mod(uv.x, gridSize);
+	gridX = min(gridX, gridSize - gridX);
+	bool onGrid = gridX <= gridWidth;
+	bool inSize = mod(uv.x + ((1.0 - time) * separation * speed), separation) < size;
+	vec4 color = onGrid || inSize ? vec4(gl_Color.rgb, 0.2) : vec4(1.0, 1.0, 1.0, 0.2);
+	float baseAlpha = onGrid ? 1.0 : 0.2;
+	baseAlpha = inSize ? baseAlpha + gl_Color.a : baseAlpha * gl_Color.a;
+	color.a *= max(0.0, sin((0.08 * uv.x + 1.0) * pi / 2) + 1.0);
+	color.a *= baseAlpha - dToEdge * dToEdge * 3;
 	gl_FragColor = color;
 }

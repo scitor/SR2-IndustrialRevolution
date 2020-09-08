@@ -420,6 +420,7 @@ class MakePlanet : MapHook {
 
 		//Setup orbit
 		planet.orbitAround(system.position, offset.length);
+		planet.orbitDuration(86400.0); // 24h
 		planet.orbitSpin(randomd(35.0, 90.0));
 
 		//Create the planet surface;
@@ -563,7 +564,11 @@ class ExpandSystem : MapHook {
 
 #section server
 	void trigger(SystemData@ data, SystemDesc@ system, Object@& current) const override {
-		system.radius += arguments[0].fromRange();;
+		double ratio = system.radius;
+		system.radius += arguments[0].fromRange() * config::SYSTEM_SIZE;
+		ratio = system.radius / ratio;
+		if(system.object !is null)
+			system.object.OuterRadius *= ratio;
 	}
 #section all
 };
@@ -827,7 +832,10 @@ class MakeAsteroid : MapHook {
 	}
 
 	void trigger(SystemData@ data, SystemDesc@ system, Object@& current) const override {
-		vec2d rpos = random2d(system.radius * 0.3, system.radius * 0.8);
+		double rad = system.radius;
+		if(system.object !is null && system.object.OuterRadius < rad)
+			rad = system.object.OuterRadius;
+		vec2d rpos = random2d(rad * 0.8, rad * 1.0);
 		vec3d pos = system.position + vec3d(rpos.x, randomd(-50.0, 50.0), rpos.y);
 		Asteroid@ roid = createAsteroid(pos, system.object, delay=true);
 		roid.orbitAround(system.position);
@@ -890,14 +898,19 @@ class MakeAsteroidBelt : MapHook {
 
 #section server
 	void trigger(SystemData@ data, SystemDesc@ system, Object@& current) const override {
-		double radius = randomd(0.3, 0.8) * system.radius;
+		double rad = system.radius;
+		if(system.object !is null && system.object.OuterRadius < rad)
+			rad = system.object.OuterRadius;
+		double radius = randomd(0.8, 1.0) * rad;
 		double angle = randomd(0, twopi);
 		double mypi = twopi * randomd(0.1, 1.0);
 
 		uint cnt = randomi(arguments[0].integer, arguments[0].integer * 10 * (mypi/twopi));
 		for(uint i = 0; i < cnt; ++i) {
-			double ang = angle + gauss() * mypi;
-			vec3d pos = system.position + vec3d(cos(ang) * radius, system.position.y, sin(ang) * radius);
+			double ang = (gauss()-0.5) * mypi;
+			double width = 1 - (ang / mypi);
+			radius += randomd(-width, width)*10;
+			vec3d pos = system.position + vec3d(cos(angle+ang) * radius, system.position.y, sin(angle+ang) * radius);
 			pos += random3d(5.0, 20.0);
 
 			Asteroid@ roid = createAsteroid(pos, system.object, delay=true);
@@ -914,12 +927,6 @@ class MakeAsteroidBelt : MapHook {
 
 			roid.initMesh();
 		}
-	}
-	double gauss() {
-		double rand = 0.0;
-		for (uint i=0;i<6;i++)
-			rand += randomd();
-		return rand / 6.0;
 	}
 #section all
 };

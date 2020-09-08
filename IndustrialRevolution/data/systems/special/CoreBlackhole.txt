@@ -1,6 +1,13 @@
 System: CoreBlackhole
-	MakeBlackhole(Radius = 20.0)
-	
+	MakeBlackhole(Radius = 320.0)
+
+	ExpandSystem(200:400)
+
 	MakePlanet(Orbit Spacing = 700:750)
-	MakeAsteroidBelt(6)
+	MakeAsteroidBelt()
 	MakePlanet(Orbit Spacing = 850:900)
+
+	MakeAsteroidBelt()
+
+	Repeat(2:5)
+		SpawnRandomRemnants(50, 0.3:0.6, 4)

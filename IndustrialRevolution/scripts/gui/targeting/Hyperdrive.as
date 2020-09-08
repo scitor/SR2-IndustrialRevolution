@@ -65,8 +65,7 @@ class HyperdriveDisplay : PointDisplay {
 			color = Color(0xff0000ff);
 
 		font::DroidSans_11_Bold.draw(mousePos + vec2i(16, 0),
-			toString(int(ht.cost)) + " " + locale::FTL
-			 + " (" + toString(ht.distance, 0) + "u)",
+			format("$1 $2 ($3)", formatDecimal(round(ht.cost)), locale::FTL, formatDistance(ht.distance)),
 			color);
 		
 		if(ht.distance > ht.range) {

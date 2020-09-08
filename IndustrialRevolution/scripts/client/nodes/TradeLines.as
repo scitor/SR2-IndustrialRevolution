@@ -14,8 +14,8 @@ const Color LINE_START(0x00ffba80);
 const Color LINE_MIDDLE(0xaaaaaa80);
 const Color LINE_END(0x0000ff80);
 
-const uint8 ALPHA_MIN = 80;
-const uint8 ALPHA_MAX = 160;
+const uint8 ALPHA_MIN = 160;
+const uint8 ALPHA_MAX = 240;
 const uint8 ALPHA_STEP = 10;
 
 const double LOCAL_MAX_DIST = 12000.0;
@@ -67,10 +67,10 @@ class TradeLinesNodeScript {
 			off.y = 0;
 			off.normalize();
 			
-			line.path.start += off * system.radius;
-			line.path.end -= off * line.to.radius;
+			line.path.start += off * system.radius * 0.95;
+			line.path.end -= off * line.to.radius * 0.95;
 
-			line.side = (quaterniond_fromAxisAngle(vec3d_up(), pi * 0.5) * off) * 32.0;
+			line.side = (quaterniond_fromAxisAngle(vec3d_up(), pi * 0.5) * off) * 36.0 * config::SYSTEM_SIZE;
 			line.path.start -= line.side;
 			line.path.end -= line.side;
 
@@ -233,6 +233,9 @@ class TradeLinesNodeScript {
 		//Draw the line
 		if(sysVisible || otherVisible) {
 			Color color = LINE_MIDDLE;
+			auto@ emp = getEmpire(system.object.PrimaryEmpire-1);
+			if(system.object !is null && emp !is null)
+				color = emp.color;
 			color.a = min(ALPHA_MAX, ALPHA_MIN + ALPHA_STEP * line.trades);
 
 			drawPolygonStart(2, material::TradePaths, color);

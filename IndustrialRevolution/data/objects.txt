@@ -107,7 +107,7 @@ Planet : objects.Planet::PlanetScript {
 	Mover@ mover = null
 	Cargo cargo
 visible:
-	double OrbitSize = 100
+	double OrbitSize = 500
 	double Population
 	int PlanetType
 	bool renamed = false

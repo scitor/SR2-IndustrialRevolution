@@ -3,10 +3,12 @@ System: BinarySystem
 	Frequency: 0.1
 
 	MakeStar(Temperature = 7000:13000, Radius = 55:70, Suffix = A, Moves = True)
-		SetupOrbit(Radius = 150, Orbit Pct = 0.4)
+		SetupOrbit(Radius = 750, Orbit Pct = 0.4)
 
 	MakeStar(Temperature = 4000:9000, Radius = 35:60, Suffix = B, Moves = True)
-		SetupOrbit(Radius = 150, Orbit Pct = 0.9)
+		SetupOrbit(Radius = 750, Orbit Pct = 0.9)
 
-	RepeatModified(4, $PLANET_FREQUENCY)
+	ExpandSystem(100:200)
+
+	RepeatModified(2:5, $PLANET_FREQUENCY)
 		MakePlanet()

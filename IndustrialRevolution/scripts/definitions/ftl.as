@@ -3,7 +3,7 @@ from regions.regions import getRegion;
 #section all
 import orbitals;
 
-const double HYPERDRIVE_COST = 0.08;
+const double HYPERDRIVE_COST = 0.06;
 const double HYPERDRIVE_START_COST = 25.0;
 const double HYPERDRIVE_CHARGE_TIME = 15.0;
 
@@ -68,9 +68,9 @@ bool canHyperdriveTo(Object& obj, const vec3d& pos) {
 	return !isFTLBlocked(obj, pos);
 }
 
-const double FLING_BEACON_RANGE = 12500.0;
+const double FLING_BEACON_RANGE = 125000.0;
 const double FLING_BEACON_RANGE_SQ = sqr(FLING_BEACON_RANGE);
-const double FLING_COST = 8.0;
+const double FLING_COST = 0.06;
 const double FLING_CHARGE_TIME = 15.0;
 const double FLING_TIME = 15.0;
 
@@ -101,7 +101,11 @@ bool canFlingTo(Object& obj, const vec3d& pos) {
 }
 
 double flingSpeed(Object& obj, const vec3d& pos) {
-	return obj.position.distanceTo(pos) / FLING_TIME;
+	Object@ beacon = obj.owner.getClosestFlingBeacon(obj.position);
+	if(beacon is null)
+		return 0.0;
+
+	return obj.position.distanceTo(pos) / FLING_TIME * (1.0 - (obj.position.distanceToSQ(beacon.position) / 2.0) / FLING_BEACON_RANGE_SQ);
 }
 
 int flingCost(Object& obj, vec3d position) {
@@ -121,13 +125,13 @@ int flingCost(Object& obj, vec3d position) {
 		else
 			scaleFactor = sqrt(double(scale));
 
-		return ceil(FLING_COST * scaleFactor * massFactor * owner.FTLCostFactor);
+		return ceil(FLING_COST * scaleFactor * massFactor * sqrt(position.distanceTo(obj.position)) * owner.FTLCostFactor);
 	}
 	else {
 		if(obj.isOrbital)
-			return ceil(FLING_COST * obj.radius * 3.0 * owner.FTLCostFactor);
+			return ceil(FLING_COST * obj.radius * sqrt(position.distanceTo(obj.position)) * 3.0 * owner.FTLCostFactor);
 		else if(obj.isPlanet)
-			return ceil(FLING_COST * obj.radius * 30.0 * owner.FTLCostFactor);
+			return ceil(FLING_COST * obj.radius * sqrt(position.distanceTo(obj.position)) * 30.0 * owner.FTLCostFactor);
 		return INFINITY;
 	}
 }
@@ -258,7 +262,9 @@ int jumpdriveCost(Object& obj, const vec3d& fromPos, const vec3d& position) {
 	if(reg !is null && owner !is null && reg.FreeFTLMask & owner.mask != 0)
 		return 0;
 	double dist = position.distanceTo(fromPos);
-	dist = min(dist, jumpdriveRange(obj));
+	double range = jumpdriveRange(obj);
+	if(dist > range)
+		dist = range + (dist - range) / 2;
 
 	return ceil(log(dsg.size) * (dsg.total(HV_Mass)*0.5/dsg.size) * sqrt(dist) * JUMPDRIVE_COST + JUMPDRIVE_START_COST) * owner.FTLCostFactor;
 }
@@ -273,7 +279,9 @@ int jumpdriveCost(Object& obj, const vec3d& position) {
 	if(reg !is null && owner !is null && reg.FreeFTLMask & owner.mask != 0)
 		return 0;
 	double dist = position.distanceTo(obj.position);
-	dist = min(dist, jumpdriveRange(obj));
+	double range = jumpdriveRange(obj);
+	if(dist > range)
+		dist = range + (dist - range) / 2;
 
 	return ceil(log(dsg.size) * (dsg.total(HV_Mass)*0.5/dsg.size) * sqrt(dist) * JUMPDRIVE_COST + JUMPDRIVE_START_COST) * owner.FTLCostFactor;
 }

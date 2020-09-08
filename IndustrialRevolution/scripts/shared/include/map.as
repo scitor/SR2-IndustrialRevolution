@@ -2,7 +2,7 @@
 import maps;
 
 const int DEFAULT_SYSTEM_COUNT = 60;
-const double DEFAULT_SPACING = 6500.0;
+const double DEFAULT_SPACING = 10000.0;
 const double MIN_SPACING = 6500.0;
 
 void init() {
