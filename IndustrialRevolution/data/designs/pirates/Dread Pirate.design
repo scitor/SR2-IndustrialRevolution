@@ -140,13 +140,11 @@
 				],
 				[
 					10,
-					13,
-					"AugmentSupply"
+					13
 				],
 				[
 					11,
-					12,
-					"TargetingSensor"
+					12
 				],
 				[
 					12,
@@ -155,23 +153,20 @@
 				],
 				[
 					12,
-					14,
-					"AugmentDamage"
+					14
 				],
 				[
 					13,
-					13,
-					"TargetingSensor"
+					13
 				],
 				[
 					13,
-					14,
-					"TargetingSensor"
+					14
 				],
 				[
 					11,
 					14,
-					"TargetingSensor"
+					"Bulkhead"
 				]
 			]
 		},
@@ -185,13 +180,11 @@
 				],
 				[
 					10,
-					11,
-					"AugmentSupply"
+					11
 				],
 				[
 					11,
-					11,
-					"TargetingSensor"
+					11
 				],
 				[
 					12,
@@ -200,23 +193,20 @@
 				],
 				[
 					12,
-					10,
-					"AugmentDamage"
+					10
 				],
 				[
 					13,
-					10,
-					"TargetingSensor"
+					10
 				],
 				[
 					13,
-					9,
-					"TargetingSensor"
+					9
 				],
 				[
 					11,
 					9,
-					"TargetingSensor"
+					"Bulkhead"
 				]
 			]
 		},
@@ -289,12 +279,12 @@
 				[
 					19,
 					11,
-					"AugmentDamage"
+					"Bulkhead"
 				],
 				[
 					20,
 					11,
-					"TargetingSensor"
+					"Bulkhead"
 				],
 				[
 					18,
@@ -304,17 +294,16 @@
 				[
 					17,
 					10,
-					"TargetingSensor"
+					"Bulkhead"
 				],
 				[
 					21,
-					10,
-					"AugmentReload"
+					10
 				],
 				[
 					22,
 					11,
-					"TargetingSensor"
+					"Bulkhead"
 				]
 			]
 		},
@@ -334,12 +323,12 @@
 				[
 					20,
 					13,
-					"TargetingSensor"
+					"Bulkhead"
 				],
 				[
 					19,
 					12,
-					"AugmentDamage"
+					"Bulkhead"
 				],
 				[
 					18,
@@ -349,17 +338,16 @@
 				[
 					17,
 					13,
-					"TargetingSensor"
+					"Bulkhead"
 				],
 				[
 					21,
-					13,
-					"AugmentReload"
+					13
 				],
 				[
 					22,
 					13,
-					"TargetingSensor"
+					"Bulkhead"
 				]
 			]
 		},
@@ -386,43 +374,38 @@
 				[
 					6,
 					12,
+					"Bulkhead"
+				],
+				[
+					8,
+					11
+				],
+				[
+					7,
+					10,
+					"Bulkhead"
+				],
+				[
+					6,
+					11,
+					"Bulkhead"
+				],
+				[
+					7,
+					11
+				],
+				[
+					5,
+					11
+				],
+				[
+					6,
+					10,
 					"Core"
 				],
 				[
-					7,
-					11
-				],
-				[
-					7,
-					12
-				],
-				[
-					6,
-					13
-				],
-				[
-					7,
-					13
-				],
-				[
-					6,
-					11
-				],
-				[
-					7,
+					5,
 					10
-				],
-				[
-					8,
-					12
-				],
-				[
-					8,
-					13
-				],
-				[
-					8,
-					11
 				]
 			]
 		},
@@ -436,7 +419,8 @@
 				],
 				[
 					11,
-					15
+					15,
+					"Bulkhead"
 				]
 			]
 		},
@@ -450,7 +434,8 @@
 				],
 				[
 					11,
-					8
+					8,
+					"Bulkhead"
 				]
 			]
 		},
@@ -474,7 +459,8 @@
 				],
 				[
 					15,
-					13
+					13,
+					"Bulkhead"
 				]
 			]
 		},
@@ -488,7 +474,48 @@
 				],
 				[
 					15,
-					10
+					10,
+					"Bulkhead"
+				]
+			]
+		},
+		{
+			"type": "RocketEngine",
+			"hexes": [
+				[
+					5,
+					12
+				],
+				[
+					6,
+					13,
+					"Bulkhead"
+				],
+				[
+					7,
+					13,
+					"Bulkhead"
+				],
+				[
+					7,
+					12
+				],
+				[
+					8,
+					13
+				],
+				[
+					8,
+					12
+				],
+				[
+					6,
+					14,
+					"Core"
+				],
+				[
+					5,
+					13
 				]
 			]
 		}
