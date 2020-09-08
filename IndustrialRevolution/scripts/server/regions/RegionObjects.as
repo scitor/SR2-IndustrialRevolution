@@ -1209,7 +1209,7 @@ tidy class RegionObjects : Component_RegionObjects, Savable {
 			}
 			if(customsOffice !is null) {
 				// spawn ships 33% faster with customs office
-				pl.setCivilianTimer(CIV_TIMER/3);
+				pl.setCivilianTimer(CIV_TIMER*2/3);
 				spawnPos = customsOffice.position;
 			}
 
@@ -1280,19 +1280,22 @@ tidy class RegionObjects : Component_RegionObjects, Savable {
 				double radius = CIV_SIZE_MERCHANT;
 				auto@ res = getResource(as.nativeResourceType[i]);
 				auto@ ctype = getCargoType(res.ident.replaced("Cargo","").replaced("Rate",""));
+				double radiusHealth = CIV_RADIUS_HEALTH;
+				if(res.ident == "BaseMaterial" || res.ident == "BioMass" || res.ident == "Ore")
+					radiusHealth = CIV_RADIUS_FIRST;
 				if(ctype !is null) {
 					uint cargoAmount = as.getCargoStored(ctype.id);
-					if(cargoAmount >= uint(CIV_RADIUS_HEALTH * CIV_SIZE_TRANSPORTER))
+					if(cargoAmount >= uint(radiusHealth * CIV_SIZE_TRANSPORTER))
 						radius = CIV_SIZE_TRANSPORTER;
-					else if(cargoAmount >= uint(CIV_RADIUS_HEALTH * CIV_SIZE_FREIGHTER))
+					else if(cargoAmount >= uint(radiusHealth * CIV_SIZE_FREIGHTER))
 						radius = CIV_SIZE_FREIGHTER;
-					else if(cargoAmount >= uint(CIV_RADIUS_HEALTH * CIV_SIZE_CARAVAN))
+					else if(cargoAmount >= uint(radiusHealth * CIV_SIZE_CARAVAN))
 						radius = CIV_SIZE_CARAVAN;
-					else if(cargoAmount >= uint(CIV_RADIUS_HEALTH * CIV_SIZE_MERCHANT))
+					else if(cargoAmount >= uint(radiusHealth * CIV_SIZE_MERCHANT))
 						radius = CIV_SIZE_MERCHANT;
 					else
 						continue;
-					as.removeCargo(ctype.id, radius * CIV_RADIUS_HEALTH);
+					as.removeCargo(ctype.id, radius * radiusHealth);
 				}
 				Civilian@ civ = createCivilian(as.position, owner, type=CiT_Freighter, radius = radius);
 				civ.setCargoResource(as.nativeResourceType[0]);

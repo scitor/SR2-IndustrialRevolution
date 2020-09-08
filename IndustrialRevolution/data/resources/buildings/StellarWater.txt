@@ -11,3 +11,5 @@ Resource: StellarWater
 	Level: 0
 	Exportable: False
 	Artificial: True
+
+	TriggerPeriodic(AddCargoMax(StellarWater, 10, 10), Interval = 10)

@@ -3,5 +3,5 @@ Cargo: Soylent1
 	Description: #SOYLENT1_DESC
 	Class: Food
 
-	IconL: ResourceIconsSmall::104
-	Icon: ResourceIconsSmall::104
+	IconL: ResourceIconsSmall::87
+	Icon: ResourceIconsSmall::87

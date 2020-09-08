@@ -4,4 +4,4 @@ Cargo: StellarWater
 	Class: WaterType
 
 	IconL: ResourceIcons::0
-	Icon: ResourceIconsSmall::103
+	Icon: ResourceIconsSmall::86

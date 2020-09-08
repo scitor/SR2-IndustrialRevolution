@@ -221,11 +221,11 @@ tidy class CivilianScript {
 			// for orbiting
 			obj.activateMover();
 			obj.maxAcceleration = ACC_STATION;
-			obj.rotationSpeed = 0.5;
+			obj.rotationSpeed = 0.01;
 			obj.stopMoving();
+			obj.noCollide = true;
 			addAmbientSource(CURRENT_PLAYER, "ambient_station", obj.id, obj.position, STATION_SND_RAD);
 		}
-		obj.noCollide = true;
 		makeMesh(obj);
 		Health = get_maxHealth(obj);
 		delta = true;
@@ -268,7 +268,7 @@ tidy class CivilianScript {
 		if(obj.getCivilianType() != CiT_Freighter)
 			removeAmbientSource(CURRENT_PLAYER, obj.id);
 		leaveRegion(obj);
-		removeBeam();
+		//removeBeam();
 		if(obj.owner !is null && obj.owner.valid) {
 			if(type == CiT_Freighter)
 				obj.owner.CivilianTradeShips -= 1;
@@ -529,7 +529,7 @@ tidy class CivilianScript {
 				break;
 			}
 			case CiNS_MovingToTarget: {
-				removeBeam(); // remove beams we have started
+				//removeBeam(); // remove beams we have started
 				if ((moveTargetObj is null || !moveTargetObj.valid) && moveTargetPos == vec3d()) {
 					//print("no move target");
 					navState = CiNS_NeedPath;
@@ -560,7 +560,7 @@ tidy class CivilianScript {
 				break;
 			}
 			case CiNS_FTLToTarget: {
-				removeBeam(); // remove beams we have started
+				//removeBeam(); // remove beams we have started
 				if(moveTargetPos == vec3d()) {
 					navState = CiNS_NeedPath;
 					@nextRegion = null;
@@ -641,7 +641,7 @@ tidy class CivilianScript {
 							uint amount = uint(pathTarget.getCargoStored(type.id));
 							double toAdd = min(3600.0 - amount, obj.radius * CIV_RADIUS_HEALTH);
 							// quickhack @TODO: do properly
-							if(cargoResource.ident == "BaseMaterial" || cargoResource.ident == "BioMass")
+							if(cargoResource.ident == "BaseMaterial" || cargoResource.ident == "BioMass" || cargoResource.ident == "Ore")
 								toAdd = min(3600.0 - amount, obj.radius * CIV_RADIUS_FIRST);
 
 							if(toAdd > 0)
@@ -665,7 +665,7 @@ tidy class CivilianScript {
 	}
 
 	bool tradeWithObject(Civilian& obj, Object@ tradeObj) {
-		startBeam(obj, tradeObj);
+		//startBeam(obj, tradeObj);
 		// who do we have here
 		Civilian@ tradeStation = cast<Civilian>(tradeObj);
 		if(tradeStation !is null) {
