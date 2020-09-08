@@ -340,8 +340,16 @@ void spawnPirateShip(Empire@ limitEmpire = null) {
 	Ship@ ship = createShip(pos, dsg, Pirates, free=true);
 
 	auto@ status = getStatusType("PirateShip");
-	if(status !is null)
-		ship.addStatus(status.id, originEmpire=limitEmpire);
-	else
+	if(status !is null) {
+		ship.addStatus(status.id, originEmpire = limitEmpire);
+
+		@dsg = Pirates.getDesign("Dread Pirate Supply");
+		for(uint i = 0; i < 2; i++)
+			createShip(pos, dsg, Pirates, free=true);
+
+		@dsg = Pirates.getDesign("Dread Pirate Buddy");
+		for(uint i = 0, cnt = 4+sqr(randomd())*8; i < 2; i++)
+			createShip(pos, dsg, Pirates, free=true);
+	} else
 		error("Error: Could not find 'PirateShip' status for managing pirate vessel.");
 }
