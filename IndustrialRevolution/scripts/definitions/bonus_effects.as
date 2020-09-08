@@ -1063,7 +1063,12 @@ class PricedAsteroid : BonusEffect {
 
 #section server
 	void activate(Object@ obj, Empire@ emp) const override {
-		Asteroid@ roid = createAsteroid(obj.position);
+		vec3d pos = obj.position;
+		vec2d off = random2d(obj.radius * 2, obj.radius * 5);
+		pos.x += off.x;
+		pos.z += off.y;
+
+		Asteroid@ roid = createAsteroid(pos);
 		Region@ reg = obj.region;
 		if(reg !is null) {
 			roid.orbitAround(reg.position);
@@ -1083,7 +1088,7 @@ class OwnedAsteroid : BonusEffect {
 #section server
 	void activate(Object@ obj, Empire@ emp) const override {
 		vec3d pos = obj.position;
-		vec2d off = random2d(5.0);
+		vec2d off = random2d(obj.radius * 2, obj.radius * 5);
 		pos.x += off.x;
 		pos.z += off.y;
 
