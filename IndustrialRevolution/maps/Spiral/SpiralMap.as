@@ -2,8 +2,9 @@
 
 enum MapSetting {
 	M_SystemCount,
-	M_SystemSpacing,
 	M_Flatten,
+	M_GalaxyGases,
+	M_ColoredGases
 };
 
 #section server
@@ -30,8 +31,9 @@ class SpiralMap : Map {
 #section client
 	void makeSettings() {
 		Number(locale::SYSTEM_COUNT, M_SystemCount, DEFAULT_SYSTEM_COUNT, decimals=0, step=10, min=4, halfWidth=true);
-		Number(locale::SYSTEM_SPACING, M_SystemSpacing, DEFAULT_SPACING, decimals=0, step=1000, min=MIN_SPACING, halfWidth=true);
-		Toggle(locale::FLATTEN, M_Flatten, false);
+		Toggle(locale::FLATTEN, M_Flatten, false, halfWidth=true);
+		Frequency("Galaxy Gases", M_GalaxyGases, 1.0, min = 0.0, max = 10.0, tooltip = "How much gas should the galaxy have (GPU intensive)");
+		Toggle("Colored Gases", M_ColoredGases, false, halfWidth=true);
 	}
 
 #section server
@@ -48,9 +50,9 @@ class SpiralMap : Map {
 		uint perArm = (systemCount - coreSystems) / armCount;
 		coreSystems = systemCount - (perArm * armCount);
 		
-		double systemSpacing = modSpacing(getSetting(M_SystemSpacing, DEFAULT_SPACING));
-		const double coreHeightVariation = flatten ? 0.0 : 1000.0;
-		const double heightVariation = flatten ? 0.0 : 600.0;
+		double systemSpacing = modSpacing(DEFAULT_SPACING);
+		const double coreHeightVariation = flatten ? 0.0 : 4000.0;
+		const double heightVariation = flatten ? 0.0 : 2400.0;
 		const double spiralBase = systemSpacing * double(systemCount) / 75.0;
 		const double spiralCurve = 0.5;
 		
@@ -196,6 +198,61 @@ class SpiralMap : Map {
 			for(uint j = 0, cnt = arm.homeworlds.length; j < cnt; ++j)
 				addPossibleHomeworld(arm.systems[arm.homeworlds[j]]);
 		}
+	}
+
+	void generateGas() {
+		array<vec3d> planned;
+		double gasesMulti = getSetting(M_GalaxyGases, 1.0);
+		if(gasesMulti < 0.01)
+			return;
+		for(uint i = 0; i < systems.length; ++i) {
+			vec3d sysPos = systems[i].position;
+			double sysRad = systems[i].radius;
+			for(uint k=0, cnt = 6; k < cnt; ++k) {
+				vec3d pos = random2to3d(0, sysRad * 3, sysPos);
+				double pct = pos.distanceTo(origin) / radius;
+				//pos.y = randomd(-sqr(1-pct)*(radius/8), sqr(1-pct)*(radius/20));
+				planned.insertLast(pos);
+			}
+			for(uint a = 0, cnt = systems[i].adjacent.length; a < cnt; a++) {
+				for(uint k=0, cnt = 10*gasesMulti; k < cnt; ++k) {
+					if(getSystem(systems[i].adjacent[a]) is null)
+						continue;
+					vec3d pos = randomBetween(sysPos, getSystem(systems[i].adjacent[a]).position, sysRad * 3);
+					double pct = pos.distanceTo(origin) / radius;
+					pos.y += randomd(-sqr(1-pct)*(radius/20), sqr(1-pct)*(radius/20));
+					planned.insertLast(pos);
+				}
+			}
+		}
+		// clear systems
+		for(uint i = 0; i < systems.length; ++i) {
+			vec3d sysPos = systems[i].position;
+			double sysRad2 = sqr(systems[i].radius * 1.5);
+			for(int p = planned.length-1; p > -1; --p) {
+				if(sysPos.distanceToSQ(planned[p]) < sysRad2)
+					planned.removeAt(p);
+			}
+		}
+		for(uint p = 0; p < planned.length; ++p) {
+			vec3d pos = planned[p];
+			double pct = pos.distanceTo(origin) / radius;
+			double edgePct = pos.distanceTo(origin) / (radius * 0.6);
+			Colorf fcol;
+			if(getSetting(M_ColoredGases, 0.0) != 0.0)
+				fcol.fromHSV((360.0 * edgePct) % 360.0, sqr(0.6-pct/10), sqr(1-pct/1.1));
+			else
+				fcol.fromHSV(0.0, 0.0, sqr(1-pct/1.1));
+			fcol.a = randomd(0.1,0.3);
+			//planned.insertLast(pos);
+			createGalaxyGas(pos, randomd(10000.0, 14000.0) / min(1.5, max(0.8, gasesMulti)), Color(fcol), randomi(0,9)<1);
+		}
+	}
+
+	SystemDesc@ getSystem(uint index) {
+		if(index >= systems.length)
+			return null;
+		return systems[index];
 	}
 #section all
 };

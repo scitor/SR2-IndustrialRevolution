@@ -337,47 +337,50 @@ class MapGeneration {
 	}
 
 	void generateGas() {
-		Color innerBright, outerBright;
-		
-		switch(randomi(0,2)) {
-			case 0:
-				innerBright = Color(0xc08060ff);
-				outerBright = Color(0x0040c0ff);
-				break;
-			case 1:
-				innerBright = Color(0xc08060ff);
-				outerBright = Color(0x006040ff);
-				break;
-			case 2:
-				innerBright = Color(0xc08060ff);
-				outerBright = Color(0x600060ff);
-				break;
-		}
-	
-		for(uint i = 0, cnt = systems.length; i < cnt; ++i) {
+		array<vec3d> planned;
+		for(uint i = 0; i < systems.length; ++i) {
 			vec3d sysPos = systems[i].position;
-			double edgePct = sysPos.distanceTo(origin) / (radius * 0.6);
-
-			int brightCount = 10 + int(4.0 * edgePct);
-			for(int k = 0; k < brightCount; ++k) {
-				Color col = innerBright.interpolate(outerBright, edgePct);
-				col.a = randomi(0x14,0x1c);
-				vec3d pos = sysPos + vec3d(randomd(-10000.0, 10000.0), randomd(-8000.0,8000.0) * (1.0 - edgePct * 0.75), randomd(-10000.0, 10000.0));
-				
-				createGalaxyGas(pos, 7500.0 - 2000.0 * edgePct, col, k == 0);
+			double sysRad = systems[i].radius;
+			for(uint k=0, cnt = 10; k < cnt; ++k) {
+				vec3d pos = random2to3d(0, sysRad * 3, sysPos);
+				double pct = pos.distanceTo(origin) / radius;
+				planned.insertLast(pos);
 			}
-			
-			int darkCount = 1 + int(3.0 * edgePct);
-			for(int k = 0; k < darkCount; ++k) {
-				//Color col = Color(0x200c1815).interpolate(Color(0x08060340), edgePct);
-				Colorf fcol;
-				fcol.fromHSV(randomd(0,360.0), randomd(0.0,0.2), randomd(0.0,0.2));
-				fcol.a = randomd(0.1,0.2);
-				
-				vec3d pos = sysPos + vec3d(randomd(-10000.0, 10000.0), randomd(-2000.0,2000.0), randomd(-10000.0, 10000.0));
-				createGalaxyGas(pos, 4200.0, Color(fcol), true);
+			for(uint a = 0, cnt = systems[i].adjacent.length; a < cnt; a++) {
+				for(uint k=0, cnt = 10; k < cnt; ++k) {
+					if(getSystem(systems[i].adjacent[a]) is null)
+						continue;
+					vec3d pos = randomBetween(sysPos, getSystem(systems[i].adjacent[a]).position, sysRad * 3);
+					double pct = pos.distanceTo(origin) / radius;
+					planned.insertLast(pos);
+				}
 			}
 		}
+		// clear systems
+		for(uint i = 0; i < systems.length; ++i) {
+			vec3d sysPos = systems[i].position;
+			double sysRad2 = sqr(systems[i].radius * 1.5);
+			for(int p = planned.length-1; p > -1; --p) {
+				if(sysPos.distanceToSQ(planned[p]) < sysRad2)
+					planned.removeAt(p);
+			}
+		}
+		for(uint p = 0; p < planned.length; ++p) {
+			vec3d pos = planned[p];
+			double pct = pos.distanceTo(origin) / radius;
+			double edgePct = pos.distanceTo(origin) / (radius * 0.6);
+			Colorf fcol;
+			fcol.fromHSV((360.0 * edgePct) % 360.0, sqr(0.5-pct/10), sqr(1-pct));
+			fcol.a = randomd(0.1,0.3);
+			//planned.insertLast(pos);
+			createGalaxyGas(pos, randomd(10000.0, 14000.0), Color(fcol), randomi(0,9)<1);
+		}
+	}
+
+		SystemDesc@ getSystem(uint index) {
+		if(index >= systems.length)
+			return null;
+		return systems[index];
 	}
 
 	GasData@ gasNodeForPoint(const vec3d& pos) {
@@ -409,7 +412,12 @@ class MapGeneration {
 		haveLinks = true;
 	}
 
-	void generateAutomatedLinks(uint targLinks = 3) {
+	void generateAutomatedLinks(uint targLinks = 1) {
+		const double MIN_DIST = 31000.0 * config::SYSTEM_SIZE;
+		const double LOOKBOX_SIZE = 1200.0 * config::SYSTEM_SIZE;
+		const double DIST_REQUIREMENT = 13000.0 * config::SYSTEM_SIZE;
+		const double DIST_REQ_RELAX = 3000.0 * config::SYSTEM_SIZE;
+
 		AngularItem[] items(16);
 		uint cnt = systemData.length;
 		for(uint i = 0; i < cnt; ++i) {
@@ -431,11 +439,11 @@ class MapGeneration {
 
 				double angle = offset.radians() + twopi;
 				double dist = offset.length;
-				if(dist > 31000.0)
+				if(dist > MIN_DIST)
 					continue;
 
 				//double sz = atan(other.radius / dist);
-				double sz = atan(1200.0 / dist); //TODO: Base this on something?
+				double sz = atan(LOOKBOX_SIZE / dist); //TODO: Base this on something?
 				
 				int closest = int(angle / twopi * 16.0);
 				int firstBox = int((angle - sz) / twopi * 16.0);
@@ -453,7 +461,7 @@ class MapGeneration {
 
 			//Turn items into links
 			uint linksMade = desc.adjacent.length;
-			double distReq = 13000.0;
+			double distReq = DIST_REQUIREMENT;
 			do {
 				for(uint p = 0, n = randomi(0,15); p < 16; ++p) {
 					AngularItem@ item = items[n];
@@ -469,7 +477,7 @@ class MapGeneration {
 						}
 
 						++linksMade;
-						if(distReq > 13000.0 && linksMade >= targLinks)
+						if(distReq > DIST_REQUIREMENT && linksMade >= targLinks)
 							break;
 						@item.desc = null;
 					}
@@ -479,8 +487,8 @@ class MapGeneration {
 
 				//Slowly relax distance requirement until we have at least
 				//the target amount of links to work with.
-				distReq += 3000.0;
-			} while(linksMade < targLinks && distReq <= 31000.0);
+				distReq += DIST_REQ_RELAX;
+			} while(linksMade < targLinks && distReq <= MIN_DIST);
 		}
 	}
 
@@ -1143,6 +1151,22 @@ final class AngularItem {
 };
 
 //}}}
+
+class SystemSort {
+	SystemDesc@ system;
+	SystemSort() {}
+	SystemSort(SystemDesc@ sys) {
+		@system = sys;
+	}
+
+	int opCmp(const SystemSort& other) const {
+		if(system.position.x > other.system.position.x)
+			return 1;
+		else if(system.position.x < other.system.position.x)
+			return -1;
+		return 0;
+	}
+};
 
 // {{{ Gas data structures
 final class GasSprite {

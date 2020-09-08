@@ -157,6 +157,55 @@ class InvasionMap : Map {
 		}
 	}
 
+	void generateGas() {
+		Color innerBright, outerBright;
+
+		switch(randomi(0,2)) {
+			case 0:
+				innerBright = Color(0xc08060ff);
+				outerBright = Color(0x0040c0ff);
+				break;
+			case 1:
+				innerBright = Color(0xc08060ff);
+				outerBright = Color(0x006040ff);
+				break;
+			case 2:
+				innerBright = Color(0xc08060ff);
+				outerBright = Color(0x600060ff);
+				break;
+		}
+
+		for(uint i = 0, cnt = systems.length; i < cnt; ++i) {
+			vec3d sysPos = systems[i].position;
+			double sysRad = systems[i].radius;
+			double edgePct = min(2.0, sysPos.distanceTo(origin) / (radius * 0.6));
+
+			int brightCount = 10 + int(4.0 * edgePct);
+			for(int k = 0; k < brightCount; ++k) {
+				Color col = innerBright.interpolate(outerBright, edgePct);
+				col.a = randomi(0x14,0x1c);
+				vec3d pos = sysPos;
+				vec2d off = random2d(0.0, sysRad * 2);
+				pos.x += off.x;
+				pos.z += off.y;
+				createGalaxyGas(pos, 20000.0 - 2000.0 * edgePct, col, k == 0);
+			}
+
+			int darkCount = 1 + int(3.0 * edgePct);
+			for(int k = 0; k < darkCount; ++k) {
+				//Color col = Color(0x200c1815).interpolate(Color(0x08060340), edgePct);
+				Colorf fcol;
+				fcol.fromHSV(randomd(0,360.0), randomd(0.0,0.2), randomd(0.0,0.2));
+				fcol.a = randomd(0.1,0.2);
+				vec3d pos = sysPos;
+				vec2d off = random2d(0.0, sysRad * 2);
+				pos.x += off.x;
+				pos.z += off.y;
+				createGalaxyGas(pos, 14000.0, Color(fcol), true);
+			}
+		}
+	}
+
 	void preInit() {
 		//Modify creep empire
 		Pirates.name = locale::REMNANT_DEFENSE_LINE;
@@ -611,7 +660,7 @@ void tick(double time) {
 	//Increase remnant strength
 	waveTimer -= time;
 	if(waveTimer <= 0.0) {
-		waveTimer += 3.0 * 60.0;
+		waveTimer += 5.0 * 60.0;
 
 		//Update defense station strength
 		double stHP = -1.0 + 0.5 * pow(1.3, symbolicStrength / DOUBLE_WAVES);
