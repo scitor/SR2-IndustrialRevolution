@@ -4,8 +4,8 @@ Resource: HeavyWater
 	Native Biome: Oceanic
 	Class: WaterType
 
-	Icon: ResourceIconsSmall::99
-	Small Icon: ResourceIconsSmall::99
+	Icon: ResourceIconsSmall::82
+	Small Icon: ResourceIconsSmall::82
 
 	Artificial: True
 	Level: 0

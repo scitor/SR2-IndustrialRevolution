@@ -2,3 +2,15 @@ CARGO_WORTH: Trade value: [b]$1[/b] (per unit)
 WATER_BLURB: Every Planet needs [img=ResourceClassIcons::4;20/] Water to develop.
 WATER_PROCESSING_FACILITY: Water Processing Facility
 WATER_PROCESSING_FACILITY_BLURB: Imported Water has to undergo various purification and processing
+
+HIGH_DENSITY_GASES: High-Density Gases
+HIGH_DENSITY_GASES_DESC: Highly compressed gases produced by natural phenomena (gravity) or artificially (compressors)
+
+CHEMICAL_REAGENTS: Chemical Reagents
+CHEMICAL_REAGENTS_DESC: Substances or compounds that are added to a system in order to bring about a chemical reaction or are added to see if a reaction occurs
+
+PEKELM_REDOX: Pekelm Redox
+PEKELM_REDOX_DESC: Used in production this is ssentially pekelm rust (just reversed, weird stuff)
+
+FULRATE_WOOL: Fulrate Wool
+FULRATE_WOOL_DESC: soem weird description for weird stuff

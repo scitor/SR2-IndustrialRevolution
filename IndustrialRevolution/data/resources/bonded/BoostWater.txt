@@ -4,8 +4,8 @@ Resource: BoostWater
 	Native Biome: Oceanic
 	Class: WaterType
 
-	Icon: ResourceIconsSmall::101
-	Small Icon: ResourceIconsSmall::101
+	Icon: ResourceIconsSmall::84
+	Small Icon: ResourceIconsSmall::84
 
 	Artificial: True
 	Level: 0

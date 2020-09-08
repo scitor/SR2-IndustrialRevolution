@@ -4,8 +4,8 @@ Resource: AwesomeWater
 	Native Biome: Oceanic
 	Class: WaterType
 
-	Icon: ResourceIconsSmall::102
-	Small Icon: ResourceIconsSmall::102
+	Icon: ResourceIconsSmall::85
+	Small Icon: ResourceIconsSmall::85
 
 	Artificial: True
 	Level: 0

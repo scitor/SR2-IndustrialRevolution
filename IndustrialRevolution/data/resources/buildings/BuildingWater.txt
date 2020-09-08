@@ -4,8 +4,8 @@ Resource: BuildingWater
 	Native Biome: Oceanic
 	Class: WaterType
 
-	Icon: ResourceIconsSmall::103
-	Small Icon: ResourceIconsSmall::103
+	Icon: ResourceIconsSmall::86
+	Small Icon: ResourceIconsSmall::86
 	Display Weight: -10
 
 	Level: 0

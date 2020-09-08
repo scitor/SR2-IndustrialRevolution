@@ -1,6 +1,6 @@
-Resource: ConstructionMaterials
-	Name: ConstructionMaterials
-	Description: ConstructionMaterials desc
+Resource: HighDensityGases
+	Name: #HIGH_DENSITY_GASES
+	Description: #HIGH_DENSITY_GASES_DESC
 	Native Biome: Crystallic
 
 	Icon: ResourceIcons::17

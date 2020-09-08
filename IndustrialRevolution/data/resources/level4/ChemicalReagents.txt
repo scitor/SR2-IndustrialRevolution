@@ -1,0 +1,13 @@
+Resource: ChemicalReagents
+	Name: #CHEMICAL_REAGENTS
+	Description: #CHEMICAL_REAGENTS_DESC
+	Native Biome: Crystallic
+
+	Icon: ResourceIcons::17
+	Small Icon: ResourceIconsSmall::0
+
+	Level: 4
+	Artificial: True
+
+	//IfLevel(5, TriggerPeriodic(RemoveCargo(ChemicalReagents, 10), Interval = 10))
+	//OnNative(TriggerPeriodic(AddCargoMax(ChemicalReagents, 11, 200), Interval = 10))

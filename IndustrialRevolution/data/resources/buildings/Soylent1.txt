@@ -4,8 +4,8 @@ Resource: Soylent1
 	Native Biome: Forest
 	Class: Food
 
-	Icon: ResourceIconsSmall::104
-	Small Icon: ResourceIconsSmall::104
+	Icon: ResourceIconsSmall::87
+	Small Icon: ResourceIconsSmall::87
 	Display Weight: -10
 
 	Level: 0

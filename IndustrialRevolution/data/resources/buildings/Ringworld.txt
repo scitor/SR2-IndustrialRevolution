@@ -8,7 +8,7 @@ Resource: Ringworld
 	Can Be Terraformed: False
 	Exportable: False
 
-	Small Icon: ResourceIconsSmall::105
+	Small Icon: ResourceIconsSmall::54
 
 	RegenSurface(160, 8, Biome Count = 3)
 

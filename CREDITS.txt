@@ -21,3 +21,10 @@ Space Ship & Mech Construction Kit 2 (data/images/buildings)
 Author: Skorpio
 Link: https://opengameart.org/content/space-ship-mech-construction-kit-2
 License: CC-BY-SA 3.0
+
+#
+
+Colony sim assets
+Author: Buch
+Link: https://opengameart.org/content/colony-sim-assets
+License: CC0

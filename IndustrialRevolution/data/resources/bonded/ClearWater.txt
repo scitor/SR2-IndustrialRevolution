@@ -4,8 +4,8 @@ Resource: ClearWater
 	Native Biome: Oceanic
 	Class: WaterType
 
-	Icon: ResourceIconsSmall::100
-	Small Icon: ResourceIconsSmall::100
+	Icon: ResourceIconsSmall::83
+	Small Icon: ResourceIconsSmall::83
 
 	Artificial: True
 	Level: 0
