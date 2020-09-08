@@ -52,6 +52,8 @@ tidy final class BuildingType {
 	string description;
 	string category;
 	Sprite sprite;
+	bool animateSprite = false;
+	uint animationFPS = 1;
 
 	string upgradesFrom;
 	const BuildingType@ base;
@@ -486,6 +488,12 @@ void loadBuildings(const string& filename) {
 		}
 		else if(key == "Sprite") {
 			bld.sprite = getSprite(value);
+		}
+		else if(key == "Animate Sprite") {
+			bld.animateSprite = toBool(value);
+		}
+		else if(key == "Animation FPS") {
+			bld.animationFPS = toUInt(value);
 		}
 		else if(key == "Upgrades From") {
 			bld.upgradesFrom = value;

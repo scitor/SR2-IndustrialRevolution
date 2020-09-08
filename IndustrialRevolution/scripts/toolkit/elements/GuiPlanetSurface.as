@@ -18,6 +18,7 @@ class GuiPlanetSurface : BaseGuiElement {
 	const Material@ developedMat = material::DevelopedTile;
 	double horizAlign = 0.5;
 	double vertAlign = 0.5;
+	uint animFrame = 0;
 
 	GuiPlanetSurface(IGuiElement@ ParentElement, Alignment@ Align) {
 		super(ParentElement, Align);
@@ -227,6 +228,9 @@ class GuiPlanetSurface : BaseGuiElement {
 					col.a = (bld.completion * 0xbf) + 0x40;
 
 					if(bld.type.size.x == 1 && bld.type.size.y == 1) {
+						if(bld.type.animateSprite && !bld.disabled && bld.completion == 1.f)
+							bld.type.sprite.sheet.draw(uint(double(animFrame / 60.0) * double(1.0 / bld.type.animationFPS)) % bld.type.sprite.sheet.count, pos, col);
+						else
 						bld.type.sprite.draw(pos, col);
 
 						//Draw developed border
@@ -243,6 +247,9 @@ class GuiPlanetSurface : BaseGuiElement {
 								&& relY == int(bld.type.size.y - center.y - 1)) {
 							vec2i ssize(bld.type.size.x * space, bld.type.size.y * space);
 							recti spos = recti_area(pos.topLeft - ssize + vec2i(space,space), ssize);
+							if(bld.type.animateSprite && !bld.disabled/* && bld.completion == 1.f*/)
+								bld.type.sprite.sheet.draw(uint(double(animFrame / 60.0) * double(1.0 / bld.type.animationFPS)) % bld.type.sprite.sheet.count, spos, col);
+							else
 							bld.type.sprite.draw(spos, col);
 						}
 
@@ -308,6 +315,7 @@ class GuiPlanetSurface : BaseGuiElement {
 		}
 
 		BaseGuiElement::draw();
+		animFrame++;
 	}
 };
 
