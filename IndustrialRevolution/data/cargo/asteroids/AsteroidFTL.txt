@@ -1,0 +1,5 @@
+Cargo: AsteroidFTL
+	Name: #ASTEROID_FTL
+	Description: #ASTEROID_FTL_DESC
+
+	Icon: ResourceIconsSmall::47
