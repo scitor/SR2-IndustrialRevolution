@@ -229,9 +229,9 @@ class GuiPlanetSurface : BaseGuiElement {
 
 					if(bld.type.size.x == 1 && bld.type.size.y == 1) {
 						if(bld.type.animateSprite && !bld.disabled && bld.completion == 1.f)
-							bld.type.sprite.sheet.draw(uint(double(animFrame / 60.0) * double(1.0 / bld.type.animationFPS)) % bld.type.sprite.sheet.count, pos, col);
+							bld.type.sprite.sheet.draw(uint((animFrame / 60.0) * bld.type.animationFPS) % bld.type.sprite.sheet.count, pos, col);
 						else
-						bld.type.sprite.draw(pos, col);
+							bld.type.sprite.draw(pos, col);
 
 						//Draw developed border
 						if(flags & SuF_Usable != 0 && hasDevelopment)
@@ -248,9 +248,9 @@ class GuiPlanetSurface : BaseGuiElement {
 							vec2i ssize(bld.type.size.x * space, bld.type.size.y * space);
 							recti spos = recti_area(pos.topLeft - ssize + vec2i(space,space), ssize);
 							if(bld.type.animateSprite && !bld.disabled/* && bld.completion == 1.f*/)
-								bld.type.sprite.sheet.draw(uint(double(animFrame / 60.0) * double(1.0 / bld.type.animationFPS)) % bld.type.sprite.sheet.count, spos, col);
+								bld.type.sprite.sheet.draw(uint((animFrame / 60.0) * bld.type.animationFPS) % bld.type.sprite.sheet.count, spos, col);
 							else
-							bld.type.sprite.draw(spos, col);
+								bld.type.sprite.draw(spos, col);
 						}
 
 						//Draw undeveloped overlay
