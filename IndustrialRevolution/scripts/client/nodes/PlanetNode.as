@@ -222,7 +222,7 @@ final class PlanetNodeScript {
 				st >>= 8;
 				double angle = fraction(gameTime / (300.0 + 40.0 * double(st % 256) / 255.0)) * twopi;
 				st >>= 8;
-				double distance = double(st % 256) / 255.0 * 7.0 + 2.0;
+				double distance = double(st % 256) / 255.0 * 25.0 + 2.0;
 				st >>= 8;
 				vec3d offset = quaterniond_fromAxisAngle(vec3d_up(), angle) * vec3d_front(distance * node.abs_scale);
 
