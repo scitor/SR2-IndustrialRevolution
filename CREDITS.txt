@@ -3,6 +3,13 @@ All content created by myself falls under the license found in LICENSE.txt
 
 #
 
+Bio Industry (Factorio Mod) animated building sprites
+Author: TheSAguy
+Link: https://forums.factorio.com/viewtopic.php?f=93&t=17548
+License: Usage permission
+
+#
+
 HQ Resource Images taken from
 Author: CraftPix.net 2D Game Assets
 Link: https://craftpix.net/freebies/
@@ -24,7 +31,7 @@ License: CC-BY-SA 3.0
 
 #
 
-Colony sim assets
+Colony sim assets (data/image/buildings)
 Author: Buch
 Link: https://opengameart.org/content/colony-sim-assets
 License: CC0
