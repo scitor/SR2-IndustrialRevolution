@@ -3,8 +3,8 @@ Resource: HighDensityGases
 	Description: #HIGH_DENSITY_GASES_DESC
 	Native Biome: Crystallic
 
-	Icon: ResourceIcons::17
-	Small Icon: ResourceIconsSmall::0
+	Icon: ResourceIcons::88
+	Small Icon: ResourceIconsSmall::88
 
 	Level: 4
 	Artificial: True

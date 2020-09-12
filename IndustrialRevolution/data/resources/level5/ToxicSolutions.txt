@@ -1,12 +1,12 @@
-Resource: ChemicalReagents
-	Name: #CHEMICAL_REAGENTS
-	Description: #CHEMICAL_REAGENTS_DESC
+Resource: ToxicSolutions
+	Name: #TOXIC_SOLUTIONS
+	Description: #TOXIC_SOLUTIONS_DESC
 	Native Biome: Crystallic
 
-	Icon: ResourceIcons::89
-	Small Icon: ResourceIconsSmall::89
+	Icon: ResourceIcons::99
+	Small Icon: ResourceIconsSmall::99
 
-	Level: 4
+	Level: 5
 	Artificial: True
 
 	//IfLevel(5, TriggerPeriodic(RemoveCargo(ChemicalReagents, 10), Interval = 10))

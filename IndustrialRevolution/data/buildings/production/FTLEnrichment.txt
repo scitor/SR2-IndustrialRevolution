@@ -1,0 +1,28 @@
+Building: FTLEnrichmentCenter
+	Name: FTL Enrichment Center
+	Description: Generation and some storage
+	Sprite: FTLEnrichment::0
+	Sprite Offset: 0x0
+	Animate Sprite: True
+	Animation FPS: 8
+
+	Category: Infrastructure
+
+	Size: 2x2
+
+	Base Cost: 100
+	Tile Cost: 10
+	Build Time: 10
+
+	Build Affinity: Mountains
+
+	In Queue: True
+
+	AddFTLStorage(50)
+	IfNative(FTL, AddFTLStorage(50))
+
+	RequireNotTrait(Sublight)
+
+	ActiveWhenCargoConsumed(AsteroidFTL, 10, 10, AddFTLIncome(+1.0))
+
+	AI: AsFTLStorage()

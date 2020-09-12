@@ -12,6 +12,6 @@ Resource: BuildingWater
 	Exportable: False
 	Artificial: True
 
-	TriggerPeriodic(AddCargoMax(BuildingWater, 10, 10), Interval = 10)
+	TriggerPeriodic(AddCargoMax(BuildingWater, 10, 200), Interval = 10)
 
 	//AddCargo(BuildingWater, 10)

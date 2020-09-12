@@ -3,8 +3,8 @@ Resource: FTLBoulder
 	Description: #FTL_BOULDER_DESC
 	Native Biome: Crystallic
 
-	Icon: ResourceIcons::17
-	Small Icon: ResourceIconsSmall::0
+	Icon: ResourceIcons::92
+	Small Icon: ResourceIconsSmall::92
 
 	Level: 4
 	Artificial: True

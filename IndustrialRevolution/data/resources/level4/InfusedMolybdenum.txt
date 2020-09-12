@@ -1,10 +1,10 @@
-Resource: ChemicalReagents
-	Name: #CHEMICAL_REAGENTS
-	Description: #CHEMICAL_REAGENTS_DESC
+Resource: InfusedMolybdenum
+	Name: #INFUSED_MOLYBDENUM
+	Description: #INFUSED_MOLYBDENUM_DESC
 	Native Biome: Crystallic
 
-	Icon: ResourceIcons::89
-	Small Icon: ResourceIconsSmall::89
+	Icon: ResourceIcons::97
+	Small Icon: ResourceIconsSmall::97
 
 	Level: 4
 	Artificial: True

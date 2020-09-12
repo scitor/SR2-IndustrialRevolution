@@ -1,3 +1,8 @@
+SpriteSheet: FTLEnrichment
+	Inherit: Image2D
+	Size: 64,64
+	LoadPriority: Game
+	Texture: data/images/buildings/ftl_enrichment.png
 
 SpriteSheet: AngryMeteorIconsSet
 	Inherit: Image2D

@@ -1,10 +1,10 @@
-Resource: ChemicalReagents
-	Name: #CHEMICAL_REAGENTS
-	Description: #CHEMICAL_REAGENTS_DESC
+Resource: EnergyCrystal
+	Name: #ENERGY_CRYSTAL
+	Description: #ENERGY_CRYSTAL_DESC
 	Native Biome: Crystallic
 
-	Icon: ResourceIcons::89
-	Small Icon: ResourceIconsSmall::89
+	Icon: ResourceIcons::93
+	Small Icon: ResourceIconsSmall::93
 
 	Level: 4
 	Artificial: True

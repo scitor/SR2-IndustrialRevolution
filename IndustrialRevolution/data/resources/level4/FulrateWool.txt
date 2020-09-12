@@ -3,8 +3,8 @@ Resource: FulrateWool
 	Description: #FULRATE_WOOL
 	Native Biome: Crystallic
 
-	Icon: ResourceIcons::17
-	Small Icon: ResourceIconsSmall::0
+	Icon: ResourceIcons::91
+	Small Icon: ResourceIconsSmall::91
 
 	Level: 4
 	Artificial: True

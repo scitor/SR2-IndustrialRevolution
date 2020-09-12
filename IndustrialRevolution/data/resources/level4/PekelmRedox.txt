@@ -3,8 +3,8 @@ Resource: PekelmRedox
 	Description: #PEKELM_REDOX
 	Native Biome: Crystallic
 
-	Icon: ResourceIcons::17
-	Small Icon: ResourceIconsSmall::0
+	Icon: ResourceIcons::90
+	Small Icon: ResourceIconsSmall::90
 
 	Level: 4
 	Artificial: True

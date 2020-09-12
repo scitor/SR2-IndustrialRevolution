@@ -3,6 +3,7 @@ WATER_BLURB: Every Planet needs [img=ResourceClassIcons::4;20/] Water to develop
 WATER_PROCESSING_FACILITY: Water Processing Facility
 WATER_PROCESSING_FACILITY_BLURB: Imported Water has to undergo various purification and processing
 
+//Tier IV Resources @todo change to real descriptions
 HIGH_DENSITY_GASES: High-Density Gases
 HIGH_DENSITY_GASES_DESC: Highly compressed gases produced by natural phenomena (gravity) or artificially (compressors)
 
@@ -10,7 +11,59 @@ CHEMICAL_REAGENTS: Chemical Reagents
 CHEMICAL_REAGENTS_DESC: Substances or compounds that are added to a system in order to bring about a chemical reaction or are added to see if a reaction occurs
 
 PEKELM_REDOX: Pekelm Redox
-PEKELM_REDOX_DESC: Used in production this is ssentially pekelm rust (just reversed, weird stuff)
+PEKELM_REDOX_DESC: Used in production this is essentially pekelm rust (just reversed, weird stuff)
 
 FULRATE_WOOL: Fulrate Wool
-FULRATE_WOOL_DESC: soem weird description for weird stuff
+FULRATE_WOOL_DESC: --insert some weird description for weird stuff here
+
+FTL_BOULDER: FTL Boulder
+FTL_BOULDER_DESC: A large agglomeration of FTL crystals
+
+ENERGY_CRYSTAL: Energy Crystal
+ENERGY_CRYSTAL_DESC: Stores vast amount of energy
+
+MIXED_CRYSTAL: Mixed Crystal
+MIXED_CRYSTAL_DESC: Mixed crystals! duh..
+
+WHITE_SPICE: White Spice
+WHITE_SPICE_DESC: The spice must flow!
+
+MOLYBDENUM: Molybdenum
+MOLYBDENUM_DESC: When you type it often enough, you can even spell it eventually lol..
+
+INFUSED_MOLYBDENUM: Infused Molybdenum
+INFUSED_MOLYBDENUM_DESC: Even more so with this stuff
+
+//Tier V Resources
+TOXIC_SOLUTIONS: Toxic Solutions
+TOXIC_SOLUTIONS_DESC: Some of the most used chemicals in the industry that would also instantly kill you.
+
+SUBZERO_PLASMA: Subzero Plasma
+SUBZERO_PLASMA_DESC: A miracle of physics engineering
+
+LIQUID_EXPLOSIVES: Liquid Explosives
+LIQUID_EXPLOSIVES_DESC:  Handle with care
+
+SUPERLUMINAL_GLUE: Superluminal Glue
+SUPERLUMINAL_GLUE_DESC: Hardens fast
+
+ELECTROLYTES: Electrolytes
+ELECTROLYTES_DESC: It's what plants crave!
+
+ENRICHED_OGANESSON: Enriched Oganesson
+ENRICHED_OGANESSON_DESC: The heaviest element, enriched
+
+CONTAINED_TERRASQUE: Contained Terrasque
+CONTAINED_TERRASQUE_DESC: Made of the heart
+
+HIGH_TECH_PARTS: High-Tech Parts
+HIGH_TECH_PARTS_DESC: Made from Low-Tech (obviously), used to make even higher tech
+
+MATRIX_CORES: Matrix Cores
+MATRIX_CORES_DESC: Mr.Smith was the one, not Neo! check out FilmTheories
+
+SUPERCOMPUTERS: Supercomputers
+SUPERCOMPUTERS_DESC: Often normal computers just don't cut it
+
+VACCINES: Vaccines
+VACCINES_DESC: You know, for when you're sick...

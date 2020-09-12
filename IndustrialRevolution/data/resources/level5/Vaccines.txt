@@ -1,0 +1,14 @@
+Resource: Vaccines
+	Name: #VACCINES
+	Description: #VACCINES_DESC
+	Native Biome: Crystallic
+
+	Icon: ResourceIcons::110
+	Small Icon: ResourceIconsSmall::110
+
+	Level: 5
+	Affinity: Energy
+	Artificial: True
+
+	//IfLevel(6, TriggerPeriodic(RemoveCargo(AdvancedComponents, 10), Interval = 10))
+	//OnNative(TriggerPeriodic(AddCargoMax(AdvancedComponents, 11, 200), Interval = 10))

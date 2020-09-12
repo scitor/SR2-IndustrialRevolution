@@ -14,4 +14,4 @@ Resource: Ore
 	OnNative(TriggerPeriodic(AddCargoMax(Ore, 1, 200), Interval = 60))
 	AsteroidGraphics()
 
-	AI: DistributeToLaborUsing()
+	AI: DistributeToImportantPlanet()

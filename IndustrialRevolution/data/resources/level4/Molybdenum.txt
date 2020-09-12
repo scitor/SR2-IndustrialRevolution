@@ -1,10 +1,10 @@
-Resource: ChemicalReagents
-	Name: #CHEMICAL_REAGENTS
-	Description: #CHEMICAL_REAGENTS_DESC
+Resource: Molybdenum
+	Name: #MOLYBDENUM
+	Description: #MOLYBDENUM_DESC
 	Native Biome: Crystallic
 
-	Icon: ResourceIcons::89
-	Small Icon: ResourceIconsSmall::89
+	Icon: ResourceIcons::96
+	Small Icon: ResourceIconsSmall::96
 
 	Level: 4
 	Artificial: True
