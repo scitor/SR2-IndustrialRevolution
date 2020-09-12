@@ -4,7 +4,7 @@ uniform float time;
 varying vec2 uv;
 
 //Percent from the center to the edge where the dust should stop
-const float innerRad = 0.05;
+const float innerRad = 0.02;
 const float outerFade = 0.8;
 
 //How many different speeds the dust should move at
@@ -88,5 +88,7 @@ void main() {
 		col += bbCol * (texture2D(texture, st).r * hiPct);
 	}
 	
-	gl_FragColor.rgb = col;
+	col.b *= smoothstep(1.0, 0.92, d);
+	col.g *= smoothstep(1.0, 0.95, d);
+	gl_FragColor.rgb = col * gl_Color.a;
 }

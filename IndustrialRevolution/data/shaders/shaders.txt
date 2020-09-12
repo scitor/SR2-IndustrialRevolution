@@ -541,3 +541,7 @@ Shader: InterpolateColor
 	
 	Variable: tex texture = 0
 	Variable: float factor = global FACTOR
+
+Shader: GravitationLens
+	Vertex: data/shaders/source/base_uv_vs.txt
+	Fragment: data/shaders/source/gravitation_lens_ps.txt
