@@ -346,12 +346,8 @@ void spawnPirateShip(Empire@ limitEmpire = null) {
 	if(status !is null) {
 		ship.addStatus(status.id, originEmpire = limitEmpire);
 
-		@dsg = Pirates.getDesign("Dread Pirate Supply");
-		for(uint i = 0; i < 2; i++)
-			createShip(pos, dsg, Pirates, ship, free=true);
-
 		@dsg = Pirates.getDesign("Dread Pirate Buddy");
-		for(uint i = 0, cnt = 2+sqr(randomd())*8; i < cnt; i++)
+		for(uint i = 0, cnt = randomi(1,4); i < cnt; i++)
 			createShip(pos, dsg, Pirates, ship, free=true);
 
 		while(ship.canGainSupports && randomi(0,9) <3)
