@@ -2,7 +2,7 @@ System: Orathi
 	Position: (0, 0, 0)
 	Homeworld: False
 
-	MakeStar(Temperature = 1000, Radius = 200)
+	MakeStar(Temperature = 10000, Radius = 1200)
 	ExpandSystem(500)
 	TriggerRegion(SetSystemAssignGroup(-2))
 
@@ -29,16 +29,11 @@ System: Orathi
 		AddPlanetResource(Water)
 		AddPlanetResource(Fruit)
 
-	ExpandSystem(1000)
+	MakePlanet(RandomLevel:3, Radius = 16, Conditions = False)
 
-	MakeAsteroid()
-	MakeAsteroid()
-	MakeAsteroid()
-	MakeAsteroid()
-	MakeAsteroid()
+	//ExpandSystem(500)
 
-	MakeArtifact()
-	MakeArtifact()
-	MakeArtifact()
-	MakeArtifact()
-	MakeArtifact()
+	Repeat(2:3)
+		MakeAsteroidBelt()
+	Repeat(2:5)
+		MakeArtifact()

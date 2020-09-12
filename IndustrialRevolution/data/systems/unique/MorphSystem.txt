@@ -4,13 +4,13 @@ System: MorphSystem
 
 	MakeStar(Temperature = 5778, Radius = 75)
 
-	ExpandSystem(100:200)
+	ExpandSystem(400:600)
 
 	Repeat(3)
 		MakePlanet(AsteroidAffinity)
 
-	Repeat(2)
-		MakeAsteroid()
+	Repeat(0:1)
+		MakeAsteroidBelt()
 
 	MakeAnomaly(MorphRed)
 	MakeAnomaly(MorphBlue)

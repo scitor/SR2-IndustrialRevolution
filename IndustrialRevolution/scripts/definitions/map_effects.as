@@ -55,7 +55,7 @@ class MakeStar : MapHook {
 		starDesc.type = OT_Star;
 		starDesc.flags |= objNoDamage;
 		if(system !is null) {
-			starDesc.name = format(locale::SYSTEM_STAR, system.name);
+			starDesc.name = system.name;
 			if(arguments[3].str.length > 0)
 				starDesc.name += " "+arguments[3].str;
 			starDesc.position = system.position + pos;
@@ -77,7 +77,7 @@ class MakeStar : MapHook {
 
 		//Create star node
 		Node@ node = bindNode(star, "StarNode");
-		node.color = blackBody(temp, max((temp + 15000.0) / 40000.0, 1.0));
+		node.color = blackBody(temp, max((temp + 15000.0) / 40000.0, min(1.0, temp / 1000)));
 		if(system !is null)
 			node.hintParentObject(system.object, false);
 
@@ -123,7 +123,7 @@ class MakeBlackhole : MapHook {
 		ObjectDesc starDesc;
 		starDesc.type = OT_Star;
 		starDesc.flags |= objNoDamage;
-		starDesc.name = format(locale::SYSTEM_BLACKHOLE, system.name);
+		starDesc.name = system.name;
 		starDesc.position = system.position + pos;
 		starDesc.radius = radius;
 		starDesc.delayedCreation = true;
@@ -722,6 +722,30 @@ class NameSystem : MapHook {
 	void trigger(SystemData@ data, SystemDesc@ system, Object@& current) const override {
 		system.object.name = arguments[0].str;
 		system.name = arguments[0].str;
+	}
+#section all
+};
+
+//NameSystemByType(<Name>)
+// Rename the system, by type
+class NameSystemByType : MapHook {
+	Document doc("Renames the system, takes name from a file.");
+	Argument type("type", AT_Custom, "The type of system to name.");
+
+#section server
+	void trigger(SystemData@ data, SystemDesc@ system, Object@& current) const override {
+		string newName;
+		print("old system name " + system.name);
+		if(type.str == "Blackhole")
+			newName = getRandomBlackholeName();
+		else if(type.str == "RedGiant")
+			newName = getRandomRedGiantName();
+		else if(type.str == "BrightGiant")
+			newName = getRandomBrightGiantName();
+
+		print("new system name "+newName);
+		system.object.name = newName;
+		system.name = newName;
 	}
 #section all
 };

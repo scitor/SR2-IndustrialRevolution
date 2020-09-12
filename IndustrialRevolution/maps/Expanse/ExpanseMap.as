@@ -132,7 +132,7 @@ class ExpanseMap : Map {
 			//Generate systems
 			uint sysCount = sysPerRoom;
 			angle = 0.0;
-			radius = i == 0 ? 9000 : 0;
+			radius = i == 0 ? 70000 : 0;
 			angleStep = twopi;
 			if(radius != 0) {
 				anglePct = (spacing / (2.0 * pi * radius));
@@ -310,12 +310,12 @@ class ExpanseMap : Map {
 				es.queuedFleets--;
 		}
 	}
-	
+
 	void createRemnants(SystemDesc@ system, double size, ExpanseSystem@ es, bool queued = false) {
 		es.queuedFleets = max(randomd(pow(size, 0.14), pow(size, 0.24)), 1.0);
 		if(queued)
 			return;
-		
+
 		while(es.queuedFleets > 0)
 			createRemnant(system, size, es);
 	}
@@ -371,7 +371,7 @@ class ExpanseMap : Map {
 
 	void tick(double time) {
 		bool madeFleet = false;
-		
+
 		for(uint i = 0, cnt = trackSystems.length; i < cnt; ++i) {
 			auto@ es = trackSystems[i];
 			if(es.system is null)
@@ -536,7 +536,7 @@ class ExpanseSystem : Savable {
 		file << cnt;
 		for(uint i = 0; i < cnt; ++i)
 			file << defenders[i];
-		
+
 		file << minAngle << maxAngle;
 		file << radius << remnantSize;
 		file << defended << shouldExpand;
@@ -558,7 +558,7 @@ class ExpanseSystem : Savable {
 		defenders.length = cnt;
 		for(uint i = 0; i < cnt; ++i)
 			file >> defenders[i];
-		
+
 		file >> minAngle >> maxAngle;
 		file >> radius >> remnantSize;
 		file >> defended >> shouldExpand;

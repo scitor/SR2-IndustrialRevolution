@@ -11,7 +11,7 @@ System: HomeSystem
 			SpawnBuilding(Factory, (4, 3), Develop = True)
 			SpawnBuilding(Warehouse, (2, 3),  Develop = True)
 			SpawnBuilding(Hydrogenator, (4, 6), Develop = True)
-			OnPlanet( AddIncome(130) )
+			OnPlanet( AddIncome(200) )
 			ForceUsefulSurface(0.8, Forest)
 
 	MakePlanet(RandomType:Food:Common, Conditions = False, Moons = False)
@@ -19,7 +19,6 @@ System: HomeSystem
 	MakePlanet(RandomLevel:1:Common, Conditions = False, Moons = False)
 		MakeMoon()
 
-	MakeAsteroidBelt()
 	AddAdjacentArtifacts(2)
 	MakeAdjacentCreepCamp(SmallCamp, Place Far = True)
 

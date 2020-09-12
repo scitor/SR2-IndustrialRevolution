@@ -1,13 +1,27 @@
 System: CoreBlackhole
+
+	NameSystemByType(Blackhole)
 	MakeBlackhole(Radius = 320.0)
+	AddQuality(300)
 
-	ExpandSystem(200:400)
-
-	MakePlanet(Orbit Spacing = 700:750)
-	MakeAsteroidBelt()
-	MakePlanet(Orbit Spacing = 850:900)
+	ExpandSystem(1000)
 
 	MakeAsteroidBelt()
+	Repeat(0:1)
+		MakePlanet(Orbit Spacing = 200, Radius = 24)
+
+	Repeat(3:6)
+		MakeAsteroidBelt()
 
 	Repeat(2:5)
-		SpawnRandomRemnants(50, 0.3:0.6, 4)
+		MakePlanet(RandomRarity:Uncommon, Radius = 16, Orbit Spacing = 10)
+
+	Repeat(2:5)
+		SpawnRandomRemnants(500, 0.3:0.6, 4)
+	Repeat(2:5)
+		SpawnRandomRemnants(300, 0.3:0.6, 4)
+	Repeat(1:2)
+		SpawnRandomRemnants(3000, 0.1:0.6, 4)
+
+	AddRegionStatus(InterdictFTL)
+	AddRegionStatus(RemnantBlockedColonization)

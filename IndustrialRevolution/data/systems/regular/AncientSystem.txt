@@ -1,11 +1,14 @@
 System: AncientSystem
 	Inherit: BaseSystem
-	Frequency: 0.25
+	Frequency: 0.05
 
-	MakeStar(Temperature = 1000:2500, Radius = 125:200)
+	MakeStar(Temperature = 3000:5500, Radius = 125:200)
 	AddQuality(+100)
 
-	ExpandSystem(100:200)
+	ExpandSystem(400:600)
+
+	Repeat(0:1)
+		MakePlanet(AncientCity, Radius = 24)
 
 	RepeatModified(2:5, $PLANET_FREQUENCY)
-		MakePlanet()
+		MakePlanet(Radius = 16)

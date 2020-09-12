@@ -227,3 +227,36 @@ vec3d randomBetween(vec3d& input, vec3d& input2, double radius = 0.0, double rad
 		pos2.z + (pos1.z - pos2.z) * randomd()
 	);
 }
+
+NameGenerator blackholeNames;
+bool blackholeNamesInitialized = false;
+string getRandomBlackholeName() {
+	if(!blackholeNamesInitialized) {
+		blackholeNamesInitialized = true;
+		blackholeNames.read("data/blackhole_names.txt");
+		blackholeNames.useGeneration = false;
+	}
+	return blackholeNames.generate();
+}
+
+NameGenerator redGiantNames;
+bool redGiantNamesInitialized = false;
+string getRandomRedGiantName() {
+	if(!redGiantNamesInitialized) {
+		redGiantNamesInitialized = true;
+		redGiantNames.read("data/red_giant_names.txt");
+		redGiantNames.useGeneration = false;
+	}
+	return redGiantNames.generate();
+}
+
+NameGenerator brightGiantNames;
+bool brightGiantNamesInitialized = false;
+string getRandomBrightGiantName() {
+	if(!brightGiantNamesInitialized) {
+		brightGiantNamesInitialized = true;
+		brightGiantNames.read("data/bright_giant_names.txt");
+		brightGiantNames.useGeneration = false;
+	}
+	return brightGiantNames.generate();
+}

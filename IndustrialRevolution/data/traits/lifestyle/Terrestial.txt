@@ -9,3 +9,5 @@ Trait: Terrestial
 	Category: Lifestyle
 	Unique: Lifestyle
 	Default: True
+
+	TriggerHomeworld(AddStoredLabor(100))

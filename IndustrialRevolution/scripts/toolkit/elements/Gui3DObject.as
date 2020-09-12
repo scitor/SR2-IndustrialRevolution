@@ -138,9 +138,8 @@ class DrawBlackhole : Draw3D {
 		@renderingNode = node;
 
 		recti square = pos.aspectAligned(1.0);
-		square = square.padded(-square.width*0.2, -square.height*0.2);
-
-		model::Sphere_max.draw(material::Blackhole, square, rotation, 0.3);
+		model::Sphere_max.draw(material::Blackhole, square, rotation, 0.6);
+		material::GravitationLens.draw(square.padded(-square.width*0.05,-square.height*0.05), Color(0x00000000));
 		@renderingNode = null;
 	}
 };
@@ -148,6 +147,7 @@ class DrawBlackhole : Draw3D {
 class DrawStar : Draw3D {
 	Node@ node;
 	double temp;
+	Object@ obj;
 	
 	DrawStar(Star@ star) {
 		temp = star.temperature;
@@ -156,16 +156,18 @@ class DrawStar : Draw3D {
 
 	void preRender(Object@ obj) {
 		shader::STAR_TEMP = temp;
+		@this.obj = obj;
 	}
 
 	void draw(const recti &in pos, quaterniond rotation) {
 		@renderingNode = node;
+		double mul = (obj !is null) ? obj.radius : 100.0;
 
 		recti square = pos.aspectAligned(1.0);
-		square = square.padded(-square.width*0.2, -square.height*0.2);
+		square = square.padded(-square.width*0.05, -square.height*0.05);
 
 		model::Sphere_max.draw(material::PopupStarSurface, square, rotation, 1/1.5);
-		material::Corona.draw(square);
+		material::Corona.draw(square.padded(floor(10 * (mul/1200))));
 		@renderingNode = null;
 	}
 };

@@ -98,11 +98,6 @@ tidy class ColonyShipScript {
 		leaveRegion(ship);
 	}
 
-	void printForID(Object& obj, const int id, string str) {
-		if (obj.id == id) {
-			print(str);
-		}
-	}
 	double tick(ColonyShip& ship, double time) {
 		Object@ target = ship.Target;
 		if(target is null)

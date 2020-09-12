@@ -61,6 +61,10 @@ class SpiralMap : Map {
 			auto@ bh = getSystemType("CoreBlackhole");
 			if(bh !is null)
 				coreSysType = bh.id;
+		} else {
+			auto@ bh = getSystemType("BlackHole");
+			if(bh !is null)
+				coreSysType = bh.id;
 		}
 		addSystem(vec3d(), 500, false, coreSysType);
 		

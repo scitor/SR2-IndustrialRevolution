@@ -9,7 +9,10 @@ final class BlackholeNodeScript {
 	
 	void establish(Node& node, Star& star) {
 		auto@ gfx = PersistentGfx();
-		gfx.establish(star, "BlackholeGlitter");
+		if(star.radius > 100.0)
+			gfx.establish(star, "BlackholeGlitterJets");
+		else
+			gfx.establish(star, "BlackholeGlitter");
 		gfx.rotate(quaterniond_fromAxisAngle(vec3d_right(), pi * 0.5));
 	}
 	
@@ -28,7 +31,9 @@ final class BlackholeNodeScript {
 			
 			undoTransform();
 			
-			renderPlane(material::AccretionDisk, node.abs_position, node.abs_scale * 20.0, Color(0xffffffff));
+			renderPlane(material::AccretionDisk, node.abs_position, node.abs_scale * 40.0 * (1.0-dist), Color(0xffffffff));
+			if(dist < 0.5)
+				renderBillboard(material::GravitationLens, node.abs_position + (cameraPos - node.abs_position).normalize(node.abs_scale*1.5), node.abs_scale * 10.0 * (0.5-dist), 0.0, Color(0x00000000));
 		}
 		
 		if(dist > 0.5) {

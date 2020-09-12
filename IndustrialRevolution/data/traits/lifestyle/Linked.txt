@@ -15,3 +15,5 @@ Trait: Linked
 	UnlockSubsystem(EmergencySupplies)
 
 	SpawnOrbital(Mainframe, Free = True)
+
+	TriggerHomeworld(AddStoredLabor(100))

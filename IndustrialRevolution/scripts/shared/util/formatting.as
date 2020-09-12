@@ -329,7 +329,7 @@ string formatSpeed(double velocity) {
 	string unit = "u/s";
 
 	if(displayVel >= 1000) {
-		displayVel /= config::SPEED_OF_LIGHT;
+		displayVel /= config::LUDICROUS_SPEED;
 		unit = "c";
 	}
 

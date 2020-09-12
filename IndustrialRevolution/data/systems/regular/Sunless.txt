@@ -1,13 +1,16 @@
 System: Sunless
 	Frequency: 0.01
 
+	MakePlanet(Radius = 24, Orbit Spacing = 0)
+		Trigger(AddStatus(Barren))
+		Repeat(1:4)
+			MakeMoon()
+
 	ExpandSystem(500)
 
 	Repeat(1:4)
 		MakeAnomaly()
 	Repeat(0:2)
 		MakeArtifact()
-	Repeat(2:4)
-		MakeAsteroidBelt()
 	Repeat(0:2)
 		MakeCreepCamp(Offset = 700)

@@ -52,25 +52,25 @@ StrategicIconNode@ makeOddityVisuals(Oddity& obj, uint type, bool fromCreation =
 	else if(type == Odd_Nebula) {
 		auto@ node = GalaxyGas();
 		node.position = obj.position;
-		node.scale = obj.radius;
+		node.scale = obj.radius * 3;
 		node.rebuildTransform();
 		
 		Colorf fCol(Color(color));
 		float h = fCol.hue, s = fCol.saturation, v = fCol.value;
 
 		for(uint i = 0; i < 40; ++i) {
-			vec2d off = (random2d(0, 0.75) * obj.radius);
+			vec2d off = random2d(0, obj.radius * 2);
 			vec3d pos = obj.position;
 			pos.x += off.x;
 			pos.z += off.y;
 
-			double rad = obj.radius * 0.65;
+			double rad = obj.radius;
 			Colorf hsv;
 			hsv.fromHSV(h + normald(-70.0,70.0), clamp(s * normald(0.6,1.4), 0.0, 1.0), v);
 			Color col(hsv);
 			col.a = randomi(0x18,0x22);
 
-			node.addSprite(pos, rad, col.rgba, true, baseAlpha=col.a);
+			node.addSprite(pos, rad, col.rgba, randomi(0,9)<1, baseAlpha=col.a);
 		}
 	}
 

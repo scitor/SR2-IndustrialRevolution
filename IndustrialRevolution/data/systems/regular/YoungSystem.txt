@@ -2,10 +2,13 @@ System: YoungSystem
 	Inherit: BaseSystem
 	Frequency: 0.15
 
-	MakeStar(Temperature = 6000:29800, Radius = 85:165, NormalTempRange = true)
+	MakeStar(Temperature = 1000:8000, Radius = 65:185)
 	AddQuality(-100)
 
-	ExpandSystem(100:200)
+	ExpandSystem(400:600)
 
-	RepeatModified(2:5, $PLANET_FREQUENCY)
+	Repeat(0:1)
+		MakeAsteroidBelt()
+
+	RepeatModified(0:3, $PLANET_FREQUENCY)
 		MakePlanet()

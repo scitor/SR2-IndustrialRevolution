@@ -27,3 +27,5 @@ Trait: Verdant
 	ModAttribute(PopulationPerColonizer, Multiply, 16)
 	ModAttribute(ForbidCityConstruction, Add, 1)
 	SetColonizerInfo(#SPORE_SHIP, SporeShip, SporeShip)
+
+	TriggerHomeworld(AddStoredLabor(100))

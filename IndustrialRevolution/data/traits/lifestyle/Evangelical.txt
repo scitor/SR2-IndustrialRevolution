@@ -8,3 +8,5 @@ Trait: Evangelical
 
 	Category: Lifestyle
 	Unique: Lifestyle
+
+	TriggerHomeworld(AddStoredLabor(100))

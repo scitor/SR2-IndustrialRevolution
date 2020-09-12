@@ -11,8 +11,8 @@ System: RemnantBase
 	MakePlanet(Drugs:FTL)
 	MakePlanet(RandomLevel:1:Uncommon)
 
-	Repeat(4)
-		MakeAsteroid()
+	Repeat(0:1)
+		MakeAsteroidBelt()
 
 	Repeat(4)
 		MakeCreepCamp()

@@ -18,6 +18,7 @@ Trait: Devout
 
 	TriggerHomeworld(SpawnBuilding(Altar, (11, 4), Develop = True))
 	TriggerHomeworld(SpawnBuilding(Farm, (4, 9), Develop = True))
+	TriggerHomeworld(AddStoredLabor(100))
 
 	ReplaceTechnologyNodes(SysShieldGen, SysShrine)
 	ReplaceTechnologyNodes(ShieldGen, SysShrine)
