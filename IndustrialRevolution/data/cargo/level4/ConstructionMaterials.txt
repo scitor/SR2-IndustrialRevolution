@@ -1,6 +1,0 @@
-Cargo: ConstructionMaterials
-	Name: ConstructionMaterials
-	Description: ConstructionMaterials desc
-
-	IconL: ResourceIcons::17
-	Icon: ResourceIconsSmall::0
