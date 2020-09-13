@@ -1,4 +1,4 @@
-Cargo: AsteroidFTL
+Cargo: FTLShards
 	Name: #ASTEROID_FTL
 	Description: #ASTEROID_FTL_DESC
 
