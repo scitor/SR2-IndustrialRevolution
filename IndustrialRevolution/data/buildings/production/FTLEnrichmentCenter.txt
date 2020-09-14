@@ -1,6 +1,6 @@
 Building: FTLEnrichmentCenter
-	Name: FTL Enrichment Center
-	Description: Generation and some storage
+	Name: #BLD_FTL_ENRICHMENT_CENTER
+	Description: #BLD_FTL_ENRICHMENT_CENTER_DESC
 	Sprite: FTLEnrichment::0
 	Sprite Offset: 0x0
 	Animate Sprite: True
@@ -23,6 +23,6 @@ Building: FTLEnrichmentCenter
 
 	RequireNotTrait(Sublight)
 
-	ActiveWhenCargoConsumed(AsteroidFTL, 10, 10, AddFTLIncome(+1.0))
+	ActiveWhenCargoConsumed(FTLShards, 10, 10, AddFTLIncome(+1.0))
 
 	AI: AsFTLStorage()
