@@ -3,14 +3,14 @@ All content created by myself falls under the license found in LICENSE.txt
 
 #
 
-Bio Industry (Factorio Mod) animated building sprites
+Bio Industry (Factorio Mod) animated building sprites (data/images/buildings/bio)
 Author: TheSAguy
 Link: https://forums.factorio.com/viewtopic.php?f=93&t=17548
 License: Usage permission
 
 #
 
-HQ Resource Images taken from
+HQ Resource Images (data/images/planetary_resources(_small).png)
 Author: CraftPix.net 2D Game Assets
 Link: https://craftpix.net/freebies/
 License: "Freebie products"
@@ -24,14 +24,22 @@ Licence: CC-BY 3.0
 
 #
 
-Space Ship & Mech Construction Kit 2 (data/images/buildings)
+Space Ship & Mech Construction Kit 2 (data/images/buildings/mech)
 Author: Skorpio
 Link: https://opengameart.org/content/space-ship-mech-construction-kit-2
 License: CC-BY-SA 3.0
 
 #
 
-Colony sim assets (data/image/buildings)
+Colony sim assets (data/image/buildings/colony)
 Author: Buch
 Link: https://opengameart.org/content/colony-sim-assets
+License: CC0
+
+#
+
+Colony Sim Extended Version (data/images/buildings/colony)
+Author: rubberduck
+Collaborators: Buch
+Link: https://opengameart.org/content/colony-sim-extended-version
 License: CC0
