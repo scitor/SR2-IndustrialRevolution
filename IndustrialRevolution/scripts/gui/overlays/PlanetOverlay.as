@@ -1234,6 +1234,7 @@ class ResourceDisplay : DisplayBox {
 				reqTimer.visible = true;
 				reqTimer.text = formatTime(decay);
 				reqLabel.color = Color(0xff0000ff);
+				reqLabel.text = format(locale::REQ_FOR_LEVEL, toString(lv));
 				reqLabel.tooltip = format(locale::REQ_STOP_DECAY, toString(lv-1), formatTime(decay));
 
 				uint newMod = pl.resourceModID;
@@ -1247,6 +1248,7 @@ class ResourceDisplay : DisplayBox {
 					if(popReq.visible)
 						popReq.text = format(locale::POP_REQ, standardize(lvl.requiredPop, true));
 
+					reqLabel.text = format(locale::REQ_FOR_LEVEL, toString(lv + 1));
 					reqLabel.tooltip = format(locale::REQ_FOR_LEVEL, toString(lv + 1));
 					modID = newMod;
 				}

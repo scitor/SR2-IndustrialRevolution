@@ -426,7 +426,7 @@ class PlanetInfoBar : InfoBar {
 				reqTimer.text = formatTime(decay);
 				reqLabel.color = Color(0xff0000ff);
 				reqLabel.tooltip = format(locale::REQ_STOP_DECAY, toString(lv-1), formatTime(decay));
-				reqLabel.text = format(locale::REQUIRED_RESOURCES, toString(lv));
+				reqLabel.text = format(locale::REQ_FOR_LEVEL, toString(lv));
 
 				uint newMod = pl.resourceModID;
 				if(modID != newMod) {
