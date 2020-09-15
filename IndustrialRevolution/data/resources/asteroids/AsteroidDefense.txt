@@ -20,5 +20,6 @@ Resource: AsteroidDefense
 
 	LockOnExport()
 
+
 	TriggerPeriodic(RemoveCargo(AsteroidDefense, 10), Interval = 10)
 	OnNative(TriggerPeriodic(AddCargoMax(AsteroidDefense, 11, 200), Interval = 10))

@@ -5,7 +5,7 @@ System: BlackHole
 	NameSystemByType(Blackhole)
 	MakeBlackhole(Radius = 5)
 
-	ExpandSystem(100:200)
+	ExpandSystem(400:600)
 
 	Repeat(3:6)
 		MakeAsteroidBelt()
@@ -22,5 +22,6 @@ System: BlackHole
 	Repeat(0:3)
 		MakeAnomaly()
 
+	ExpandSystem(400)
 	AddRegionStatus(InterdictFTL)
 	AddRegionStatus(RemnantBlockedColonization)

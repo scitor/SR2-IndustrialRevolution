@@ -1,6 +1,6 @@
 //Radius added to every entry
 const double ExtraRadius = 100.0;
-const double BorderThickness = 150.0;
+const double BorderThickness = 600.0;
 
 bool SHOW_TERRITORY_BORDERS = true;
 void setTerritoryBordersShown(bool enabled) {
@@ -80,7 +80,7 @@ final class Sphere {
 		
 		//Curve around the edge of this sphere
 		if(diff > 0) {
-			int points = max(3, int(diff / 0.1309)); //7.5 degrees per point
+			int points = max(3, int(diff / 0.06545)); //7.5 degrees per point
 			
 			for(int i = 0; i < points; ++i) {
 				double a = leftTangent + (diff * double(i) / double(points));
@@ -250,8 +250,8 @@ class TerritoryNodeScript {
 		verts.length = 0;		
 		if(final.length == 1) {
 			Sphere@ sphere = final[0];
-			for(int i = 0; i < 48; ++i) {
-				double a = double(i) * twopi / 48.0;
+			for(int i = 0; i < 96; ++i) {
+				double a = double(i) * twopi / 96.0;
 				vec3d dir(cos(a), 0, sin(a));
 				verts.insertLast(sphere.pos + dir * sphere.radius);
 				verts.insertLast(sphere.pos + dir * (sphere.radius - BorderThickness));
@@ -260,8 +260,8 @@ class TerritoryNodeScript {
 		else if(final.length == 2) {
 			for(int s = 0; s < 2; ++s) {
 				Sphere@ sphere = final[s];
-				for(int i = 0; i < 24; ++i) {
-					double a = double(i) * pi / 24.0 + (sphere.angle - pi * 0.5);
+				for(int i = 0; i < 48; ++i) {
+					double a = double(i) * pi / 48.0 + (sphere.angle - pi * 0.5);
 					vec3d dir(cos(a), 0, sin(a));
 					verts.insertLast(sphere.pos + dir * sphere.radius);
 					verts.insertLast(sphere.pos + dir * (sphere.radius - BorderThickness));

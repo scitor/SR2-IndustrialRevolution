@@ -12,6 +12,6 @@ Resource: Soylent1
 	Exportable: False
 	Artificial: True
 
-	TriggerPeriodic(AddCargoMax(Soylent1, 10, 200), Interval = 10)
 
-	//AddCargo(Soylent1, 10)
+	IfLevel(1, TriggerPeriodic(RemoveCargo(Soylent1, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(Soylent1, 11, 200), Interval = 10))

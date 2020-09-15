@@ -2,16 +2,21 @@ System: Nebula
 	Frequency: 0.01
 	Unique: Global
 
+	Repeat(0:1)
+		MakePlanet(RandomRarity:Uncommon, Radius = 24, Orbit Spacing = 0, Distribute Resource = True)
+	Repeat(1:4)
+		MakeMoon()
+
 	ExpandSystem(400:800)
 
-	Repeat(1:10)
+	Repeat(1:6)
 		MakeAnomaly()
 	Repeat(1:6)
 		MakeArtifact()
 	Repeat(0:2)
 		MakeAsteroidBelt()
 
-	Repeat(0:2)
+	Repeat(0:1)
 		MakePlanet(RandomRarity:Uncommon, Orbit Spacing = 0, Distribute Resource = True)
 
 	ExpandSystem(500)

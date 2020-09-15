@@ -17,5 +17,6 @@ Resource: AsteroidLabor
 
 	AI: DistributeToLaborUsing()
 
+
 	TriggerPeriodic(RemoveCargo(AsteroidLabor, 10), Interval = 10)
 	OnNative(TriggerPeriodic(AddCargoMax(AsteroidLabor, 11, 200), Interval = 10))

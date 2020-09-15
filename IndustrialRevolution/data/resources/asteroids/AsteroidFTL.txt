@@ -14,5 +14,6 @@ Resource: AsteroidFTL
 	//AddFTLIncome(+0.5)
 	//AddPermanentFTLStorage(+100)
 
-	//TriggerPeriodic(RemoveCargo(AsteroidFTL, 10), Interval = 10)
-	OnNative(TriggerPeriodic(AddCargoMax(AsteroidFTL, 10, 200), Interval = 10))
+	Cargo Type: FTLShards
+	//TriggerPeriodic(RemoveCargo(FTLShards, 10), Interval = 10)
+	OnNative(TriggerPeriodic(AddCargoMax(FTLShards, 11, 200), Interval = 10))

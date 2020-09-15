@@ -2,7 +2,6 @@
 import tile_resources;
 import util.formatting;
 import hooks;
-from cargo import getCargoType;
 from saving import SaveIdentifier, SaveVersion;
 import bool readLevelChain(ReadFile& file) from "planet_levels";
 
@@ -108,6 +107,7 @@ tidy final class ResourceType {
 	int totalPressure = 0;
 	int displayWeight = 0;
 	int cargoWorth = 0;
+	string cargoType;
 	array<uint> affinities;
 	ResourceRarity rarity = RR_Common;
 	bool artificial = false;
@@ -792,30 +792,26 @@ tidy final class ResourceRequirements {
 			switch(r.type) {
 				case RRT_Resource:
 					if(r.resource.mode == RM_Normal)
-						unsatisfied = max(0, unsatisfied - uint(planet.getCargoStored(getCargoType(r.resource.ident).id)));
+						unsatisfied = max(0, unsatisfied - uint(planet.getCargoStored(r.resource.cargoType)));
 					break;
 				case RRT_Class:
-					for(uint i = 0, cnt = planet.cargoTypes; i < cnt; ++i) {
-						auto@ type = getCargoType(planet.cargoType[i]);
-						auto@ res = getResource(type.ident);
-						uint cargo = uint(planet.getCargoStored(type.id));
-						if(res !is null && res.cls is r.cls) {
-							//print(format("$1 $2 $3 $4", planet.name, res.name, cargo, unsatisfied));
-							unsatisfied = max(0, unsatisfied - cargo);
-							if(unsatisfied < 1)
-								break;
-						}
+					for(uint i = 0, cnt = r.cls.types.length; i < cnt; ++i) {
+						const ResourceType@ rtype = r.cls.types[i];
+						uint cargo = uint(planet.getCargoStored(rtype.cargoType));
+						unsatisfied = max(0, unsatisfied - cargo);
+						if(unsatisfied < 1)
+							break;
 					}
 				break;
 				case RRT_Level:
-					for(uint i = 0, cnt = planet.cargoTypes; i < cnt; ++i) {
-						auto@ type = getCargoType(planet.cargoType[i]);
-						auto@ res = getResource(type.ident);
-						if(res !is null && res.level == r.level) {
-							unsatisfied = max(0, unsatisfied - uint(planet.getCargoStored(type.id)));
-							if(unsatisfied < 1)
-								break;
-						}
+					for(uint i = 0, cnt = resources::resources.length; i < cnt; ++i) {
+						const ResourceType@ rtype = resources::resources[i];
+						if(rtype.level != r.level)
+							continue;
+						uint cargo = uint(planet.getCargoStored(rtype.cargoType));
+						unsatisfied = max(0, unsatisfied - cargo);
+						if(unsatisfied < 1)
+							break;
 					}
 				break;
 				case RRT_Class_Types:
@@ -1463,6 +1459,7 @@ void loadResources(const string& filename) {
 				addResourceType(r);
 			@r = ResourceType();
 			r.ident = value;
+			r.cargoType = value;
 		}
 		else if(key == "Level Chain") {
 			advance = !readLevelChain(file);
@@ -1512,6 +1509,9 @@ void loadResources(const string& filename) {
 		}
 		else if(key == "Cargo Worth") {
 			r.cargoWorth = toInt(value);
+		}
+		else if(key == "Cargo Type") {
+			r.cargoType = value;
 		}
 		else if(key == "Vanish Mode") {
 			if(value == "Never")

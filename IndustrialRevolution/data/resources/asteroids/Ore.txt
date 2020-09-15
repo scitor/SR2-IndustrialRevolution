@@ -1,16 +1,18 @@
 Resource: Ore
-	Name: #R_ORE_RATE
-	Description: Asteroid mining base yield 1 Ore / min
+	Name: #LOCAL_ASTEROID_FIELD
+	Description: #LOCAL_ASTEROID_FIELD_DESC
 	Native Biome: Desert
 
-	Icon: ResourceIconsSmall::65
-	Small Icon: ResourceIconsSmall::65
+	Icon: ResourceIcons::28
+	Small Icon: ResourceIconsSmall::28
 
 	Level: 0
 	Distribution: 0
-	Asteroid Frequency: 100
+	Asteroid Frequency: 0
 	Asteroid Labor: 10
+	Exportable: False
 
+	Cargo Type: Ore
 	OnNative(TriggerPeriodic(AddCargoMax(Ore, 1, 200), Interval = 60))
 	AsteroidGraphics()
 

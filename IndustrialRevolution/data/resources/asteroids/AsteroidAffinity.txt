@@ -14,5 +14,6 @@ Resource: AsteroidAffinity
 
 	AI: DistributeAsLocalPressureBoost(2)
 
+
 	TriggerPeriodic(RemoveCargo(AsteroidAffinity, 10), Interval = 10)
 	OnNative(TriggerPeriodic(AddCargoMax(AsteroidAffinity, 11, 200), Interval = 10))

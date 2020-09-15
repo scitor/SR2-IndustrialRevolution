@@ -1,18 +1,20 @@
 System: HomeSystem
-	MakeStar(Temperature = 400:13000, Radius = 65:85)
+	MakeStar(Temperature = 3000:4000, Radius = 100:150)
 		BonusHealth(20000000000)
 
 	ExpandSystem(100:200)
+	MakeAsteroid(Resource = AsteroidFTL)
 	MakeAsteroidBelt(1)
 
 	RepeatHomeworlds()
-		MakePlanet(RandomType:Food:Common, Radius = 10, Conditions = False)
+		MakePlanet(RandomType:Food:Common, Radius = 10, Conditions = False, Moons = False)
 			AddPopulation(3.0)
 			SpawnBuilding(Factory, (4, 3), Develop = True)
 			SpawnBuilding(Warehouse, (2, 3),  Develop = True)
 			SpawnBuilding(Hydrogenator, (4, 6), Develop = True)
 			OnPlanet( AddIncome(200) )
 			ForceUsefulSurface(0.8, Forest)
+			MakeMoon()
 
 	MakePlanet(RandomType:Food:Common, Conditions = False, Moons = False)
 	MakePlanet(Water, Conditions = False, Moons = False)

@@ -11,4 +11,5 @@ Resource: OreRate
 	Frequency: 0
 	Level: 0
 
+	Cargo Type: Ore
 	OnNative(TriggerPeriodic(AddCargoMax(Ore, 1, 200), Interval = 6))

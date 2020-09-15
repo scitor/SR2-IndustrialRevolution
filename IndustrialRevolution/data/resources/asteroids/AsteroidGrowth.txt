@@ -14,5 +14,6 @@ Resource: AsteroidGrowth
 
 	AI: DistributeToImportantPlanet()
 
+
 	TriggerPeriodic(RemoveCargo(AsteroidGrowth, 10), Interval = 10)
 	OnNative(TriggerPeriodic(AddCargoMax(AsteroidGrowth, 11, 200), Interval = 10))

@@ -4,12 +4,14 @@ Resource: StellarWater
 	Native Biome: Oceanic
 	Class: WaterType
 
-	Icon: ResourceIconsSmall::86
-	Small Icon: ResourceIconsSmall::86
+	Icon: ResourceIconsSmall::86*#00ffe9
+	Small Icon: ResourceIconsSmall::86*#00ffe9
 	Display Weight: -10
 
 	Level: 0
 	Exportable: False
 	Artificial: True
 
-	TriggerPeriodic(AddCargoMax(StellarWater, 10, 10), Interval = 10)
+
+	IfLevel(1, TriggerPeriodic(RemoveCargo(StellarWater, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(StellarWater, 11, 200), Interval = 10))
