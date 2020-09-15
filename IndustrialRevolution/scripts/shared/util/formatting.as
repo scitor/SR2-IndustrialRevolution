@@ -74,7 +74,7 @@ string formatInfluenceCost(string option, int influence) {
 	return format(locale::OPTION_INFLUENCE_COST, option, toString(influence));
 }
 
-string formatMoney(int money, bool colored = false, bool roundUp = true) {
+string formatMoney(int money, bool colored = false, bool roundUp = true, bool showCurrency = true) {
 	string text;
 	if(money < 0) {
 		if(colored)
@@ -82,7 +82,7 @@ string formatMoney(int money, bool colored = false, bool roundUp = true) {
 		text += "-";
 	}
 
-	text += "§";
+	text += showCurrency ? "§" : "";
 	int am = abs(money);
 	if(am == 0)
 		text += "0";
