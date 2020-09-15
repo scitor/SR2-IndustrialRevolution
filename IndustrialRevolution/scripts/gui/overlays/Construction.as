@@ -178,11 +178,14 @@ class ConstructionDisplay : DisplayBox {
 	GuiAccordion@ constructionsList;
 
 	GuiProgressbar@ storageBox;
+	GuiButton@ maximizeButton;
 	GuiButton@ repeatButton;
 	GuiButton@ drydockButton;
 
 	GuiCargoDisplay@ cargo;
+	GuiSkinElement@ cargoBar;
 
+	bool isMaximized = false;
 	bool hasBuildings = false;
 	bool hasOrbitals = false;
 	bool hasShips = false;
@@ -195,42 +198,49 @@ class ConstructionDisplay : DisplayBox {
 		@slaved = ov.slaved;
 
 		//Header
-		@nameBox = GuiSkinElement(this, Alignment(Left+8, Top+8, Left+0.5f-4, Top+42), SS_PlainOverlay);
+		@nameBox = GuiSkinElement(this, Alignment(Left+8, Top+8, Left+0.5f-4, Height=34), SS_PlainOverlay);
 		@name = GuiText(nameBox, Alignment().padded(8, 0), locale::CONSTRUCTION);
 		name.font = FT_Medium;
 
-		@laborBox = GuiSkinElement(this, Alignment(Left+0.5f+4, Top+8, Right-8, Top+42), SS_PlainOverlay);
+		@laborBox = GuiSkinElement(this, Alignment(Left+0.5f+4, Top+8, Right-8, Height=34), SS_PlainOverlay);
 		@laborIcon = GuiSprite(laborBox, Alignment(Left+8, Top+5, Width=24, Height=24));
 		laborIcon.desc = Sprite(spritesheet::ResourceIcon, 6);
 		@labor = GuiText(laborBox, Alignment(Left+40, Top, Right-8, Bottom));
 		labor.font = FT_Medium;
 
 		//Queue section
-		@queueBox = GuiSkinElement(this, Alignment(Left+8, Top+50, Right-8, Top+Q_HEIGHT), SS_QueueBackground);
-		GuiSkinElement bottomBar(queueBox, Alignment(Left+4, Bottom-34, Right-4, Bottom), SS_PlainBox);
+		@queueBox = GuiSkinElement(this, Alignment(Left+8, Top+50, Right-8, Height=Q_HEIGHT), SS_QueueBackground);
 		@queue = GuiPanel(queueBox, Alignment(Left, Top, Right, Bottom-34));
-		@storageBox = GuiProgressbar(queueBox, recti_area(4, Q_HEIGHT-34-50, WIDTH-16-12-80, 34));
+		@storageBox = GuiProgressbar(queueBox, Alignment(Left, Bottom-34, Right, Height=34));
 		storageBox.visible = false;
 		storageBox.frontColor = Color(0x836000ff);
 		storageBox.backColor = Color(0xffffff80);
-		@cargo = GuiCargoDisplay(queueBox, recti_area((WIDTH-16)/2, Q_HEIGHT-34-50, (WIDTH-16)/2-12-80, 34));
-		cargo.visible = false;
 
-		@repeatButton = GuiButton(queueBox, Alignment(Right-8-32, Bottom-32, Width=30, Height=30));
+		@repeatButton = GuiButton(nameBox, Alignment(Right-32, Top+2, Width=30, Height=30));
 		repeatButton.style = SS_IconToggle;
 		repeatButton.color = Color(0x00ff00ff);
 		repeatButton.toggleButton = true;
 		repeatButton.setIcon(icons::Repeat);
 		setMarkupTooltip(repeatButton, locale::TT_REPEAT_QUEUE, width=300);
 
-		@drydockButton = GuiButton(queueBox, Alignment(Right-8-32-34, Bottom-32, Width=30, Height=30));
+		@drydockButton = GuiButton(nameBox, Alignment(Right-32-32, Top+2, Width=30, Height=30));
 		drydockButton.style = SS_IconButton;
 		drydockButton.color = Color(0x0080ffff);
 		drydockButton.setIcon(Sprite(spritesheet::GuiOrbitalIcons, 3, playerEmpire.color));
 		setMarkupTooltip(drydockButton, locale::TT_DRY_DOCK, width=300);
 
+		@maximizeButton = GuiButton(nameBox, Alignment(Right-32-32-32, Top+2, Width=30, Height=30));
+		maximizeButton.style = SS_IconToggle;
+		maximizeButton.color = Color(0x00ff00ff);
+		maximizeButton.toggleButton = true;
+		maximizeButton.setIcon(Sprite(spritesheet::TechModIcons, 0));
+		//setMarkupTooltip(repeatButton, locale::TT_REPEAT_QUEUE, width=300);
+
+		@cargoBar = GuiSkinElement(this, Alignment(Left+8, Top+50+Q_HEIGHT+2, Right-8, Height=32), SS_PlainBox);
+		@cargo = GuiCargoDisplay(cargoBar, Alignment(Left, Top, Right, Height=32));
+
 		//Build panel buttons
-		@buttonBox = BaseGuiElement(this, Alignment(Left+8, Top+Q_HEIGHT+8, Right-8, Top+Q_HEIGHT+44));
+		@buttonBox = BaseGuiElement(this, Alignment(Left+8, Top+50+Q_HEIGHT+44, Right-8, Height=34));
 		@buildingsButton = GuiButton(buttonBox, Alignment(Left, Top, Left, Bottom));
 		buildingsButton.text = locale::BUILDINGS;
 		buildingsButton.toggleButton = true;
@@ -268,7 +278,7 @@ class ConstructionDisplay : DisplayBox {
 		constructionsButton.buttonIcon = icons::Project;
 
 		//Build panel section
-		@buildPanel = GuiPanel(this, Alignment(Left+8, Top+Q_HEIGHT+44, Right-8, Bottom-8));
+		@buildPanel = GuiPanel(this, Alignment(Left+8, Top+50+Q_HEIGHT+44+4+34+4, Right-8, Bottom-8));
 		buildPanel.horizType = ST_Never;
 
 		@buildingsList = GuiAccordion(buildPanel, recti(0, 0, WIDTH-16, 50));
@@ -840,9 +850,7 @@ class ConstructionDisplay : DisplayBox {
 				laborBox.visible = true;
 				queueBox.visible = true;
 
-				buttonBox.alignment.top.pixels = Q_HEIGHT+8;
-				buttonBox.alignment.bottom.pixels = Q_HEIGHT+44;
-
+				buttonBox.alignment.top.pixels = queueBox.alignment.top.pixels + Q_HEIGHT + 38;
 				if(obj.hasSurfaceComponent) {
 					buildingsButton.visible = true;
 					btnCount += 1;
@@ -860,9 +868,7 @@ class ConstructionDisplay : DisplayBox {
 				laborBox.visible = false;
 				queueBox.visible = false;
 
-				buttonBox.alignment.top.pixels = 8;
-				buttonBox.alignment.bottom.pixels = 44;
-				buildPanel.alignment.top.pixels = 44;
+				buttonBox.alignment.top.pixels = queueBox.alignment.top.pixels + 4;
 
 				buildingsButton.visible = false;
 				shipsButton.visible = false;
@@ -883,13 +889,25 @@ class ConstructionDisplay : DisplayBox {
 				constructionsButton.visible = false;
 			}
 
-			if(btnCount <= 1) {
+			buildPanel.visible = true;
+			cargoBar.visible = true;
+			queueBox.alignment.bottom = queueBox.alignment.top;
+			queueBox.alignment.bottom.pixels = queueBox.alignment.bottom.pixels + Q_HEIGHT;
+			if(isMaximized) {
 				buttonBox.visible = false;
+				buildPanel.visible = false;
+				cargoBar.visible = false;
+				queueBox.alignment.bottom = this.alignment.bottom;
+			} else if(btnCount <= 1) {
+				buttonBox.visible = false;
+				//buttonBox.alignment.top.pixels = 8;
+				//buildPanel.alignment.top.pixels = 44;
 				buildPanel.alignment.top.pixels = buttonBox.alignment.top.pixels;
 			}
 			else {
 				buttonBox.visible = true;
-				buildPanel.alignment.top.pixels = buttonBox.alignment.bottom.pixels;
+				//buttonBox.alignment.top.pixels = Q_HEIGHT+8;
+				buildPanel.alignment.top.pixels = buttonBox.alignment.top.pixels + 38;
 
 				float pos = 0.f, step = 1.f / float(btnCount);
 				if(modulesButton.visible) {
@@ -938,24 +956,18 @@ class ConstructionDisplay : DisplayBox {
 					pct = min(1.f, curStored / storCap);
 				storageBox.progress = pct;
 				storageBox.text = format(locale::STORED_LABOR, toString(curStored,0), toString(storCap,0));
-				cargo.rect = recti_area((WIDTH-16)/2, Q_HEIGHT-34-50, (WIDTH-16)/2-12-80, 34);
+				queue.alignment.bottom.pixels = 34;
 			}
 			else {
+				queue.alignment.bottom.pixels = 0;
 				storageBox.visible = false;
-				cargo.rect = recti_area(4, Q_HEIGHT-34-50, (WIDTH-8)-12-80, 34);
 			}
-
 			//Update cargo
-			cargo.visible = obj.hasCargo && obj.cargoTypes > 0;
-			if(cargo.visible) {
+			if(obj.cargoTypes > 0)
 				cargo.update(obj);
-				storageBox.size = vec2i((WIDTH-16)/2-8, 34);
-			}
-			else {
-				storageBox.size = vec2i(WIDTH-16-12-80, 34);
-			}
 
 			repeatButton.pressed = obj.owner is playerEmpire && obj.isRepeating;
+			maximizeButton.pressed = isMaximized;
 
 			auto@ drydock = getOrbitalModule("DryDock");
 			drydockButton.visible = obj.owner is playerEmpire && obj.canBuildShips && obj.canBuildOrbitals && drydock !is null && drydock.canBuildBy(obj);
@@ -1083,6 +1095,10 @@ class ConstructionDisplay : DisplayBox {
 			case GUI_Clicked:
 				if(evt.caller is repeatButton) {
 					obj.setRepeating(!obj.isRepeating);
+					return true;
+				}
+				else if(evt.caller is maximizeButton) {
+					isMaximized = !isMaximized;
 					return true;
 				}
 				else if(evt.caller is drydockButton) {
@@ -1622,13 +1638,13 @@ class BuildElement : GuiListElement {
 			nameColor = Color(0xffffffff);
 
 		if(build != 0 || maintain != 0)
-			costText = formatMoney(build);
+			costText = formatMoney(build, false, true, false);
 		else
 			costText.resize(0);
 		if(maintain == 0)
 			maintainText.resize(0);
 		else
-			maintainText = formatMoney(maintain);
+			maintainText = formatMoney(maintain, false, true, false);
 		if(energy != 0)
 			energyText = formatRate(energy);
 		else
@@ -1680,66 +1696,64 @@ class BuildElement : GuiListElement {
 		//Labor
 		if(laborText.length != 0) {
 			if((costText.length == 0 && extraCosts.length < 4) || extraCosts.length == 0)
-				x -= 120;
+				x -= 80 ;
 			else
-				x -= 60;
-			icons::Labor.draw(recti_area(vec2i(x, 3)+pos.topLeft, vec2i(24, 24)));
-			font.draw(pos=recti_area(vec2i(x+28, 0)+pos.topLeft, vec2i(92, 30)),
-					horizAlign=0.0, vertAlign=0.5,
-					text=laborText, ellipsis=locale::ELLIPSIS, color=colors::White);
+				x -= 40;
+			icons::Labor.draw(recti_area(vec2i(x, 3)+pos.topLeft, vec2i(24, 24)), Color(0xffffff80));
+			smallFont.draw(pos=recti_area(vec2i(x, 0)+pos.topLeft, vec2i(24, 30)),
+					horizAlign=0.5, vertAlign=0.5,
+					text=laborText, ellipsis=locale::ELLIPSIS, color=colors::White, stroke=colors::Black);
 
 			if(timeText.length != 0 && ((costText.length == 0 && extraCosts.length < 4) || extraCosts.length == 0)) {
-				font.draw(pos=recti_area(vec2i(x+28, 0)+pos.topLeft, vec2i(92, 30)),
+				spritesheet::ContextIcons.draw(1, recti_area(vec2i(x+36, 3)+pos.topLeft, vec2i(24, 24)), Color(0xffffff40));
+				smallFont.draw(pos=recti_area(vec2i(x+24, 0)+pos.topLeft, vec2i(50, 30)),
 						horizAlign=1.0, vertAlign=0.5,
-						text=timeText, ellipsis=locale::ELLIPSIS, color=colors::White);
+						text=timeText, ellipsis=locale::ELLIPSIS, color=colors::White, stroke=colors::Black);
 			}
 		}
 		else if(timeText.length != 0) {
-			x -= 120;
-			spritesheet::ContextIcons.draw(1, recti_area(vec2i(x, 3)+pos.topLeft, vec2i(24, 24)));
-			font.draw(pos=recti_area(vec2i(x+28, 0)+pos.topLeft, vec2i(57, 30)),
-					horizAlign=0.0, vertAlign=0.5,
-					text=timeText, ellipsis=locale::ELLIPSIS, color=colors::White);
+			x -= 40;
+			spritesheet::ContextIcons.draw(1, recti_area(vec2i(x+12, 3)+pos.topLeft, vec2i(24, 24)), Color(0xffffff80));
+			smallFont.draw(pos=recti_area(vec2i(x, 0)+pos.topLeft, vec2i(40, 30)),
+					horizAlign=1.0, vertAlign=0.5,
+					text=timeText, ellipsis=locale::ELLIPSIS, color=colors::White, stroke=colors::Black);
 		}
 
 		//Cost
 		if(energyText.length != 0) {
-			x -= 90;
+			x -= 40;
 			icons::Energy.draw(recti_area(vec2i(x, 3)+pos.topLeft, vec2i(24, 24)));
-			font.draw(pos=recti_area(vec2i(x+28, 0)+pos.topLeft, vec2i(62, 30)),
+			smallFont.draw(pos=recti_area(vec2i(x, 0)+pos.topLeft, vec2i(50, 30)),
 					horizAlign=0.0, vertAlign=0.5,
 					text=energyText, ellipsis=locale::ELLIPSIS, color=colors::White);
 		}
 
 		if(costText.length != 0) {
 			if(maintainText.length != 0) {
-				x -= 135;
-				icons::Money.draw(recti_area(vec2i(x, 3)+pos.topLeft, vec2i(24, 24)));
-				font.draw(pos=recti_area(vec2i(x+28, 0)+pos.topLeft, vec2i(92, 30)),
-						horizAlign=0.0, vertAlign=0.5,
-						text=costText, ellipsis=locale::ELLIPSIS, color=colors::White);
-				font.draw(pos=recti_area(vec2i(x+28, 0)+pos.topLeft, vec2i(92, 30)),
-						horizAlign=0.5, vertAlign=0.5,
-						text=slashStr, ellipsis=locale::ELLIPSIS, color=colors::White);
-				font.draw(pos=recti_area(vec2i(x+28, 0)+pos.topLeft, vec2i(92, 30)),
-						horizAlign=1.0, vertAlign=0.5,
-						text=maintainText, ellipsis=locale::ELLIPSIS, color=colors::White);
+				x -= 55;
+				icons::Money.draw(recti_area(vec2i(x, 3)+pos.topLeft, vec2i(24, 24)), Color(0xffffff80));
+				font.draw(pos=recti_area(vec2i(x, 0)+pos.topLeft, vec2i(50, 30)),
+						horizAlign=1.0, vertAlign= 0.2,
+						text=costText, ellipsis=locale::ELLIPSIS, color=colors::White, stroke=colors::Black);
+				smallFont.draw(pos=recti_area(vec2i(x, 0)+pos.topLeft, vec2i(50, 30)),
+						horizAlign=1.0, vertAlign=1.0,
+						text=maintainText, ellipsis=locale::ELLIPSIS, color=Color(0xffffffd0));
 			}
 			else {
-				x -= 90;
-				icons::Money.draw(recti_area(vec2i(x, 3)+pos.topLeft, vec2i(24, 24)));
-				font.draw(pos=recti_area(vec2i(x+28, 0)+pos.topLeft, vec2i(62, 30)),
-						horizAlign=0.0, vertAlign=0.5,
-						text=costText, ellipsis=locale::ELLIPSIS, color=colors::White);
+				x -= 55;
+				icons::Money.draw(recti_area(vec2i(x, 3)+pos.topLeft, vec2i(24, 24)), Color(0xffffff80));
+				font.draw(pos=recti_area(vec2i(x, 0)+pos.topLeft, vec2i(50, 30)),
+						horizAlign=1.0, vertAlign=0.5,
+						text=costText, ellipsis=locale::ELLIPSIS, color=colors::White, stroke=colors::Black);
 			}
 		}
 
 		for(uint i = 0, cnt = extraCosts.length; i < cnt; ++i) {
-			x -= 60;
-			extraIcons[i].draw(recti_area(vec2i(x, 3)+pos.topLeft, vec2i(24, 24)));
-			font.draw(pos=recti_area(vec2i(x+28, 0)+pos.topLeft, vec2i(32, 32)),
-					horizAlign=0.0, vertAlign=0.5,
-					text=extraCosts[i], ellipsis=locale::SHORT_ELLIPSIS, color=colors::White);
+			x -= 30 ;
+			extraIcons[i].draw(recti_area(vec2i(x, 0)+pos.topLeft, vec2i(24, 24)));
+			smallFont.draw(pos=recti_area(vec2i(x, 0)+pos.topLeft, vec2i(24, 32)),
+					horizAlign=0.5, vertAlign=0.9,
+					text=extraCosts[i], ellipsis=locale::SHORT_ELLIPSIS, color=colors::White, stroke=colors::Black);
 		}
 
 		//Requirements
