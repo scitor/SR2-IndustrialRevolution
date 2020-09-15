@@ -1,6 +1,6 @@
 Cargo: Aluminum
 	Name: #ALUMINUM
-	Description: #ALUMINUM_DESC
+	Description: #RESOURCE_CARGO_DESCRIPTION
 
 	IconL: ResourceIcons::1
 	Icon: ResourceIconsSmall::16

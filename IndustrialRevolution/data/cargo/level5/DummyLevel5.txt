@@ -1,0 +1,4 @@
+Cargo: DummyLevel5
+	Level: 5
+	Distribution: 0
+	// dummy resource for engine to work. it needs one exportable, non-artificial for its lists

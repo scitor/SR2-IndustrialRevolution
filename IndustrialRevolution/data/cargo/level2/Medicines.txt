@@ -1,6 +1,6 @@
 Cargo: Medicines
 	Name: #MEDICINES
-	Description: #MEDICINES_DESC
+	Description: #RESOURCE_CARGO_DESCRIPTION
 
 	IconL: ResourceIcons::15
 	Icon: ResourceIconsSmall::6

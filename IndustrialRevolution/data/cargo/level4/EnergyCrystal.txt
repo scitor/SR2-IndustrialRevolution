@@ -1,0 +1,6 @@
+Cargo: EnergyCrystal
+	Name: #ENERGY_CRYSTAL
+	Description: #PROCESSED_CARGO_DESCRIPTION
+
+	Icon: ResourceIcons::93
+	Small Icon: ResourceIconsSmall::93

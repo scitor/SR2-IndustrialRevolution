@@ -1,6 +1,6 @@
 Cargo: Pekelm
 	Name: #PEKELM
-	Description: #PEKELM_DESC
+	Description: #RESOURCE_CARGO_DESCRIPTION
 
 	IconL: ResourceIcons::25
 	Icon: ResourceIconsSmall::25

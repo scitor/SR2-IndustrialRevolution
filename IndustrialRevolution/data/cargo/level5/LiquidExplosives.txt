@@ -1,0 +1,6 @@
+Cargo: LiquidExplosives
+	Name: #LIQUID_EXPLOSIVES
+	Description: #PROCESSED_CARGO_DESCRIPTION
+
+	Icon: ResourceIcons::101
+	Small Icon: ResourceIconsSmall::101

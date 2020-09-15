@@ -1,0 +1,6 @@
+Cargo: SubzeroPlasma
+	Name: #SUBZERO_PLASMA
+	Description: #PROCESSED_CARGO_DESCRIPTION
+
+	Icon: ResourceIcons::100
+	Small Icon: ResourceIconsSmall::100

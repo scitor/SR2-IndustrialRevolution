@@ -1,6 +1,6 @@
 Cargo: Kalsunim
 	Name: #KALSUNIM
-	Description: #KALSUNIM_DESC
+	Description: #RESOURCE_CARGO_DESCRIPTION
 
 	IconL: ResourceIconsSmall::48
 	Icon: ResourceIconsSmall::48

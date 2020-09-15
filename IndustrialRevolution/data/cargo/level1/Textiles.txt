@@ -1,6 +1,6 @@
 Cargo: Textiles
 	Name: #TEXTILES
-	Description: #TEXTILES_DESC
+	Description: #RESOURCE_CARGO_DESCRIPTION
 
 	IconL: ResourceIcons::9
 	Icon: ResourceIconsSmall::8

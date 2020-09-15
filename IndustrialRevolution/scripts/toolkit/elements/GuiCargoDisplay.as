@@ -10,6 +10,7 @@ class GuiCargoDisplay : BaseGuiElement {
 	array<GuiText@> values;
 
 	int padding = 2;
+	int iconSize = 21;
 
 	GuiCargoDisplay(IGuiElement@ parent, Alignment@ align) {
 		super(parent, align);
@@ -29,8 +30,11 @@ class GuiCargoDisplay : BaseGuiElement {
 		icons.length = newCnt;
 		values.length = newCnt;
 		for(uint i = oldCnt; i < newCnt; ++i) {
-			@icons[i] = GuiSprite(this, recti());
+			@icons[i] = GuiSprite(this, recti(21,21));
 			@values[i] = GuiText(this, recti());
+			values[i].font = FT_Detail;
+			values[i].stroke = colors::Black;
+			values[i].horizAlign = 0.5;
 		}
 
 		const Font@ ft = skin.getFont(FT_Normal);
@@ -40,20 +44,20 @@ class GuiCargoDisplay : BaseGuiElement {
 			if(type is null)
 				continue;
 			double amount = obj.getCargoStored(type.id);
-			string ttip = format("[font=Medium]$1[/font]\n$2", type.name, type.description);
+			string ttip = format("[font=Medium]$1[/font] [img=$2;24/]\n$3", type.name, getSpriteDesc(type.icon), type.description);
 
-			icons[i].rect = recti_area(x, padding, s, s);
+			icons[i].rect = recti_area(x, padding, iconSize, iconSize);
 			icons[i].desc = type.icon;
 			setMarkupTooltip(icons[i], ttip);
-			x += s + padding;
+			//x += s + padding;
 
 			string txt = standardize(amount, true);
-			int w = ft.getDimension(txt).x + 3;
+			int w = s + padding;
 
-			values[i].rect = recti_area(x, padding, w, s);
+			values[i].rect = recti_area(x, padding + 8, w, s);
 			values[i].text = txt;
 			setMarkupTooltip(values[i], ttip);
-			x += w + padding;
+			x += iconSize + padding;
 		}
 	}
 };

@@ -1,6 +1,6 @@
 Cargo: DegenerateMatter
 	Name: #DEGENERATE_MATTER
-	Description: #DEGENERATE_MATTER_DESC
+	Description: #RESOURCE_CARGO_DESCRIPTION
 
 	IconL: ResourceIcons::42
 	Icon: ResourceIconsSmall::42

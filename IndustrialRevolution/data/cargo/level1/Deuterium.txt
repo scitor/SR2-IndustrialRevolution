@@ -1,6 +1,6 @@
 Cargo: Deuterium
 	Name: #DEUTERIUM
-	Description: #DEUTERIUM_DESC
+	Description: #RESOURCE_CARGO_DESCRIPTION
 
 	IconL: ResourceIcons::31
 	Icon: ResourceIconsSmall::31

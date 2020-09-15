@@ -1,6 +1,6 @@
 Cargo: Neutronium
 	Name: #NEUTRONIUM
-	Description: #NEUTRONIUM_DESC
+	Description: #RESOURCE_CARGO_DESCRIPTION
 
 	IconL: ResourceIcons::36
 	Icon: ResourceIconsSmall::36

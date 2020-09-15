@@ -1,6 +1,6 @@
 Cargo: UniqueResearch
 	Name: #UNIQUE_RESEARCH
-	Description: #UNIQUE_RESEARCH_DESC
+	Description: #RESOURCE_CARGO_DESCRIPTION
 
 	IconL: ResourceIconsSmall::56
 	Icon: ResourceIconsSmall::56

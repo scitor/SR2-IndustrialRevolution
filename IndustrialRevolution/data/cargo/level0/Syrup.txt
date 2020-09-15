@@ -1,6 +1,5 @@
 Cargo: Syrup
 	Name: #R_SYRUP
-	Description: #R_SYRUP_DESC
-	Class: Food
+	Description: #RESOURCE_CARGO_DESCRIPTION
 
 	IconL: ResourceIconsSmall::79

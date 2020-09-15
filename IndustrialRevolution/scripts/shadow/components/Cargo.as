@@ -21,6 +21,13 @@ tidy class Cargo : CargoStorage, Component_Cargo {
 		return get(type);
 	}
 
+	double getCargoStored(const string& typeIdent) {
+		auto@ type = getCargoType(typeIdent);
+		if(type is null)
+			return -1.0;
+		return get(type);
+	}
+
 	uint get_cargoTypes() {
 		if(types is null)
 			return 0;

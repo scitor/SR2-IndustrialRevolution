@@ -1,6 +1,6 @@
 Cargo: AsteroidDefense
 	Name: #ASTEROID_DEFENSE
-	Description: #ASTEROID_DEFENSE_DESC
+	Description: #RESOURCE_CARGO_DESCRIPTION
 
 	IconL: ResourceIcons::42
 	Icon: ResourceIconsSmall::45

@@ -1,6 +1,6 @@
 Cargo: UniqueInfluence
 	Name: #UNIQUE_INFLUENCE
-	Description: #UNIQUE_INFLUENCE_DESC
+	Description: #RESOURCE_CARGO_DESCRIPTION
 
 	IconL: ResourceIconsSmall::55
 	Icon: ResourceIconsSmall::55

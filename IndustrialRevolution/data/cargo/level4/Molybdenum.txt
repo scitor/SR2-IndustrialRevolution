@@ -1,0 +1,6 @@
+Cargo: Molybdenum
+	Name: #MOLYBDENUM
+	Description: #PROCESSED_CARGO_DESCRIPTION
+
+	Icon: ResourceIcons::96
+	Small Icon: ResourceIconsSmall::96

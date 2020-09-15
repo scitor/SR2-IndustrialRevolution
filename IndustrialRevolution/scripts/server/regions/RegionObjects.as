@@ -6,7 +6,7 @@ import region_effects.ZealotRegion;
 import notifications;
 import statuses;
 from resources import getLaborCost;
-from cargo import hasDesignCosts;
+from cargo import hasDesignCosts, getCargoType;
 from settings.game_settings import gameSettings;
 from region_effects.GrantVision import GrantVision;
 import constructions;
@@ -1228,7 +1228,7 @@ tidy class RegionObjects : Component_RegionObjects, Savable {
 
 				double radius = CIV_SIZE_MERCHANT;
 				auto@ res = getResource(type);
-				auto@ ctype = getCargoType(res.ident.replaced("Cargo","").replaced("Rate",""));
+				auto@ ctype = getCargoType(res.cargoType);
 				double radiusHealth = CIV_RADIUS_HEALTH;
 				if(res.ident == "BaseMaterial" || res.ident == "BioMass" || res.ident == "Ore")
 					radiusHealth = CIV_RADIUS_FIRST;
@@ -1279,7 +1279,7 @@ tidy class RegionObjects : Component_RegionObjects, Savable {
 
 				double radius = CIV_SIZE_MERCHANT;
 				auto@ res = getResource(as.nativeResourceType[i]);
-				auto@ ctype = getCargoType(res.ident.replaced("Cargo","").replaced("Rate",""));
+				auto@ ctype = getCargoType(res.cargoType);
 				double radiusHealth = CIV_RADIUS_HEALTH;
 				if(res.ident == "BaseMaterial" || res.ident == "BioMass" || res.ident == "Ore")
 					radiusHealth = CIV_RADIUS_FIRST;
@@ -2389,7 +2389,7 @@ tidy class IconRing {
 
 		double angleStep = (twopi / double(cnt));
 		vec3d sysPos = region.position;
-		double radius = region.OuterRadius + (800 * level);
+		double radius = region.OuterRadius + (3000 * level);
 		vec3d basePos = objects[0].position;
 		double baseAngle = vec2d(basePos.x - sysPos.x, basePos.z - sysPos.z).radians();
 

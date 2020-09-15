@@ -15,6 +15,7 @@ const double ACC_INTERSYSTEM_FTL = 3000.0;
 const double CIV_REPAIR = 1.0;
 const double BLOCKADE_TIMER = 3.0 * 60.0;
 const double DEST_RANGE = 20.0;
+const double CARGO_DELIVERY_STORAGE_CAP = 3600.0; // don't deliver more than that amount of cargo, ever
 
 tidy class CivilianScript {
 	uint type = 0;
@@ -637,15 +638,16 @@ tidy class CivilianScript {
 								cargoResource.hooks[i].onTradeDeliver(obj, origin, pathTarget);
 
 						if(pathTarget !is null && pathTarget.hasCargo) {
-							auto@ type = ::getCargoType(cargoResource.ident.replaced("Cargo","").replaced("Rate",""));
-							uint amount = uint(pathTarget.getCargoStored(type.id));
-							double toAdd = min(3600.0 - amount, obj.radius * CIV_RADIUS_HEALTH);
+							uint amount = uint(pathTarget.getCargoStored(cargoResource.cargoType));
+							double toAdd = min(CARGO_DELIVERY_STORAGE_CAP - amount, obj.radius * CIV_RADIUS_HEALTH);
 							// quickhack @TODO: do properly
 							if(cargoResource.ident == "BaseMaterial" || cargoResource.ident == "BioMass" || cargoResource.ident == "Ore")
-								toAdd = min(3600.0 - amount, obj.radius * CIV_RADIUS_FIRST);
+								toAdd = min(CARGO_DELIVERY_STORAGE_CAP - amount, obj.radius * CIV_RADIUS_FIRST);
 
-							if(toAdd > 0)
+							if(toAdd > 0) {
+								auto@ type = ::getCargoType(cargoResource.cargoType);
 								pathTarget.addCargo(type.id, toAdd);
+							}
 						}
 					}
 					// start trading with the planets resource

@@ -1,7 +1,7 @@
 Cargo: StellarWater
-	Name: Stellar Water
-	Description: A comet was used to provide the population on this planet with water.
+	Name: #STELLAR_WATER
+	Description: #STELLAR_WATER_DESC
 	Class: WaterType
 
 	IconL: ResourceIcons::0
-	Icon: ResourceIconsSmall::86
+	Icon: ResourceIconsSmall::86*#00ffe9

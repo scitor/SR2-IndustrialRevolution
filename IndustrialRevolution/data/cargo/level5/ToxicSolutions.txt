@@ -1,0 +1,6 @@
+Cargo: ToxicSolutions
+	Name: #TOXIC_SOLUTIONS
+	Description: #PROCESSED_CARGO_DESCRIPTION
+
+	Icon: ResourceIcons::99
+	Small Icon: ResourceIconsSmall::99

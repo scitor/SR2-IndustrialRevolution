@@ -1,5 +1,5 @@
 Cargo: Hypervolatiles
 	Name: #R_HYPERVOLATILES
-	Description: #R_HYPERVOLATILES_DESC
+	Description: #RESOURCE_CARGO_DESCRIPTION
 
 	Icon: ResourceIconsSmall::45

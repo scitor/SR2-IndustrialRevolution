@@ -1,7 +1,6 @@
 Cargo: Water
 	Name: #WATER
-	Blurb: #WATER_BLURB
-	Class: WaterType
+	Description: #RESOURCE_CARGO_DESCRIPTION
 
 	IconL: ResourceIcons::0
 	Icon: ResourceIconsSmall::18

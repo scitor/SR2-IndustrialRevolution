@@ -1,6 +1,6 @@
 Cargo: RareMetals
 	Name: #RARE_METALS
-	Description: #RARE_METALS_DESC
+	Description: #RESOURCE_CARGO_DESCRIPTION
 
 	IconL: ResourceIcons::12
 	Icon: ResourceIconsSmall::11

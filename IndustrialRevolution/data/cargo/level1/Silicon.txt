@@ -1,5 +1,5 @@
 Cargo: Silicon
 	Name: #R_SILICON
-	Description: #R_SILICON_DESC
+	Description: #RESOURCE_CARGO_DESCRIPTION
 
 	IconL: ResourceIconsSmall::76

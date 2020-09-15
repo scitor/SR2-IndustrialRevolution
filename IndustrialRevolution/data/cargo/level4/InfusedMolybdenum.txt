@@ -1,0 +1,6 @@
+Cargo: InfusedMolybdenum
+	Name: #INFUSED_MOLYBDENUM
+	Description: #PROCESSED_CARGO_DESCRIPTION
+
+	Icon: ResourceIcons::97
+	Small Icon: ResourceIconsSmall::97

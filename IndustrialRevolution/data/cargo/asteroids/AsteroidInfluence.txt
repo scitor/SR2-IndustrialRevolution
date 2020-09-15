@@ -1,6 +1,6 @@
 Cargo: AsteroidInfluence
 	Name: #ASTEROID_INFLUENCE
-	Description: #ASTEROID_INFLUENCE_DESC
+	Description: #RESOURCE_CARGO_DESCRIPTION
 
 	IconL: ResourceIcons::0
 	Icon: ResourceIconsSmall::0

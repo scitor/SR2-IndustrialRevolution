@@ -1,0 +1,6 @@
+Cargo: FulrateWool
+	Name: #FULRATE_WOOL
+	Description: #PROCESSED_CARGO_DESCRIPTION
+
+	Icon: ResourceIcons::91
+	Small Icon: ResourceIconsSmall::91

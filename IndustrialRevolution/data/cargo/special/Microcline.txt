@@ -1,6 +1,6 @@
 Cargo: Microcline
 	Name: #MICROCLINE
-	Description: #MICROCLINE_DESC
+	Description: #RESOURCE_CARGO_DESCRIPTION
 
 	IconL: ResourceIconsSmall::73
 	Icon: ResourceIconsSmall::73

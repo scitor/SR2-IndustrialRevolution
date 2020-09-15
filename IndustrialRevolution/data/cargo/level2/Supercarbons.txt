@@ -1,6 +1,6 @@
 Cargo: Supercarbons
 	Name: #SUPERCARBONS
-	Description: #SUPERCARBONS_DESC
+	Description: #RESOURCE_CARGO_DESCRIPTION
 
 	IconL: ResourceIcons::39
 	Icon: ResourceIconsSmall::39

@@ -1,0 +1,6 @@
+Cargo: EnrichedOganesson
+	Name: #ENRICHED_OGANESSON
+	Description: #PROCESSED_CARGO_DESCRIPTION
+
+	Icon: ResourceIcons::105
+	Small Icon: ResourceIconsSmall::105

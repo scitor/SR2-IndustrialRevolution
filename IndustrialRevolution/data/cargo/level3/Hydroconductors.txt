@@ -1,6 +1,6 @@
 Cargo: Hydroconductors
 	Name: #HYDROCONDUCTORS
-	Description: #HYDROCONDUCTORS_DESC
+	Description: #RESOURCE_CARGO_DESCRIPTION
 
 	IconL: ResourceIcons::40
 	Icon: ResourceIconsSmall::40

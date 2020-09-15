@@ -1,0 +1,6 @@
+Cargo: ChemicalReagents
+	Name: #CHEMICAL_REAGENTS
+	Description: #PROCESSED_CARGO_DESCRIPTION
+
+	Icon: ResourceIcons::89
+	Small Icon: ResourceIconsSmall::89

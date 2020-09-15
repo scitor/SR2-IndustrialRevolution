@@ -1,6 +1,6 @@
 Cargo: Plastics
 	Name: #PLASTICS
-	Description: #PLASTICS_DESC
+	Description: #RESOURCE_CARGO_DESCRIPTION
 
 	IconL: ResourceIcons::10
 	Icon: ResourceIconsSmall::9

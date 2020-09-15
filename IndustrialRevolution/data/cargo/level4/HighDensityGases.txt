@@ -1,0 +1,6 @@
+Cargo: HighDensityGases
+	Name: #HIGH_DENSITY_GASES
+	Description: #PROCESSED_CARGO_DESCRIPTION
+
+	Icon: ResourceIcons::88
+	Small Icon: ResourceIconsSmall::88

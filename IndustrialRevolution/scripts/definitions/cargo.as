@@ -14,6 +14,7 @@ tidy final class CargoType {
 	string ident;
 	string name;
 	string description;
+	string resourceType;
 	Sprite icon;
 	Color color;
 
@@ -364,6 +365,7 @@ void loadCargo(const string& filename) {
 		if(key.equals_nocase("Cargo")) {
 			@type = CargoType();
 			type.ident = value;
+			type.resourceType = value;
 			addCargoType(type);
 			type.variable = getHexVariable(type.ident+"Cost");
 		}
@@ -384,6 +386,9 @@ void loadCargo(const string& filename) {
 		}
 		else if(key.equals_nocase("Storage Size")) {
 			type.storageSize = toDouble(value);
+		}
+		else if(key.equals_nocase("Resource Type")) {
+			type.resourceType = value;
 		}
 	}
 }

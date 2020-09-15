@@ -1502,15 +1502,13 @@ tidy class ObjectResources : Component_Resources, Savable {
 					}
 					if(!path.valid)
 						r.usable = false;
-					else if(r.type.ident != "Ore") {
-						auto@ ctype = getCargoType(r.type.ident);
-						if(ctype !is null && r.exportedTo.hasCargo) {
-							if(r.exportedTo.getCargoStored(ctype.id) > 0) {
-								r.inTransit = false;
-							} else {
-								r.usable = false;
-								r.inTransit = true;
-							}
+					else if(r.type.cargoType != "Ore" && r.exportedTo.hasCargo) {
+						print(format("check $1 $2 $3", r.exportedTo.name, r.type.cargoType, r.exportedTo.getCargoStored(r.type.cargoType)));
+						if(r.exportedTo.getCargoStored(r.type.cargoType) > 0) {
+							r.inTransit = false;
+						} else {
+							r.usable = false;
+							r.inTransit = true;
 						}
 					}
 				}
