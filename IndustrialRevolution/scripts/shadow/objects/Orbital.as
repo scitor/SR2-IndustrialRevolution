@@ -3,7 +3,7 @@ from resources import MoneyType;
 import orbitals;
 import saving;
 
-const int STRATEGIC_RING = -1;
+const int STRATEGIC_RING = 0;
 const double RECOVERY_TIME = 3.0 * 60.0;
 
 tidy class OrbitalScript {

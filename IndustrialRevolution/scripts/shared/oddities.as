@@ -18,7 +18,7 @@ StrategicIconNode@ makeOddityVisuals(Oddity& obj, uint type, bool fromCreation =
 		icon.setColor(0xffafffff);
 
 		if(obj.region !is null)
-			obj.region.addStrategicIcon(-1, obj, icon);
+			obj.region.addStrategicIcon(-3, obj, icon);
 #section server
 		if(fromCreation && (obj.region is null || obj.region.VisionMask & playerEmpire.mask != 0))
 			sound::open_slipstream.play(obj.position, priority=true);
@@ -41,7 +41,7 @@ StrategicIconNode@ makeOddityVisuals(Oddity& obj, uint type, bool fromCreation =
 		icon.setColor(0x66f4ffff);
 
 		if(obj.region !is null)
-			obj.region.addStrategicIcon(-1, obj, icon);
+			obj.region.addStrategicIcon(-3, obj, icon);
 		
 #section server
 		addAmbientSource(CURRENT_PLAYER, "tear", obj.id, obj.position, obj.radius);

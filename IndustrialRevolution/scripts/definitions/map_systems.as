@@ -94,7 +94,7 @@ void loadSystems(const string& filename) {
 		else if(key == "Frequency") {
 			type.frequency = toDouble(value);
 			if(type.unique != SU_NonUnique)
-				type.frequency *= config::UNIQUE_SYSTEM_OCCURANCE / 0.3;
+				type.frequency *= config::UNIQUE_SYSTEM_OCCURANCE;
 		}
 		else if(key == "Inherit") {
 			type.baseNames.insertLast(value);
@@ -106,7 +106,7 @@ void loadSystems(const string& filename) {
 				type.unique = SU_Galaxy;
 			else
 				error("Error: Unknown system uniqueness: "+value);
-			type.frequency *= config::UNIQUE_SYSTEM_OCCURANCE / 0.3;
+			type.frequency *= config::UNIQUE_SYSTEM_OCCURANCE;
 		}
 		else {
 			string line = file.line;

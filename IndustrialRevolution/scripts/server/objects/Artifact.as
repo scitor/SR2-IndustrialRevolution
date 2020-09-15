@@ -76,8 +76,8 @@ tidy class ArtifactScript {
 				if(!obj.region.initialized)
 					@obj.region = null;
 				else
-					obj.region.addStrategicIcon(-1, obj, icon);
-			
+					obj.region.addStrategicIcon(-3, obj, icon);
+
 				if(obj.region !is null) {
 					Node@ node = obj.getNode();
 					node.hintParentObject(obj.region, false);
@@ -89,7 +89,7 @@ tidy class ArtifactScript {
 	void destroy(Artifact& obj) {
 		if(icon !is null) {
 			if(obj.region !is null)
-				obj.region.removeStrategicIcon(-1, icon);
+				obj.region.removeStrategicIcon(-3, icon);
 			icon.markForDeletion();
 			@icon = null;
 		}
@@ -126,22 +126,22 @@ tidy class ArtifactScript {
 			Region@ newRegion = obj.region;
 			if(icon !is null) {
 				if(prevRegion !is null)
-					prevRegion.removeStrategicIcon(-1, icon);
+					prevRegion.removeStrategicIcon(-3, icon);
 				if(newRegion !is null)
-					newRegion.addStrategicIcon(-1, obj, icon);
+					newRegion.addStrategicIcon(-3, obj, icon);
 			}
 			@prevRegion = newRegion;
-			
+
 			Node@ node = obj.getNode();
 			if(node !is null)
 				node.hintParentObject(newRegion, false);
 		}
-		
+
 		if(obj.region is null) {
 			deepSpaceTime += time;
 			if(deepSpaceTime > 14.0 * 60.0) {
 				deepSpaceTime = randomd(-30.0,30.0);
-				
+
 				Ship@ ship = createShip(obj.position + random3d(4000.0),
 					Creeps.getDesign("Gravitar"), Creeps, free = true);
 				ship.addAbilityOrder(0, obj, obj.radius + ship.radius + 5.0, append=true);

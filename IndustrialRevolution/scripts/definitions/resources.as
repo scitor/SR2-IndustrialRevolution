@@ -1687,7 +1687,7 @@ void preInit() {
 
 		}
 		if(type.unique)
-			freq *= config::UNIQUE_RESOURCE_OCCURANCE / 0.3;
+			freq *= config::UNIQUE_RESOURCE_OCCURANCE;
 
 		resources::totalFrequency += freq;
 		type.rarityScore = freq;

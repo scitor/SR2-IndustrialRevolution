@@ -18,6 +18,7 @@ const double DEST_RANGE = 20.0;
 const double CARGO_DELIVERY_STORAGE_CAP = 3600.0; // don't deliver more than that amount of cargo, ever
 
 tidy class CivilianScript {
+	StrategicIconNode@ icon;
 	uint type = 0;
 	Object@ origin;
 	Object@ pathTarget;
@@ -236,9 +237,17 @@ tidy class CivilianScript {
 		MeshDesc mesh;
 		@mesh.model = getCivilianModel(obj.owner, type, obj.radius);
 		@mesh.material = getCivilianMaterial(obj.owner, type, obj.radius);
-		@mesh.iconSheet = getCivilianIcon(obj.owner, type, obj.radius).sheet;
-		mesh.iconIndex = getCivilianIcon(obj.owner, type, obj.radius).index;
 
+		if(obj.getCivilianType() == CiT_Freighter) {
+			@mesh.iconSheet = getCivilianIcon(obj.owner, type, obj.radius).sheet;
+			mesh.iconIndex = getCivilianIcon(obj.owner, type, obj.radius).index;
+		} else {
+			@icon = StrategicIconNode();
+			icon.establish(obj, 0.01, getCivilianIcon(obj.owner, type, obj.radius).sheet, getCivilianIcon(obj.owner, type, obj.radius).index);
+			//icon.memorable = true;
+			if(obj.region !is null)
+				obj.region.addStrategicIcon(-3, obj, icon);
+		}
 		bindMesh(obj, mesh);
 	}
 
@@ -275,6 +284,12 @@ tidy class CivilianScript {
 				obj.owner.CivilianTradeShips -= 1;
 			if(income != 0)
 				obj.owner.modTotalBudget(-income, MoT_Trade);
+		}
+		if(icon !is null) {
+			if(obj.region !is null)
+				obj.region.removeStrategicIcon(-3, icon);
+			icon.markForDeletion();
+			@icon = null;
 		}
 	}
 
@@ -382,6 +397,8 @@ tidy class CivilianScript {
 		if(obj.hasMover)
 			obj.moverTick(time);
 
+		if(icon !is null)
+			icon.visible = obj.isVisibleTo(playerEmpire);
 	//obj.name = obj.id;
 		//Tick occasional stuff
 		timer -= float(time);

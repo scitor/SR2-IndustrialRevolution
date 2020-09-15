@@ -5,7 +5,7 @@ import orbitals;
 import saving;
 import util.target_search;
 
-const int STRATEGIC_RING = -1;
+const int STRATEGIC_RING = 0;
 const double RECOVERY_TIME = 3.0 * 60.0;
 const double COMBAT_RECOVER_RATE = 0.25;
 

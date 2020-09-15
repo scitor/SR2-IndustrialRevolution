@@ -221,7 +221,7 @@ tidy class OddityScript {
 
 	void destroy(Oddity& obj) {
 		if(obj.region !is null)
-			obj.region.removeStrategicIcon(-1, icon);
+			obj.region.removeStrategicIcon(-3, icon);
 		if(icon !is null)
 			icon.markForDeletion();
 		leaveRegion(obj);
@@ -257,9 +257,9 @@ tidy class OddityScript {
 			Region@ newRegion = obj.region;
 			if(icon !is null) {
 				if(prevRegion !is null)
-					prevRegion.removeStrategicIcon(-1, icon);
+					prevRegion.removeStrategicIcon(-3, icon);
 				if(newRegion !is null)
-					newRegion.addStrategicIcon(-1, obj, icon);
+					newRegion.addStrategicIcon(-3, obj, icon);
 			}
 			updateVision(visionRegion, visionMask, 0);
 			visionMask = 0;

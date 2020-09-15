@@ -6,7 +6,7 @@ LEVEL_DECAY_TIMER: 180
 ASTEROID_COST_STEP: 1.0
 
 //The base frequency of permanent resources on asteroids.
-ASTEROID_PERMANENT_FREQ: 1.4
+ASTEROID_PERMANENT_FREQ: 1.0
 
 //How much the labor cost of terraforming increases per hop of distance.
 TERRAFORM_COST_STEP: 1.0
@@ -68,26 +68,26 @@ COLONIZING_GROWTH_PENALTY: 0.3
 PLANET_CONDITION_CHANCE: 0.2
 
 //Frequency of anomalies
-ANOMALY_OCCURANCE: 0.2
+ANOMALY_OCCURANCE: 1.0
 
 //Frequency of remnants
-REMNANT_OCCURANCE: 0.3
+REMNANT_OCCURANCE: 1.0
 
 //Frequency of asteroids
-ASTEROID_OCCURANCE: 0.65
-RESOURCE_ASTEROID_OCCURANCE: 0.45
+ASTEROID_OCCURANCE: 1.0
+RESOURCE_ASTEROID_OCCURANCE: 0.05
 
 //Frequency of unique systems
-UNIQUE_SYSTEM_OCCURANCE: 0.3
+UNIQUE_SYSTEM_OCCURANCE: 1.0
 
 //Frequency of unique resources
-UNIQUE_RESOURCE_OCCURANCE: 0.3
+UNIQUE_RESOURCE_OCCURANCE: 1.0
 
 //Frequency of planets in systems
 PLANET_FREQUENCY: 1.0
 
 //Frequency of artifacts
-ARTIFACT_FREQUENCY: 0.25
+ARTIFACT_FREQUENCY: 1.0
 
 //Fasten all seatbelts, seal all entrances and exits, close all shops in the mall, cancel the three ring circus, secure all animals in the zoo!
 LUDICROUS_SPEED: 1618.03398875

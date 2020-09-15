@@ -243,7 +243,7 @@ tidy class AnomalyScript {
 
 	void destroy(Anomaly& obj) {
 		if(obj.region !is null)
-			obj.region.removeStrategicIcon(-1, icon);
+			obj.region.removeStrategicIcon(-3, icon);
 		icon.markForDeletion();
 		leaveRegion(obj);
 	}

@@ -22,14 +22,14 @@ tidy class ArtifactScript {
 			icon.memorable = true;
 
 			if(obj.region !is null)
-				obj.region.addStrategicIcon(-1, obj, icon);
+				obj.region.addStrategicIcon(-3, obj, icon);
 		}
 	}
 
 	void destroy(Artifact& obj) {
 		if(icon !is null) {
 			if(obj.region !is null)
-				obj.region.removeStrategicIcon(-1, icon);
+				obj.region.removeStrategicIcon(-3, icon);
 			icon.markForDeletion();
 			@icon = null;
 		}
@@ -46,9 +46,9 @@ tidy class ArtifactScript {
 		if(updateRegion(obj)) {
 			Region@ newRegion = obj.region;
 			if(prevRegion !is null)
-				prevRegion.removeStrategicIcon(-1, icon);
+				prevRegion.removeStrategicIcon(-3, icon);
 			if(newRegion !is null)
-				newRegion.addStrategicIcon(-1, obj, icon);
+				newRegion.addStrategicIcon(-3, obj, icon);
 			@prevRegion = newRegion;
 		}
 		icon.visible = obj.isVisibleTo(playerEmpire);

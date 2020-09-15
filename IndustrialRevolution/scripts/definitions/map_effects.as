@@ -504,9 +504,9 @@ class MakeMoon : MapHook {
 
 #section server
 	void trigger(SystemData@ data, SystemDesc@ system, Object@& current) const override {
-		Object@ obj = current;
-		if(obj.isPlanet) {
-			cast<Planet>(obj).addMoon(size.decimal);
+		Planet@ obj = cast<Planet>(current);
+		if(obj !is null) {
+			obj.addMoon(size.decimal);
 			obj.addStatus(getStatusID("Moon"));
 		}
 	}
@@ -857,7 +857,7 @@ class MakeAsteroid : MapHook {
 		if(system.object !is null && system.object.OuterRadius < rad)
 			rad = system.object.OuterRadius;
 		vec2d rpos = random2d(rad * 0.8, rad * 1.0);
-		vec3d pos = system.position + vec3d(rpos.x, randomd(-50.0, 50.0), rpos.y);
+		vec3d pos = system.position + vec3d(rpos.x, 0, rpos.y);
 		Asteroid@ roid = createAsteroid(pos, system.object, delay=true);
 		roid.orbitAround(system.position);
 		roid.orbitSpin(randomd(20.0, 60.0));
@@ -868,12 +868,22 @@ class MakeAsteroid : MapHook {
 			return;
 		}
 
-		bool cargoSpec = cargo.integer != -1;
-		bool resSpec = (resPossib.length != 0 || distribute);
+		double totChance = config::ASTEROID_OCCURANCE + config::RESOURCE_ASTEROID_OCCURANCE;
+		double resChance = config::RESOURCE_ASTEROID_OCCURANCE;
+		double roll = randomd(0, totChance);
 
-		if(cargoSpec && !resSpec) {
-			const ResourceType@ type = getResource("Ore");
-			roid.addAvailable(type.id, type.asteroidCost);
+		int cargoType = cargo.integer;
+		if(cargoType == -1) {
+			auto@ ore = getCargoType("Ore");
+			if(ore !is null)
+				cargoType = ore.id;
+		}
+
+		bool cargoSpec = cargo.integer != -1 && config::ASTEROID_OCCURANCE != 0;
+		bool resSpec = (resPossib.length != 0 || distribute) && config::RESOURCE_ASTEROID_OCCURANCE != 0;
+
+		if((cargoSpec && !resSpec) || ((cargoSpec == resSpec) && roll >= resChance)) {
+			roid.addCargo(cargoType, cargo_amount.fromRange());
 		} else if(resSpec) {
 			if(distribute || resPossib.length == 0) {
 				do {
@@ -919,32 +929,38 @@ class MakeAsteroidBelt : MapHook {
 
 #section server
 	void trigger(SystemData@ data, SystemDesc@ system, Object@& current) const override {
-		double rad = system.radius;
-		if(system.object !is null && system.object.OuterRadius < rad)
-			rad = system.object.OuterRadius;
-		double radius = randomd(0.8, 1.0) * rad;
+		double radius = system.radius;
+		if(system.object !is null && system.object.OuterRadius < radius)
+			radius = system.object.OuterRadius;
+		radius *= randomd(0.8, 0.98);
 		double angle = randomd(0, twopi);
 		double mypi = twopi * randomd(0.1, 1.0);
+		double totChance = config::ASTEROID_OCCURANCE + config::RESOURCE_ASTEROID_OCCURANCE;
+		double resChance = config::RESOURCE_ASTEROID_OCCURANCE;
 
 		uint cnt = randomi(arguments[0].integer, arguments[0].integer * 10 * (mypi/twopi));
 		for(uint i = 0; i < cnt; ++i) {
 			double ang = (gauss()-0.5) * mypi;
 			double width = 1 - (ang / mypi);
-			radius += randomd(-width, width)*10;
-			vec3d pos = system.position + vec3d(cos(angle+ang) * radius, system.position.y, sin(angle+ang) * radius);
+			double rad = radius + randomd(-width, width)*100;
+			vec3d pos = system.position + vec3d(cos(angle+ang) * rad, 0, sin(angle+ang) * rad);
 			pos += random3d(5.0, 20.0);
 
 			Asteroid@ roid = createAsteroid(pos, system.object, delay=true);
 			roid.orbitAround(system.position);
 			roid.orbitSpin(randomd(20.0, 60.0));
-			@current = roid;
 
-			do {
-				const ResourceType@ type = getDistributedAsteroidResource();
-				if(roid.getAvailableCostFor(type.id) < 0.0)
-					roid.addAvailable(type.id, type.asteroidCost);
+			if(randomd(0, totChance) >= resChance && cargo.integer != -1) {
+				roid.addCargo(cargo.integer, cargo_amount.fromRange());
 			}
-			while(randomd() < distribution_chance.decimal);
+			else {
+				do {
+					const ResourceType@ type = getDistributedAsteroidResource();
+					if(roid.getAvailableCostFor(type.id) < 0.0)
+						roid.addAvailable(type.id, type.asteroidCost);
+				}
+				while(randomd() < distribution_chance.decimal);
+			}
 
 			roid.initMesh();
 		}

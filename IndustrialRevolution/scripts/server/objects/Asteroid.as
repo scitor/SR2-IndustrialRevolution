@@ -121,7 +121,7 @@ tidy class AsteroidScript {
 	void destroy(Asteroid& obj) {
 		obj.destroyObjResources();
 		if(obj.region !is null)
-			obj.region.removeStrategicIcon(-1, icon);
+			obj.region.removeStrategicIcon(-2, icon);
 		icon.markForDeletion();
 		@icon = null;
 
@@ -186,9 +186,11 @@ tidy class AsteroidScript {
 		mesh.memorable = true;
 
 		@icon = StrategicIconNode();
-		if(obj.nativeResourceCount == 1 && obj.nativeResourceType[0] == getResource("Ore").id)
+		int ringLevel = -3;
+		if(obj.cargoTypes != 0) {
 			icon.establish(obj, 0.01, spritesheet::OreAsteroidIcon, 0);
-		else
+			ringLevel = -2;
+		} else
 			icon.establish(obj, 0.01, spritesheet::AsteroidIcon, 0);
 		icon.memorable = true;
 
@@ -198,7 +200,7 @@ tidy class AsteroidScript {
 			if(!obj.region.initialized)
 				@obj.region = null;
 			else
-				obj.region.addStrategicIcon(-1, obj, icon);
+				obj.region.addStrategicIcon(ringLevel, obj, icon);
 
 			if(obj.region !is null) {
 				Node@ node = obj.getNode();
@@ -229,9 +231,9 @@ tidy class AsteroidScript {
 		if(updateRegion(obj)) {
 			Region@ newRegion = obj.region;
 			if(prevRegion !is null)
-				prevRegion.removeStrategicIcon(-1, icon);
+				prevRegion.removeStrategicIcon(-2, icon);
 			if(newRegion !is null)
-				newRegion.addStrategicIcon(-1, obj, icon);
+				newRegion.addStrategicIcon(-2, obj, icon);
 			@prevRegion = newRegion;
 
 			Node@ node = obj.getNode();
