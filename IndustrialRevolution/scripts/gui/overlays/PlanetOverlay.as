@@ -40,8 +40,8 @@ const uint WIDTH = 500;
 const uint S_HEIGHT = 360;
 const uint INCOME_HEIGHT = 140;
 const uint VAR_H = 40;
-const int MIN_TILE_SIZE = 18;
-const int MIN_TILE_SIZE_HD = 26;
+const int MIN_TILE_SIZE = 8;
+const int MIN_TILE_SIZE_HD = 16;
 Resources available;
 
 bool SHOW_PLANET_TREE = false;
@@ -463,16 +463,6 @@ class SurfaceDisplay : DisplayBox {
 				string value = formatMinuteRate(pl.laborIncome);
 				string ttip = format(locale::PLANET_LABOR_TIP, standardize(surface.pressures[TR_Labor], true), standardize(surface.saturates[TR_Labor], true));
 				addVariable(icons::Labor, value, ttip, color);
-			}
-
-			uint cargoCnt = pl.cargoTypes;
-			for(uint i = 0; i < cargoCnt; ++i) {
-				auto@ type = getCargoType(pl.cargoType[i]);
-				if(type is null)
-					continue;
-				string value = standardize(pl.getCargoStored(type.id), true);
-				string ttip = format("[font=Medium]$1[/font]\n$2", type.name, type.description);
-				addVariable(type.icon, value, ttip, type.color);
 			}
 		}
 
@@ -950,6 +940,7 @@ class ResourceDisplay : DisplayBox {
 	GuiText@ level;
 
 	GuiSkinElement@ requireBox;
+	GuiSkinElement@ reqLabelBox;
 	GuiText@ reqLabel;
 	GuiText@ reqTimer;
 	GuiMarkupText@ popReq;
@@ -980,7 +971,7 @@ class ResourceDisplay : DisplayBox {
 		@pl = ov.obj;
 
 		//Level indicator
-		@levelBar = GuiSkinElement(this, Alignment(Left+1, Top+1, Left+192, Top+42), SS_PlainOverlay);
+		@levelBar = GuiSkinElement(this, Alignment(Left+2, Top+2, Left+192, Top+42), SS_PlainOverlay);
 		@level = GuiText(levelBar, Alignment(Left+8, Top+4, Right-8, Bottom-4));
 		level.font = FT_Medium;
 
@@ -988,8 +979,8 @@ class ResourceDisplay : DisplayBox {
 		statusPos = 513;
 		if(screenSize.width < 1900)
 			statusPos = 400;
-		@statusBox = GuiSkinElement(this, Alignment(Left+statusPos, Top+1, Right-44, Top+42), SS_PlainOverlay);
-		@requireBox = GuiSkinElement(this, Alignment(Left+200, Top+1, Left+statusPos-10, Top+42), SS_PlainOverlay);
+		@statusBox = GuiSkinElement(this, Alignment(Left+statusPos, Top+2, Right-44, Top+42), SS_PlainOverlay);
+		@requireBox = GuiSkinElement(this, Alignment(Left+200, Top+2, Left+statusPos-10, Top+42), SS_PlainOverlay);
 		setMarkupTooltip(requireBox, locale::PLANET_REQUIREMENTS_TIP, width=400);
 		@reqLabel = GuiText(requireBox, Alignment(Left-4, Top-6, Left+96, Top+6), locale::REQUIRED_RESOURCES);
 		reqLabel.noClip = true;
@@ -1026,7 +1017,7 @@ class ResourceDisplay : DisplayBox {
 		@resourcePressure = GuiMarkupText(resourceBox, Alignment(Right-85, Top+3, Right-6, Bottom-3));
 
 		//Display toggle button
-		@toggleButton = GuiButton(this, Alignment(Right-40, Top, Right, Top+43));
+		@toggleButton = GuiButton(this, Alignment(Right-43, Top, Width=42, Height=43 ));
 		toggleButton.toggleButton = true;
 		toggleButton.color = Color(0xaaaaaaff);
 		toggleButton.setIcon(Sprite(material::TabPlanets, Color(0xffffff80)));
@@ -1085,7 +1076,7 @@ class ResourceDisplay : DisplayBox {
 				for(uint i = 0; i < cnt; ++i) {
 					auto@ icon = statusIcons[i];
 					if(icon is null) {
-						@icon = GuiStatusBox(statusBox, recti_area(2+40*i, 2, 38, 38));
+						@icon = GuiStatusBox(statusBox, recti_area(2+40*i, 1, 38, 38));
 						icon.noClip = true;
 						@statusIcons[i] = icon;
 					}
@@ -1246,7 +1237,7 @@ class ResourceDisplay : DisplayBox {
 
 					popReq.visible = reqDisplay.length == 0 && owner.HasPopulation != 0;
 					if(popReq.visible)
-						popReq.text = format(locale::POP_REQ, standardize(lvl.requiredPop, true));
+						popReq.text = format(locale::POP_REQ, standardize(lvl.requiredPop, true), toString(lv + 1));
 
 					reqLabel.text = format(locale::REQ_FOR_LEVEL, toString(lv + 1));
 					reqLabel.tooltip = format(locale::REQ_FOR_LEVEL, toString(lv + 1));
@@ -1267,9 +1258,9 @@ class ResourceDisplay : DisplayBox {
 
 					popReq.visible = reqDisplay.length == 0 && owner.HasPopulation != 0;
 					if(popReq.visible)
-						popReq.text = format(locale::POP_REQ, standardize(lvl.requiredPop, true));
+						popReq.text = format(locale::POP_REQ, standardize(lvl.requiredPop, true), toString(lv + 1));
 
-					reqLabel.text = format(locale::REQUIRED_RESOURCES, toString(lv+1));
+					reqLabel.text = format(locale::REQ_FOR_LEVEL, toString(lv + 1));
 					reqLabel.tooltip = format(locale::REQ_FOR_LEVEL, toString(lv + 1));
 					modID = newMod;
 				}
