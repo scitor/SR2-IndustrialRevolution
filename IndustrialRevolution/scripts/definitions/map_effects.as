@@ -87,7 +87,7 @@ class MakeStar : MapHook {
 
 		//Create light
 		LightDesc lightDesc;
-		lightDesc.att_quadratic = 1.f/(2000.f*2000.f);
+		lightDesc.att_quadratic = 1.f/(20000.f*20000.f);
 		lightDesc.position = vec3f(star.position);
 		lightDesc.diffuse = node.color * 1.0f;
 		lightDesc.specular = lightDesc.diffuse;
@@ -420,7 +420,6 @@ class MakePlanet : MapHook {
 
 		//Setup orbit
 		planet.orbitAround(system.position, offset.length);
-		planet.orbitDuration(86400.0); // 24h
 		planet.orbitSpin(randomd(35.0, 90.0));
 
 		//Create the planet surface;
@@ -735,7 +734,6 @@ class NameSystemByType : MapHook {
 #section server
 	void trigger(SystemData@ data, SystemDesc@ system, Object@& current) const override {
 		string newName;
-		print("old system name " + system.name);
 		if(type.str == "Blackhole")
 			newName = getRandomBlackholeName();
 		else if(type.str == "RedGiant")
@@ -743,7 +741,6 @@ class NameSystemByType : MapHook {
 		else if(type.str == "BrightGiant")
 			newName = getRandomBrightGiantName();
 
-		print("new system name "+newName);
 		system.object.name = newName;
 		system.name = newName;
 	}

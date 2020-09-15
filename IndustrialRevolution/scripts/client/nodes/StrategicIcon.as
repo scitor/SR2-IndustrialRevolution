@@ -106,8 +106,8 @@ class StrategicIcon {
 	}
 };
 
-const double OUTSIDE_DISTANCE = 14000.0;
-const double OUTSIDE_SIZE_MAX = 34000.0;
+const double OUTSIDE_DISTANCE = 6000.0;
+const double OUTSIDE_SIZE_MAX = 40000.0;
 const double ANIMATE_TIME = 0.25;
 
 const double FADE_DIST_MIN = 100;

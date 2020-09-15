@@ -27,7 +27,7 @@ tidy class StarScript {
 		if(star.owner is null)
 			@star.owner = defaultEmpire;
 
-		lightDesc.att_quadratic = 1.f/(2000.f*2000.f);
+		lightDesc.att_quadratic = 1.f/(20000.f*20000.f);
 		
 		double temp = star.temperature;
 		Node@ node;

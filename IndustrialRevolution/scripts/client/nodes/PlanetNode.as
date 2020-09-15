@@ -213,6 +213,12 @@ final class PlanetNodeScript {
 		
 		undoTransform();
 
+		if(node.sortDistance < 800.0 * node.abs_scale) {
+			//Draw the orbit plane
+			shader::CIRCLE_MIN = 0.6f;
+			shader::CIRCLE_MAX = 1.f;
+			renderPlane(material::OrbitCircle, node.abs_position, obj.OrbitSize, Color(0xffffff05));
+		}
 		if(moons !is null && node.sortDistance < 800.0 * node.abs_scale) {
 			for(uint i = 0, cnt = moons.length; i < cnt; ++i) {
 				auto@ dat = moons[i];
@@ -224,7 +230,7 @@ final class PlanetNodeScript {
 				st >>= 8;
 				double distance = double(st % 256) / 255.0 * 25.0 + 2.0;
 				st >>= 8;
-				vec3d offset = quaterniond_fromAxisAngle(vec3d_up(), angle) * vec3d_front(distance * node.abs_scale);
+				vec3d offset = quaterniond_fromAxisAngle(vec3d_up(), angle) * vec3d_front(obj.OrbitSize + distance * node.abs_scale);
 
 				applyTransform(node.abs_position + offset, vec3d(dat.size), quaterniond_fromAxisAngle(vec3d_up(), rot));
 				material::ProceduralMoon.switchTo();

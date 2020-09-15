@@ -5,7 +5,7 @@ import nodes.StrategicIcon;
 import planet_levels;
 
 const double APPROACH_EPSILON = 0.002;
-const double OUTSIDE_DISTANCE = 12000.0;
+const double OUTSIDE_DISTANCE = 6000.0;
 const double OUTSIDE_SIZE_MAX = 25000.0;
 const double ANIMATE_TIME = 0.25;
 const double GRAVITY_DISC_MAX_DIST = 5000.0;
@@ -281,8 +281,7 @@ final class PlanetIconNodeScript : StrategicIcon {
 			double orbitSize = pl.OrbitSize;
 			shader::CIRCLE_MIN = 0.6f;
 			shader::CIRCLE_MAX = 1.f;
-			Color orbitColor(0xffffff05);
-			
+
 			double orbitCircleFadeOut = FADE_DIST_MIN;
 
 			double a = 0.025;
@@ -292,17 +291,8 @@ final class PlanetIconNodeScript : StrategicIcon {
 				a *= (dist - 50.0) / 100.0;
 			else if(dist > orbitCircleFadeOut)
 				a *= 1.0 - (dist - orbitCircleFadeOut) / (orbitCircleFadeIn - orbitCircleFadeOut);
-			
-			if(a <= 0.0)
-				orbitColor.a = 0;
-			else if(a >= 1.0)
-				orbitColor.a = 255;
-			else
-				orbitColor.a = uint8(a * 255.0);
-			
+
 			vec3d center = node.abs_position;
-			if(orbitColor.a > 0)
-				renderPlane(material::OrbitCircle, center, orbitSize, orbitColor);
 
 			float prevA = shader::CAPTURE_COLOR.w;
 			Color flagColor = color;
