@@ -105,11 +105,15 @@ tidy class ResourceManager : Component_ResourceManager, Savable {
 			msg >> welfareDefense;
 		msg >> storedWelfare;
 
-		for(uint i = 0; i < MoT_COUNT-1; ++i)
-			msg >> moneyTypes[i];
-		if(msg >= SV_0070)
-			msg >> moneyTypes[MoT_Vassals];
-
+		if(msg >= SV_0164_IR) {
+			for(uint i = 0; i < MoT_COUNT; ++i)
+				msg >> moneyTypes[i];
+		} else {
+			for(uint i = 0; i < MoT_COUNT-1; ++i)
+				msg >> moneyTypes[i];
+			if(msg >= SV_0070)
+				msg >> moneyTypes[MoT_Vassals];
+		}
 		if(msg >= SV_0067) {
 			uint cnt = 0;
 			msg >> cnt;

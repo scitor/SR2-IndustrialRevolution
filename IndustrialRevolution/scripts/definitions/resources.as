@@ -76,6 +76,9 @@ enum MoneyType {
 	//Update save version when adding
 	// See: components.ResourceManager
 
+	Mot_MothershipPopulation, // changed to labor, but just in case
+	MoT_Evangelized,
+
 	MoT_COUNT
 };
 
