@@ -1,6 +1,7 @@
 import regions.regions;
 
 tidy class FreighterScript {
+	string targetName;
 	FreighterScript() {
 	}
 
@@ -39,7 +40,7 @@ tidy class FreighterScript {
 		regionOwnerChange(obj, prevOwner);
 		return false;
 	}
-	
+
 	double tick(Freighter& ship, double time) {
 		updateRegion(ship);
 		ship.moverTick(time);
@@ -47,11 +48,13 @@ tidy class FreighterScript {
 	}
 
 	void syncInitial(Freighter& ship, Message& msg) {
+		msg >> ship.targetName;
 		msg >> ship.skin;
 		ship.readMover(msg);
 	}
 
 	void syncDetailed(Freighter& ship, Message& msg, double tDiff) {
+		msg >> ship.targetName;
 		ship.readMover(msg);
 	}
 

@@ -4,6 +4,8 @@ import saving;
 
 tidy class ColonyShipScript {
 	int moveId;
+	string targetName;
+	double origRadius;
 	bool leavingRegion = false;
 
 	ColonyShipScript() {
@@ -22,6 +24,8 @@ tidy class ColonyShipScript {
 
 		msg >> moveId;
 
+		if(msg >= SV_0164_IR)
+			msg >> obj.targetName;
 	}
 
 	void makeMesh(ColonyShip& obj) {
@@ -47,6 +51,7 @@ tidy class ColonyShipScript {
 		@shipMesh.iconSheet = spritesheet::HullIcons;
 		shipMesh.iconIndex = 0;
 
+		origRadius = obj.radius;
 		bindMesh(obj, shipMesh);
 	}
 
@@ -63,6 +68,7 @@ tidy class ColonyShipScript {
 		msg << obj.CarriedPopulation;
 
 		msg << moveId;
+		msg << obj.targetName;
 	}
 
 	void init(ColonyShip& ship) {
@@ -102,8 +108,12 @@ tidy class ColonyShipScript {
 		Object@ target = ship.Target;
 		if(target is null)
 			return 0.2;
+
+		ship.targetName = target.name;
 		ship.moverTick(time);
 		bool regionUpdate = updateRegion(ship);
+		ship.radius = origRadius * ((ship.region is null) ? 10 : 1);
+		ship.getNode().scale = ((ship.getNode().scale * 9) + ship.radius) / 10.0;
 
 		if(ship.isMoving && !regionUpdate && ship.region !is target.region)
 			return 0.2;
@@ -136,7 +146,7 @@ tidy class ColonyShipScript {
 		}
 		if(leavingRegion) { // leaving
 			vec3d enterPos = destRegion.position;
-			enterPos += (ship.position - destRegion.position).normalized(destRegion.radius * 0.85);
+			enterPos += (ship.position - destRegion.position).normalized(destRegion.radius * 0.5);
 			enterPos.y = destRegion.position.y;
 			if(ship.moveTo(enterPos, moveId, enterOrbit=false) || curRegion is destRegion) {
 				moveId = -1;
@@ -144,7 +154,7 @@ tidy class ColonyShipScript {
 			}
 		}
 
-	if(target.isPlanet && ship.owner !is null && ship.owner.major && !target.isEmpireColonizing(ship.owner)) {
+		if(target.isPlanet && ship.owner !is null && ship.owner.major && !target.isEmpireColonizing(ship.owner)) {
 			if(ship.Origin !is null && ship.Origin.hasSurfaceComponent && ship.position.distanceToSQ(ship.Origin.position) < pow(3000.0, 2))
 				ship.destroy();
 		}
@@ -158,10 +168,12 @@ tidy class ColonyShipScript {
 	}
 
 	void syncInitial(const ColonyShip& ship, Message& msg) {
+		msg << ship.targetName;
 		ship.writeMover(msg);
 	}
 
 	void syncDetailed(const ColonyShip& ship, Message& msg) {
+		msg << ship.targetName;
 		ship.writeMover(msg);
 	}
 

@@ -10,6 +10,7 @@ tidy class FreighterScript {
 	int moveId = -1;
 	double idleTimer = 180.0;
 	bool leavingRegion = false;
+	string targetName;
 
 	FreighterScript() {
 	}
@@ -55,6 +56,8 @@ tidy class FreighterScript {
 		if(msg >= SV_0145)
 			msg >> obj.skin;
 
+		if(msg >= SV_0164_IR)
+			msg >> obj.targetName;
 		//Create the graphics
 		makeMesh(obj);
 	}
@@ -73,6 +76,7 @@ tidy class FreighterScript {
 		msg << obj.MinLevel;
 		msg << obj.VisitHostile;
 		msg << obj.skin;
+		msg << obj.targetName;
 	}
 
 	void init(Freighter& ship) {
@@ -99,6 +103,7 @@ tidy class FreighterScript {
 
 		if(ship.isMoving || !checkTarget(ship, time))
 			return 0.2;
+		ship.targetName = target.name;
 
 		// do pathing
 		Region@ curRegion = ship.region;
@@ -174,11 +179,13 @@ tidy class FreighterScript {
 	}
 
 	void syncInitial(const Freighter& ship, Message& msg) {
+		msg << ship.targetName;
 		msg << ship.skin;
 		ship.writeMover(msg);
 	}
 
 	void syncDetailed(const Freighter& ship, Message& msg) {
+		msg << ship.targetName;
 		ship.writeMover(msg);
 	}
 

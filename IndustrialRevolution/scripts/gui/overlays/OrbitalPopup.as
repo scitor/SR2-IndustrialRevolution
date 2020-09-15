@@ -26,6 +26,7 @@ class OrbitalPopup : Popup {
 	GuiProgressbar@ strength;
 
 	GuiCargoDisplay@ cargo;
+	GuiText@ speedometer;
 
 	GuiSprite@ defIcon;
 
@@ -37,22 +38,27 @@ class OrbitalPopup : Popup {
 		super(parent);
 		size = vec2i(190, 155);
 
-		@name = GuiText(this, Alignment(Left+4, Top+2, Right-4, Top+24));
+		@name = GuiText(this, Alignment(Left+4, Top+2, Right-4, Height=22));
 		name.horizAlign = 0.5;
 
-		@health = GuiProgressbar(this, Alignment(Left+3, Bottom-56, Right-4, Bottom-30));
+		@health = GuiProgressbar(this, Alignment(Left+3, Bottom-55, Right-4, Height=26));
 		health.tooltip = locale::HEALTH;
-
 		GuiSprite healthIcon(health, Alignment(Left+2, Top+1, Width=24, Height=24), icons::Health);
 
-		@strength = GuiProgressbar(this, Alignment(Left+3, Bottom-30, Right-4, Bottom-4));
+		@strength = GuiProgressbar(this, Alignment(Left+3, Bottom-30, Right-4, Height=26));
 		strength.tooltip = locale::FLEET_STRENGTH;
 
 		GuiSprite strIcon(strength, Alignment(Left+2, Top+1, Width=24, Height=24), icons::Strength);
 
-		@objView = Gui3DObject(this, recti(34, 24, 156, 98));
+		@objView = Gui3DObject(this, Alignment(Left+4, Top+26, Right-4, Height=80));
 
-		@cargo = GuiCargoDisplay(objView, Alignment(Left, Top, Right, Top+25));
+		@speedometer = GuiText(objView, Alignment(Left+6, Bottom-24, Right-2, Bottom));
+		speedometer.font = FT_Detail;
+		speedometer.stroke = colors::Black;
+		speedometer.horizAlign = 1.0;
+		speedometer.visible = false;
+
+		@cargo = GuiCargoDisplay(objView, Alignment(Left, Top, Right, Height=25));
 
 		@defIcon = GuiSprite(this, Alignment(Right-44, Top+25, Width=40, Height=40));
 		defIcon.desc = icons::Defense;
@@ -219,6 +225,13 @@ class OrbitalPopup : Popup {
 		defIcon.visible = playerEmpire.isDefending(obj);
 
 		updateStrengthBar();
+
+		if(obj.velocity.length > 0) {
+			speedometer.visible = true;
+			speedometer.color = obj.owner.color;
+			speedometer.text = formatSpeed(obj.velocity.length);
+		} else
+			speedometer.visible = false;
 
 		//Find master obj
 		Object@ fromMaster = obj;

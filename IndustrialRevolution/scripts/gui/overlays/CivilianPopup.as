@@ -24,6 +24,7 @@ class CivilianPopup : Popup {
 	GuiText@ cargoLabel;
 	GuiMarkupText@ worth;
 	GuiMarkupText@ cargoText;
+	GuiText@ speedometer;
 
 	GuiProgressbar@ health;
 
@@ -40,8 +41,12 @@ class CivilianPopup : Popup {
 		@objView = Gui3DObject(this, Alignment(Left+4, Top+25, Right-4, Top+110));
 		@objStatusIcon = GuiSprite(objView, Alignment(Left+2, Top+44, Width=24, Height=24), spritesheet::ActionBarIcons, 4);
 		objStatusIcon.visible = false;
-
-		@health = GuiProgressbar(this, Alignment(Left+3, Top+94, Right-4, Top+121));
+		@speedometer = GuiText(objView, Alignment(Left+6, Bottom-27, Right-2, Height=12));
+		speedometer.font = FT_Detail;
+		speedometer.stroke = colors::Black;
+		speedometer.visible = false;
+		speedometer.horizAlign = 1.0;
+		@health = GuiProgressbar(this, Alignment(Left+3, Top+95, Right-4, Top+122));
 		health.tooltip = locale::HEALTH;
 		GuiSprite healthIcon(health, Alignment(Left+2, Top+1, Width=24, Height=24), icons::Health);
 
@@ -152,6 +157,12 @@ class CivilianPopup : Popup {
 		uint type = obj.getCargoType();
 		int value = obj.getCargoWorth();
 		objDesc.color = obj.owner.color;
+		if(obj.velocity.length > 0) {
+			speedometer.visible = true;
+			speedometer.color = obj.owner.color;
+			speedometer.text = formatSpeed(obj.velocity.length);
+		} else
+			speedometer.visible = false;
 
 		if(type == CT_Goods) {
 			resources.visible = false;

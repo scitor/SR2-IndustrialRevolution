@@ -6,6 +6,7 @@ import elements.Gui3DObject;
 import elements.GuiSkinElement;
 import elements.GuiStatusBox;
 import elements.GuiResources;
+import elements.GuiCargoDisplay;
 from overlays.ContextMenu import openContextMenu;
 import resources;
 import cargo;
@@ -18,24 +19,30 @@ class AsteroidPopup : Popup {
 	double lastUpdate = -INFINITY;
 
 	GuiSkinElement@ band;
-	GuiSprite@ cargoIcon;
-	GuiText@ cargoName;
-	GuiText@ cargoValue;
 	GuiResourceGrid@ resources;
+	GuiCargoDisplay@ cargo;
 
 	GuiSkinElement@ statusBox;
 	array<GuiStatusBox@> statusIcons;
+	GuiText@ speedometer;
 
 	AsteroidPopup(BaseGuiElement@ parent) {
 		super(parent);
-		size = vec2i(150, 135);
+		size = vec2i(160, 135);
 
 		@name = GuiText(this, Alignment(Left+4, Top+2, Right-4, Top+24));
 		name.horizAlign = 0.5;
 
-		@objView = Gui3DObject(this, Alignment(Left+4, Top+25, Right-4, Top+95));
+		@objView = Gui3DObject(this, Alignment(Left+4, Top+25, Right-4, Top+100));
+		@cargo = GuiCargoDisplay(objView, Alignment(Left+4, Top+2, Right-4, Height=26));
 
-		@band = GuiSkinElement(this, Alignment(Left+3, Bottom-35, Right-4, Bottom-2), SS_SubTitle);
+		@speedometer = GuiText(objView, Alignment(Left+6, Bottom-10, Right-2, Bottom));
+		speedometer.font = FT_Detail;
+		speedometer.stroke = colors::Black;
+		speedometer.horizAlign = 1.0;
+		speedometer.visible = false;
+
+		@band = GuiSkinElement(this, Alignment(Left+3, Bottom-35, Right-4, Height=33), SS_SubTitle);
 		band.color = Color(0xaaaaaaff);
 
 		@resources = GuiResourceGrid(band, Alignment(Left+4, Top+4, Right-3, Bottom-4));
@@ -44,12 +51,6 @@ class AsteroidPopup : Popup {
 		@statusBox = GuiSkinElement(this, Alignment(Right-2, Top, Right+34, Bottom), SS_PlainBox);
 		statusBox.noClip = true;
 		statusBox.visible = false;
-
-		@cargoIcon = GuiSprite(band, Alignment(Left+2, Top+2, Left+31, Bottom-2));
-		@cargoName = GuiText(band, Alignment(Left+38, Top+4, Right-4, Bottom-4));
-		cargoName.font = FT_Bold;
-		@cargoValue = GuiText(band, Alignment(Left+38, Top+4, Right-4, Bottom-4));
-		cargoValue.horizAlign = 1.0;
 
 		updateAbsolutePosition();
 	}
@@ -61,6 +62,7 @@ class AsteroidPopup : Popup {
 	void set(Object@ Obj) {
 		@obj = cast<Asteroid>(Obj);
 		@objView.object = Obj;
+		//objView.internalRotation = quaterniond_fromAxisAngle(random3d(1.0), randomd(-pi,pi));
 		lastUpdate = -INFINITY;
 	}
 
@@ -131,33 +133,31 @@ class AsteroidPopup : Popup {
 		else
 			name.font = FT_Normal;
 
-		if(obj.cargoTypes != 0) {
-			auto@ cargo = getCargoType(obj.cargoType[0]);
-			band.visible = cargo !is null;
-			if(cargo !is null) {
-				cargoIcon.desc = cargo.icon;
-				cargoName.text = cargo.name+":";
-				cargoValue.text = standardize(obj.getCargoStored(cargo.id), true);
-			}
-			cargoIcon.visible = true;
-			cargoName.visible = true;
-			cargoValue.visible = true;
-			resources.visible = false;
-		}
-		else if(obj.nativeResourceCount != 0) {
-			cargoIcon.visible = false;
-			cargoName.visible = false;
-			cargoValue.visible = false;
+		if(obj.velocity.length > 0) {
+			speedometer.visible = true;
+			speedometer.color = obj.owner.color;
+			speedometer.text = formatSpeed(obj.velocity.length);
+		} else
+			speedometer.visible = false;
+
+		cargo.update(obj);
+		if(obj.cargoTypes != 0)
+			drawRectangle(cargo.absolutePosition, Color(0x00000040));
+		if(obj.nativeResourceCount != 0) {
 			resources.visible = true;
 
 			resources.resources.syncFrom(obj.getAllResources());
 			resources.setSingleMode();
 
 			band.visible = resources.length != 0;
-		}
-		else {
+		} else
 			band.visible = false;
-		}
+
+		if(band.visible)
+			size = vec2i(160, 135);
+		else
+			size = vec2i(160, 105);
+
 		//Update statuses
 		{
 			array<Status> statuses;

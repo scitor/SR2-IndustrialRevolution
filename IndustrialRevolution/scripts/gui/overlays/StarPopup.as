@@ -7,6 +7,8 @@ import elements.GuiProgressbar;
 import elements.MarkupTooltip;
 import icons;
 from overlays.ContextMenu import openContextMenu;
+import util.formatting;
+const uint coronaPadding = 20;
 
 class StarPopup : Popup {
 	GuiText@ name;
@@ -15,27 +17,39 @@ class StarPopup : Popup {
 	double lastUpdate = -INFINITY;
 
 	GuiSprite@ defIcon;
+	GuiText@ speedometer;
+	GuiText@ objDesc;
 
 	GuiProgressbar@ health;
 
 	StarPopup(BaseGuiElement@ parent) {
 		super(parent);
-		size = vec2i(150, 110);
+		size = vec2i(150 + 2*coronaPadding, 160 + 2*coronaPadding);
 
-		@name = GuiText(this, Alignment(Left+4, Top+2, Right-4, Top+24));
+		@name = GuiText(this, Alignment(Left+4, Top+2, Right-4, Top+24).padded(coronaPadding,coronaPadding));
 		name.horizAlign = 0.5;
 
-		@objView = Gui3DObject(this, Alignment(Left+4, Top+25, Right-4, Bottom-4));
+		@objView = Gui3DObject(this, Alignment(Left+4, Top+24, Right-4, Bottom-6));
 
-		@defIcon = GuiSprite(this, Alignment(Left+4, Top+25, Width=40, Height=40));
+		@objDesc = GuiText(objView, Alignment(Left+1+coronaPadding, Bottom-12-coronaPadding, Right-4, Height=12));
+		objDesc.stroke = colors::Black;
+		objDesc.font = FT_Detail;
+
+		@speedometer = GuiText(objView, Alignment(Left+3, Bottom-12-coronaPadding, Right-2-coronaPadding, Height=12));
+		speedometer.font = FT_Detail;
+		speedometer.stroke = colors::Black;
+		speedometer.visible = false;
+		speedometer.horizAlign = 1.0;
+
+		@defIcon = GuiSprite(objView, Alignment(Left+20, Top+20, Width=40, Height=40));
 		defIcon.desc = icons::Defense;
 		setMarkupTooltip(defIcon, locale::TT_IS_DEFENDING);
 		defIcon.visible = false;
 
-		@health = GuiProgressbar(this, Alignment(Left+8, Top+28, Right-8, Top+50));
+		@health = GuiProgressbar(this, Alignment(Left+3+coronaPadding, Bottom-40-coronaPadding, Right-4-coronaPadding, Height=22));
 		health.visible = false;
 
-		auto@ healthIcon = GuiSprite(health, Alignment(Left-8, Top-9, Left+24, Bottom-8), icons::Health);
+		auto@ healthIcon = GuiSprite(health, Alignment(Left+4, Top, Width=22, Height=22), icons::Health);
 		healthIcon.noClip = true;
 
 		updateAbsolutePosition();
@@ -72,7 +86,7 @@ class StarPopup : Popup {
 				col = other.color;
 		}
 
-		skin.draw(style, flags, bgPos, col);
+		skin.draw(style, flags, bgPos.padded(coronaPadding,coronaPadding), col);
 		if(obj.owner !is null && obj.owner.flag !is null) {
 			obj.owner.flag.draw(
 				objView.absolutePosition.aspectAligned(1.0, horizAlign=1.0, vertAlign=1.0),
@@ -125,6 +139,26 @@ class StarPopup : Popup {
 		else
 			name.font = FT_Normal;
 
+		objDesc.text = format("$1-$2", starClass(obj.temperature, obj.radius), locale::SYSTEM_STAR);
+		if(obj.temperature < 1.0)
+			objDesc.text = locale::SYSTEM_BLACKHOLE;
+		else if(obj.radius > 500) {
+			if(obj.temperature < 2000.0)
+				objDesc.text = locale::SYSTEM_STAR_RED_GIANT;
+			else
+				objDesc.text = locale::SYSTEM_STAR_BRIGHT_GIANT;
+		} else if(obj.radius < 50) {
+			if(obj.temperature < 2000.0)
+				objDesc.text = locale::SYSTEM_STAR_RED_DWARF;
+			else
+				objDesc.text = locale::SYSTEM_NEUTRON_STAR;
+		}
+		if(obj.velocity.length > 0) {
+			speedometer.visible = true;
+			speedometer.text = formatSpeed(obj.velocity.length);
+		} else
+			speedometer.visible = false;
+
 		//Update health
 		if(obj.Health < obj.MaxHealth) {
 			health.progress = obj.Health / obj.MaxHealth;
@@ -138,5 +172,10 @@ class StarPopup : Popup {
 
 		Popup::update();
 		Popup::updatePosition(obj);
+	}
+
+	string starClass(double temperature, double radius) {
+		const string starClasses = "MKGFABO";
+		return starClasses.substr(max(0, min(starClasses.length-1, int(((radius - 50) / 250) + (temperature/2000)))), 1);
 	}
 };

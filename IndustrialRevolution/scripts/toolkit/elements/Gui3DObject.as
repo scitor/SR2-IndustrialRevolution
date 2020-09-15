@@ -9,6 +9,7 @@ import civilians;
 #section gui
 from nodes.PlanetNode import getPlanetMaterial;
 #section all
+from oddities import OddityType;
 
 from planets.PlanetSurface import preparePlanetShader;
 from util.draw_model import drawLitModel;
@@ -172,6 +173,29 @@ class DrawStar : Draw3D {
 	}
 };
 
+class DrawSprite : Draw3D {
+	const SpriteSheet@ sheet;
+	uint index;
+	Object@ obj;
+
+	DrawSprite(const SpriteSheet@ sheet, uint index) {
+		@this.sheet = sheet;
+		this.index = index;
+	}
+
+	void preRender(Object@ obj) {
+		@this.obj = obj;
+	}
+
+	void draw(const recti &in pos, quaterniond rotation) {
+		recti square = pos.aspectAligned(1.0).padded(20);
+		Color col(0xffafffff);
+		if(obj.type == Odd_Wormhole)
+			col = Color(0x66f4ffff);
+		sheet.draw(index, square, col);
+	}
+};
+
 class Gui3DDisplay : BaseGuiElement {
 	Draw3D@ drawMode;
 	quaterniond rotation;
@@ -295,6 +319,9 @@ Draw3D@ makeDrawMode(Object@ obj) {
 				return DrawBlackhole(star);
 		}
 
+		case OT_Oddity: {
+			return DrawSprite(spritesheet::OrbitalIcons, 4);
+		}
 		case OT_Pickup: {
 			const PickupType@ type = getPickupType(cast<Pickup>(obj).PickupType);
 			return DrawModel(type.model, type.material);

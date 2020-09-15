@@ -132,6 +132,7 @@ invisible:
 visible:
 	synced double CarriedPopulation = 0
 	synced double Health = 50
+	string targetName
 }
 
 Orbital : objects.Orbital::OrbitalScript {
@@ -328,6 +329,7 @@ invisible:
 visible:
 	string skin
 	synced double Health = 50
+	string targetName
 }
 
 Artifact : objects.Artifact::ArtifactScript {

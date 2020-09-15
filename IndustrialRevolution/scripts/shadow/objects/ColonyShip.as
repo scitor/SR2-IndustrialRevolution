@@ -1,6 +1,8 @@
 import regions.regions;
 
 tidy class ColonyShipScript {
+	string targetName;
+	double origRadius;
 	ColonyShipScript() {
 	}
 
@@ -32,6 +34,7 @@ tidy class ColonyShipScript {
 		@shipMesh.iconSheet = spritesheet::HullIcons;
 		shipMesh.iconIndex = 0;
 
+		origRadius = obj.radius;
 		bindMesh(obj, shipMesh);
 	}
 
@@ -43,18 +46,22 @@ tidy class ColonyShipScript {
 		regionOwnerChange(obj, prevOwner);
 		return false;
 	}
-	
+
 	double tick(ColonyShip& ship, double time) {
 		updateRegion(ship);
 		ship.moverTick(time);
+		ship.radius = origRadius * ((ship.region is null) ? 10 : 1);
+		ship.getNode().scale = ((ship.getNode().scale * 9) + ship.radius) / 10.0;
 		return 0.2;
 	}
 
 	void syncInitial(ColonyShip& ship, Message& msg) {
+		msg >> ship.targetName;
 		ship.readMover(msg);
 	}
 
 	void syncDetailed(ColonyShip& ship, Message& msg, double tDiff) {
+		msg >> ship.targetName;
 		ship.readMover(msg);
 	}
 

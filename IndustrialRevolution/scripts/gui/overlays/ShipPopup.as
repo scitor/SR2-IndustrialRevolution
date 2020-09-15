@@ -32,6 +32,7 @@ class ShipPopup : Popup {
 	GuiBlueprint@ bpdisp;
 	GuiText@ name;
 	GuiText@ ownerName;
+	GuiText@ speedometer;
 
 	GuiSprite@ shieldIcon;
 	GuiProgressbar@ health;
@@ -56,7 +57,11 @@ class ShipPopup : Popup {
 		@bpdisp = GuiBlueprint(this, Alignment(Left+4, Top+50, Right-4, Bottom-80));
 		bpdisp.popHover = true;
 		bpdisp.popSize = vec2i(77, 40);
-
+		@speedometer = GuiText(bpdisp, Alignment(Left+6, Bottom-10, Right-2, Bottom));
+		speedometer.font = FT_Detail;
+		speedometer.stroke = colors::Black;
+		speedometer.horizAlign = 1.0;
+		speedometer.visible = false;
 		@cargo = GuiCargoDisplay(bpdisp, Alignment(Left, Top, Right, Top+25));
 
 		GuiSkinElement band(this, Alignment(Left+3, Bottom-80, Right-4, Bottom-50), SS_NULL);
@@ -73,13 +78,13 @@ class ShipPopup : Popup {
 		shield.frontColor = Color(0x429cffff);
 		shield.backColor = Color(0x59a8ff20);
 
-		GuiSprite healthIcon(band, Alignment(Left, Top, Width=30, Height=30), icons::Health);
+		GuiSprite healthIcon(band, Alignment(Left+2, Top, Width=28, Height=30), icons::Health);
 		healthIcon.noClip = true;
 
 		@shieldIcon = GuiSprite(band, Alignment(Right-23, Bottom-23, Width=30, Height=30), icons::Shield);
 		shieldIcon.visible = false;
 
-		GuiSkinElement strband(this, Alignment(Left+3, Bottom-50, Right-4, Bottom-30), SS_NULL);
+		GuiSkinElement strband(this, Alignment(Left+3, Bottom-51, Right-4, Bottom-30), SS_NULL);
 
 		@strength = GuiProgressbar(strband, Alignment(Left+0, Top, Right-0.5f, Bottom));
 		strength.tooltip = locale::FLEET_STRENGTH;
@@ -91,7 +96,7 @@ class ShipPopup : Popup {
 
 		GuiSprite strIcon(strband, Alignment(Left, Top, Left+24, Bottom), icons::Strength);
 
-		@supply = GuiProgressbar(strband, Alignment(Left+0.5f, Top, Right-1, Bottom));
+		@supply = GuiProgressbar(strband, Alignment(Left+0.5f, Top, Right, Bottom));
 		supply.tooltip = locale::SUPPLY;
 
 		GuiSprite supIcon(strband, Alignment(Right-24, Top, Right, Bottom), icons::Supply);
@@ -264,10 +269,16 @@ class ShipPopup : Popup {
 				owner.color * Color(0xffffff40));
 		}
 
-		skin.draw(SS_SubTitle, SF_Normal, recti_area(bgPos.topLeft + vec2i(2,2), vec2i(bgPos.width-5, 50-4)), col);
+		skin.draw(SS_SubTitle, SF_Normal, recti_area(bgPos.topLeft + vec2i(2,1), vec2i(bgPos.width-5, 50-4)), col);
 		drawFleetIcon(ship, recti_area(bgPos.topLeft+vec2i(-2, 2), vec2i(46,46)), showStrength=false);
 
 		bpdisp.draw();
+		if(ship.velocity.length > 0) {
+			speedometer.visible = true;
+			speedometer.color = ship.owner.color;
+			speedometer.text = formatSpeed(ship.velocity.length);
+		} else
+			speedometer.visible = false;
 
 		//Construction display
 		if(hasConstruction) {
