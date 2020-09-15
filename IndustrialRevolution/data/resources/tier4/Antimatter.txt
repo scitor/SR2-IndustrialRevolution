@@ -1,0 +1,20 @@
+Resource: Antimatter
+	Name: #ANTIMATTER
+	Description: #ANTIMATTER_DESC
+	Native Biome: Crystallic
+
+	Icon: ResourceIcons::17
+	Small Icon: ResourceIconsSmall::0
+
+	Level: 4
+	Artificial: True
+
+	Affinity: Energy
+
+	Pressure: 16 Energy
+
+	AddFleetCommand(+2048)
+	AddFleetEffectiveness(+3.0)
+
+	IfLevel(5, TriggerPeriodic(RemoveCargo(Antimatter, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(Antimatter, 11, 200), Interval = 10))

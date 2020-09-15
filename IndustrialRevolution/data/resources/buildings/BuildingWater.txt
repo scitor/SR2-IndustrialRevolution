@@ -1,6 +1,6 @@
 Resource: BuildingWater
-	Name: #WATER
-	Description: A Hydrogenerator provides water for the local population.
+	Name: #BUILDING_WATER
+	Description: #BUILDING_WATER_DESC
 	Native Biome: Oceanic
 	Class: WaterType
 

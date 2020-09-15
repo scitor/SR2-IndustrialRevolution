@@ -1,0 +1,22 @@
+Resource: MixedCrystal
+	Name: #MIXED_CRYSTAL
+	Description: #MIXED_CRYSTAL_DESC
+	Native Biome: Crystallic
+
+	Icon: ResourceIcons::94
+	Small Icon: ResourceIconsSmall::94
+
+	Terraform Cost: 500
+	Terraform Labor: 30
+
+	Level: 1
+	Rarity: Uncommon
+	Asteroid Frequency: 0.2
+	Asteroid Labor: 40
+
+	Affinity: Influence
+
+	Pressure: 3 Influence
+
+	IfLevel(2, TriggerPeriodic(RemoveCargo(MixedCrystal, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(MixedCrystal, 11, 200), Interval = 10))

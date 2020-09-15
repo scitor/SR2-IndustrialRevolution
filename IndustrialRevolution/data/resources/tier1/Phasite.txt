@@ -1,0 +1,22 @@
+Resource: Phasite
+	Name: #PHASITE
+	Description: #PHASITE_DESC
+	Native Biome: Ice
+
+	Icon: ResourceIcons::24
+	Small Icon: ResourceIconsSmall::24
+
+	Level: 1
+	Rarity: Uncommon
+	Asteroid Frequency: 0.1
+	Asteroid Labor: 40
+
+	Affinity: Research
+
+	Pressure: 2 Research
+
+	PopResearch(0.2) #version<132
+	PerPopulationAddResource(0.2, Research) #version>=132
+
+	IfLevel(2, TriggerPeriodic(RemoveCargo(Phasite, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(Phasite, 11, 200), Interval = 10))

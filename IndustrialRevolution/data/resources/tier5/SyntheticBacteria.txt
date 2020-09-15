@@ -1,13 +1,12 @@
-Resource: Electrolytes
-	Name: #ELECTROLYTES
-	Description: #ELECTROLYTES_DESC
+Resource: SyntheticBacteria
+	Name: #SYNTHETIC_BACTERIA
+	Description: #SYNTHETIC_BACTERIA_DESC
 	Native Biome: Crystallic
 
 	Icon: ResourceIcons::104
 	Small Icon: ResourceIconsSmall::104
 
 	Level: 5
-	Affinity: Energy
 	Artificial: True
 
 	//IfLevel(6, TriggerPeriodic(RemoveCargo(AdvancedComponents, 10), Interval = 10))

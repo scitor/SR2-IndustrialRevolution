@@ -1,0 +1,23 @@
+Resource: Silicon
+	Name: #R_SILICON
+	Description: #R_SILICON_DESC
+	Native Biome: Desert
+	DLC: Heralds
+
+	Small Icon: ResourceIconsSmall::76
+
+	Level: 1
+	Rarity: Uncommon
+	Asteroid Frequency: 0.1
+	Asteroid Labor: 40
+
+	Affinity: Research
+	Affinity: Money
+
+	Pressure: 1 Money
+	Pressure: 2 Research
+
+	ModPopulationGrowth(+0.3)
+
+	IfLevel(2, TriggerPeriodic(RemoveCargo(Silicon, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(Silicon, 11, 200), Interval = 10))

@@ -6,8 +6,8 @@ Resource: PekelmRedox
 	Icon: ResourceIcons::90
 	Small Icon: ResourceIconsSmall::90
 
-	Level: 4
+	Level: 2
 	Artificial: True
 
-	//IfLevel(5, TriggerPeriodic(RemoveCargo(ChemicalReagents, 10), Interval = 10))
-	//OnNative(TriggerPeriodic(AddCargoMax(ChemicalReagents, 11, 200), Interval = 10))
+	//IfLevel(3, TriggerPeriodic(RemoveCargo(PekelmRedox, 10), Interval = 10))
+	//OnNative(TriggerPeriodic(AddCargoMax(PekelmRedox, 11, 200), Interval = 10))

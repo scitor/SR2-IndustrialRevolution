@@ -1,0 +1,21 @@
+Resource: InfusedMolybdenum
+	Name: #INFUSED_MOLYBDENUM
+	Description: #INFUSED_MOLYBDENUM_DESC
+	Native Biome: Crystallic
+
+	Icon: ResourceIcons::97
+	Small Icon: ResourceIconsSmall::97
+
+	Level: 3
+	Rarity: Epic
+	Asteroid Frequency: 0.01
+	Asteroid Labor: 60
+
+	Affinity: Influence
+	Affinity: Money
+
+	Pressure: 4 Influence
+	Pressure: 4 Money
+
+	IfLevel(4, TriggerPeriodic(RemoveCargo(InfusedMolybdenum, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(InfusedMolybdenum, 11, 200), Interval = 10))

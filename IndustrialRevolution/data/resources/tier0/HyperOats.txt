@@ -1,0 +1,19 @@
+Resource: HyperOats
+	Name: #HYPER_OATS
+	Description: #HYPER_OATS_DESC
+	Native Biome: Forest
+	Class: Food
+
+	Icon: ResourceIconsSmall::52
+	Small Icon: ResourceIconsSmall::52
+
+	Level: 0
+	Rarity: Rare
+
+	AddDummyResource(HyperOats)
+
+	//OnTradeSpawn(AddCargo(HyperOats, -150))
+	//OnTradeDeliver(AddCargo(HyperOats, 150))
+
+	IfLevel(1, TriggerPeriodic(RemoveCargo(HyperOats, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(HyperOats, 11, 200), Interval = 10))

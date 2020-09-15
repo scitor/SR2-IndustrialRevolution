@@ -1,0 +1,24 @@
+Resource: Hypervolatiles
+	Name: #R_HYPERVOLATILES
+	Description: #R_HYPERVOLATILES_DESC
+	Native Biome: Crystallic
+	DLC: Heralds
+
+	Small Icon: ResourceIconsSmall::45
+
+	Level: 2
+	Rarity: Rare
+	Asteroid Frequency: 0.02
+	Asteroid Labor: 50
+
+	Affinity: Defense
+	Affinity: Money
+
+	Pressure: 3 Defense
+	Pressure: 3 Money
+
+	ModPressurePct(Defense, +0.40, +1)
+	ModPressurePct(Influence, -0.40, -1)
+
+	IfLevel(3, TriggerPeriodic(RemoveCargo(Hypervolatiles, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(Hypervolatiles, 11, 200), Interval = 10))

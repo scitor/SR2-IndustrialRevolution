@@ -1,0 +1,19 @@
+Resource: Medicines
+	Name: #MEDICINES
+	Description: #MEDICINES_DESC
+	Native Biome: Forest
+
+	Icon: ResourceIcons::15
+	Small Icon: ResourceIconsSmall::6
+
+	Level: 4
+	Artificial: True
+
+	Affinity: Money
+
+	Pressure: 16 Money
+
+	AddPressureCap(4)
+
+	IfLevel(5, TriggerPeriodic(RemoveCargo(Medicines, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(Medicines, 11, 200), Interval = 10))

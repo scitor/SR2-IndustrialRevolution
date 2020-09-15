@@ -1,0 +1,23 @@
+Resource: VolatileGas
+	Name: #VOLATILE_GAS
+	Description: #VOLATILE_GAS_DESC
+	Native Biome: Crystallic
+
+	Icon: ResourceIcons::88
+	Small Icon: ResourceIconsSmall::88
+
+	Level: 1
+	Rarity: Uncommon
+	Asteroid Frequency: 0.1
+	Asteroid Labor: 40
+
+	Affinity: Money
+	Affinity: Energy
+	Affinity: Research
+
+	Pressure: 1 Money
+	Pressure: 1 Energy
+	Pressure: 1 Research
+
+	IfLevel(2, TriggerPeriodic(RemoveCargo(VolatileGas, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(VolatileGas, 11, 200), Interval = 10))

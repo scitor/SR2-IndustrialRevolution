@@ -1,0 +1,20 @@
+Resource: Plutonium
+	Name: #PLUTONIUM
+	Description: #PLUTONIUM_DESC
+	Native Biome: Forest
+
+	Icon: ResourceIcons::34
+	Small Icon: ResourceIconsSmall::34
+
+	Level: 3
+	Rarity: Epic
+	Asteroid Frequency: 0.01
+	Asteroid Labor: 60
+
+	Affinity: Energy + Defense
+
+	Pressure: 4 Energy
+	Pressure: 4 Defense
+
+	IfLevel(4, TriggerPeriodic(RemoveCargo(Plutonium, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(Plutonium, 11, 200), Interval = 10))

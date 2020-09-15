@@ -1,0 +1,19 @@
+Resource: Electronics
+	Name: #ELECTRONICS
+	Description: #ELECTRONICS_DESC
+	Native Biome: Desert
+
+	Icon: ResourceIcons::14
+	Small Icon: ResourceIconsSmall::5
+
+	Level: 4
+	Artificial: True
+
+	Affinity: Research
+	Affinity: Energy
+
+	Pressure: 8 Research
+	Pressure: 8 Energy
+
+	IfLevel(5, TriggerPeriodic(RemoveCargo(Electronics, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(Electronics, 11, 200), Interval = 10))

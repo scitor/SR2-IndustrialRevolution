@@ -1,0 +1,25 @@
+Resource: Marble
+	Name: #R_MARBLE
+	Description: #R_MARBLE_DESC
+	Native Biome: Mountains
+	DLC: Heralds
+
+	Small Icon: ResourceIconsSmall::77
+
+	Level: 1
+	Rarity: Uncommon
+	Asteroid Frequency: 0.1
+	Asteroid Labor: 40
+
+	Affinity: Defense
+	Affinity: Energy
+	Affinity: Influence
+
+	Pressure: 1 Defense
+	Pressure: 1 Energy
+	Pressure: 1 Influence
+
+	ModBuildingConstructRate(+0.5)
+
+	IfLevel(2, TriggerPeriodic(RemoveCargo(Marble, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(Marble, 11, 200), Interval = 10))

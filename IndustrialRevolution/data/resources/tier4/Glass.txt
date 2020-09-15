@@ -1,0 +1,20 @@
+Resource: Glass
+	Name: #GLASS
+	Description: #GLASS_DESC
+	Native Biome: Desert
+
+	Icon: ResourceIcons::27
+	Small Icon: ResourceIconsSmall::27
+
+	Level: 4
+	Artificial: True
+
+	Affinity: Money
+	Affinity: Energy
+
+	Pressure: 8 Money
+
+	AddResource(Energy, 4)
+
+	IfLevel(3, TriggerPeriodic(RemoveCargo(Glass, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(Glass, 11, 200), Interval = 10))

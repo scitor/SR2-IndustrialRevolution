@@ -1,0 +1,24 @@
+Resource: Molybdenum
+	Name: #MOLYBDENUM
+	Description: #MOLYBDENUM_DESC
+	Native Biome: Crystallic
+
+	Icon: ResourceIcons::96
+	Small Icon: ResourceIconsSmall::96
+
+	Level: 2
+	Rarity: Rare
+	Asteroid Frequency: 0.02
+	Asteroid Labor: 50
+
+	Affinity: Influence
+	Affinity: Money
+
+	Pressure: 3 Influence
+	Pressure: 3 Money
+
+	ModPressurePct(Influence, +0.40, +1)
+	ModPressurePct(Defense, -0.40, -1)
+
+	IfLevel(3, TriggerPeriodic(RemoveCargo(Molybdenum, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(Molybdenum, 11, 200), Interval = 10))

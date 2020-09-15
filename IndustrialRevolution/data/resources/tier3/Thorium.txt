@@ -1,0 +1,19 @@
+Resource: Thorium
+	Name: #THORIUM
+	Description: #THORIUM_DESC
+	Native Biome: Forest
+
+	Icon: ResourceIcons::35
+	Small Icon: ResourceIconsSmall::35
+
+	Level: 3
+	Rarity: Epic
+	Asteroid Frequency: 0.01
+	Asteroid Labor: 60
+
+	Affinity: Energy
+
+	Pressure: 7 Energy
+
+	IfLevel(4, TriggerPeriodic(RemoveCargo(Thorium, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(Thorium, 11, 200), Interval = 10))

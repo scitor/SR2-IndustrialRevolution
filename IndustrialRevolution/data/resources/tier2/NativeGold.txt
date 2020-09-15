@@ -1,0 +1,22 @@
+Resource: NativeGold
+	Name: #NATIVE_GOLD
+	Description: #NATIVE_GOLD_DESC
+	Native Biome: Mountains
+
+	Icon: ResourceIcons::30
+	Small Icon: ResourceIconsSmall::30
+
+	Level: 2
+	Rarity: Rare
+	Asteroid Frequency: 0.02
+	Asteroid Labor: 50
+
+	Affinity: Money
+	Affinity: Influence
+
+	Pressure: 3 Money
+
+	AddResource(Influence, 1)
+
+	IfLevel(3, TriggerPeriodic(RemoveCargo(NativeGold, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(NativeGold, 11, 200), Interval = 10))

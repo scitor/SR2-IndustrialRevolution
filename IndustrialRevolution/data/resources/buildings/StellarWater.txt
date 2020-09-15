@@ -1,6 +1,6 @@
 Resource: StellarWater
-	Name: #WATER
-	Description: 
+	Name: #STELLAR_WATER
+	Description: #STELLAR_WATER_DESC
 	Native Biome: Oceanic
 	Class: WaterType
 

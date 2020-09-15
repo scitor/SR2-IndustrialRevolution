@@ -1,0 +1,20 @@
+Resource: Electrolytes
+	Name: #ELECTROLYTES
+	Description: #ELECTROLYTES_DESC
+	Native Biome: Crystallic
+
+	Icon: ResourceIcons::70
+	Small Icon: ResourceIconsSmall::70
+
+	Level: 1
+	Rarity: Uncommon
+	Asteroid Frequency: 0.1
+	Asteroid Labor: 40
+
+	Affinity: Energy + Money
+
+	Pressure: 2 Energy
+	Pressure: 1 Money
+
+	IfLevel(2, TriggerPeriodic(RemoveCargo(Electrolytes, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(Electrolytes, 11, 200), Interval = 10))

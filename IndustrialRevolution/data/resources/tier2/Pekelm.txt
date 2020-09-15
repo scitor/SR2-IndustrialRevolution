@@ -1,0 +1,21 @@
+Resource: Pekelm
+	Name: #PEKELM
+	Description: #PEKELM_DESC
+	Native Biome: Ice
+
+	Icon: ResourceIcons::25
+	Small Icon: ResourceIconsSmall::25
+
+	Level: 2
+	Rarity: Rare
+	Asteroid Frequency: 0.02
+	Asteroid Labor: 50
+
+	Affinity: Defense
+
+	Pressure: 3 Defense
+
+	ModColonyShipAccel(+1.0)
+
+	IfLevel(3, TriggerPeriodic(RemoveCargo(Pekelm, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(Pekelm, 11, 200), Interval = 10))

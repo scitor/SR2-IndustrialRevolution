@@ -1,0 +1,22 @@
+Resource: Chemicals
+	Name: #CHEMICALS
+	Description: #CHEMICALS_DESC
+	Native Biome: Desert
+
+	Icon: ResourceIcons::11
+	Small Icon: ResourceIconsSmall::10
+
+	Terraform Cost: 500
+	Terraform Labor: 30
+
+	Level: 1
+	Rarity: Uncommon
+	Asteroid Frequency: 0.2
+	Asteroid Labor: 40
+
+	Affinity: Research
+
+	Pressure: 3 Research
+
+	IfLevel(2, TriggerPeriodic(RemoveCargo(Chemicals, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(Chemicals, 11, 200), Interval = 10))

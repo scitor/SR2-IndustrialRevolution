@@ -1,0 +1,20 @@
+Resource: Syrup
+	Name: #R_SYRUP
+	Description: #R_SYRUP_DESC
+	Class: Food
+	Native Biome: Forest
+	DLC: Heralds
+
+	Small Icon: ResourceIconsSmall::79
+
+	Level: 0
+	Rarity: Uncommon
+	Display Requirement: False
+
+	ModPressurePct(Influence, +0.3, +1)
+
+	//OnTradeSpawn(AddCargo(Syrup, -150))
+	//OnTradeDeliver(AddCargo(Syrup, 150))
+
+	IfLevel(1, TriggerPeriodic(RemoveCargo(Syrup, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(Syrup, 11, 200), Interval = 10))

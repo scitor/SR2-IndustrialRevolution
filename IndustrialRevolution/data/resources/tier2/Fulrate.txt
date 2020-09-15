@@ -1,0 +1,21 @@
+Resource: Fulrate
+	Name: #FULRATE
+	Description: #FULRATE_DESC
+	Native Biome: Mountains
+
+	Icon: ResourceIcons::44
+	Small Icon: ResourceIconsSmall::43
+
+	Level: 2
+	Rarity: Rare
+	Asteroid Frequency: 0.02
+	Asteroid Labor: 50
+
+	Affinity: Money
+
+	Pressure: 2 Money
+
+	GiveNativePressure(4)
+
+	IfLevel(3, TriggerPeriodic(RemoveCargo(Fulrate, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(Fulrate, 11, 200), Interval = 10))

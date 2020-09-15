@@ -1,0 +1,18 @@
+Resource: Textiles
+	Name: #TEXTILES
+	Description: #TEXTILES_DESC
+	Native Biome: Forest
+
+	Icon: ResourceIcons::9
+	Small Icon: ResourceIconsSmall::8
+
+	Level: 4
+	Artificial: True
+
+	Affinity: Money + Influence
+
+	Pressure: 8 Money
+	Pressure: 8 Influence
+
+	IfLevel(5, TriggerPeriodic(RemoveCargo(Textiles, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(Textiles, 11, 200), Interval = 10))

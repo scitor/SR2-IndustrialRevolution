@@ -5,8 +5,6 @@ Resource: AsteroidFTL
 	Icon: ResourceIcons::22
 	Small Icon: ResourceIconsSmall::47
 
-	Rarity: Common
-
 	Distribution: 0
 	Asteroid Frequency: 0.5
 	Asteroid Labor: 30
@@ -17,3 +15,5 @@ Resource: AsteroidFTL
 	Cargo Type: FTLShards
 	//TriggerPeriodic(RemoveCargo(FTLShards, 10), Interval = 10)
 	OnNative(TriggerPeriodic(AddCargoMax(FTLShards, 11, 200), Interval = 10))
+
+	AI: DistributeToImportantPlanet()
