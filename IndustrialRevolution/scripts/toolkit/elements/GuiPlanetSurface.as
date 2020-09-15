@@ -247,7 +247,7 @@ class GuiPlanetSurface : BaseGuiElement {
 								&& relY == int(bld.type.size.y - center.y - 1)) {
 							vec2i ssize(bld.type.size.x * space, bld.type.size.y * space);
 							recti spos = recti_area(pos.topLeft - ssize + vec2i(space,space), ssize);
-							if(bld.type.animateSprite && !bld.disabled/* && bld.completion == 1.f*/)
+							if(bld.type.animateSprite && !bld.disabled && bld.completion == 1.f)
 								bld.type.sprite.sheet.draw(uint((animFrame / 60.0) * bld.type.animationFPS) % bld.type.sprite.sheet.count, spos, col);
 							else
 								bld.type.sprite.draw(spos, col);
