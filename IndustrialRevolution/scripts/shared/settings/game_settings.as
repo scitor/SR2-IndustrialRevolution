@@ -442,7 +442,7 @@ void onGameSettings(Message& msg) {
 	while(it.iterate(name, value))
 		config::set(name, value);
 
-	config::GFX_DISTANCE_MOD = 6500.0 / modSpacing(6500.0);
+	config::GFX_DISTANCE_MOD = 10000.0 / modSpacing(10000.0);
 
 	if(!hasDLC("Heralds"))
 		config::EXPERIENCE_GAIN_FACTOR = 0.0;
