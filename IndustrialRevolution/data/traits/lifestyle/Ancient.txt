@@ -21,7 +21,7 @@ Trait: Ancient
 
 	AddStatusOwnedPlanets(AncientPlanet)
 
-	TriggerHomeworld(TerraformTo(Supercarbons))
+	TriggerHomeworld(TerraformTo(AncientHomeworld))
 	TriggerHomeworld(DestroyBuildingAt((4, 3), Undevelop = True))
 	TriggerHomeworld(DestroyBuildingAt((2, 3), Undevelop = True))
 	TriggerHomeworld(DestroyBuildingAt((4, 6), Undevelop = True))
@@ -68,3 +68,5 @@ Trait: Ancient
 	ReplaceTechnologyNodes(PlanetaryEngine, Thrust2)
 	ReplaceTechnologyNodes(Population, FoundryLabor)
 	ReplaceTechnologyNodes(Laboratories, FoundryLabor2)
+
+	TriggerHomeworld(AddStoredLabor(100))

@@ -7,8 +7,8 @@ Status: AncientPlanet
 
 	AddDummyResource(Water, 20)
 	AddDummyResource(Meat, 20)
-	AddDummyResource(Titanium, 20)
-	AddDummyResource(Supercarbons, 20)
+	AddDummyResource(Iron, 20)
+	AddDummyResource(AncientHomeworld, 20)
 
 	IfNativeLevel(0, SetMaxLevel(0), Exact = True, Limit = False) #version<159
 	IfNativeLevel(1, SetMaxLevel(1), Exact = True, Limit = False) #version<159

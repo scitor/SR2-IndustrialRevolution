@@ -7,19 +7,21 @@ System: HomeSystem
 	MakeAsteroidBelt(1)
 
 	RepeatHomeworlds()
-		MakePlanet(RandomType:Food:Common, Radius = 10, Conditions = False, Moons = False)
+		MakePlanet(RandomType:Food:Common, Radius = 10, Conditions = False)
 			AddPopulation(3.0)
 			SpawnBuilding(Factory, (4, 3), Develop = True)
 			SpawnBuilding(Warehouse, (2, 3),  Develop = True)
 			SpawnBuilding(Hydrogenator, (4, 6), Develop = True)
-			OnPlanet( AddIncome(200) )
 			ForceUsefulSurface(0.8, Forest)
 			MakeMoon()
 
 	MakePlanet(RandomType:Food:Common, Conditions = False, Moons = False)
 	MakePlanet(Water, Conditions = False, Moons = False)
-	MakePlanet(RandomLevel:1:Common, Conditions = False, Moons = False)
+	MakePlanet(RandomLevel:1:Common, Conditions = False)
 		MakeMoon()
+
+	RepeatModified(0:1, $PLANET_FREQUENCY)
+		MakePlanet()
 
 	AddAdjacentArtifacts(2)
 	MakeAdjacentCreepCamp(SmallCamp, Place Far = True)

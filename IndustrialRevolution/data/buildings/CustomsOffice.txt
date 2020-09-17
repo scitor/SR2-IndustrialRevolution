@@ -9,10 +9,9 @@ Building: CustomsOffice
 
 	Base Cost: 100
 	Tile Cost: 10
-	Build Time: 30
+	Build Time: 60
 
 	Build Affinity: Mountains
 
-	In Queue: True
 
 	AddStatus(CustomsOffice)

@@ -4,4 +4,4 @@ Status: MothershipPopulation
 	Icon: ResourceIcon::8
 	Collapses: True
 
-	RepeatStacks(AddMoneyIncome(15))
+	RepeatStacks(AddLaborIncome(1))
