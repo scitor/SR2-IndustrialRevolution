@@ -9,5 +9,5 @@ System: StandardSystem
 	Repeat(0:1)
 		MakeAsteroidBelt()
 
-	RepeatModified(2:5, $PLANET_FREQUENCY)
+	RepeatModified(3:6, $PLANET_FREQUENCY)
 		MakePlanet()

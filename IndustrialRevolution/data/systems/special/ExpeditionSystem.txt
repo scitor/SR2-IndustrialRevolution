@@ -10,7 +10,7 @@ System: ExpeditionSystem
 	Repeat(5)
 		MakePlanet()
 
-	Repeat(2:5)
+	Repeat(3:5)
 		SpawnRandomRemnants(50, 0.3:0.6, 4)
 
 	AddRegionStatus(RemnantBlockedColonization)

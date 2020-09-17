@@ -10,5 +10,5 @@ System: YoungSystem
 	Repeat(0:1)
 		MakeAsteroidBelt()
 
-	RepeatModified(0:3, $PLANET_FREQUENCY)
+	RepeatModified(1:4, $PLANET_FREQUENCY)
 		MakePlanet()

@@ -10,5 +10,5 @@ System: AncientSystem
 	Repeat(0:1)
 		MakePlanet(AncientCity, Radius = 24)
 
-	RepeatModified(2:5, $PLANET_FREQUENCY)
+	RepeatModified(3:6, $PLANET_FREQUENCY)
 		MakePlanet(Radius = 16)

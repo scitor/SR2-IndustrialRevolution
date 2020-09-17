@@ -10,7 +10,7 @@ System: BlackHole
 	Repeat(3:6)
 		MakeAsteroidBelt()
 
-	Repeat(2:5)
+	Repeat(3:6)
 		MakePlanet(RandomRarity:Uncommon, Radius = 16, Orbit Spacing = 10)
 
 	Repeat(2:5)
