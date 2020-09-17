@@ -979,7 +979,7 @@ bool openContextMenu(Object& clicked, Object@ selected = null) {
 		bool addedColonyOptions = false;
 		
 		if(selected !is null && selected.owner is playerEmpire && selected.isPlanet
-				&& selected !is clicked && selected.maxPopulation > 1) {
+				&& selected !is clicked && selected.maxPopulation > 0 ) {
 			//Colonization from selected planet
 			if(!selected.hasColonyTarget(clicked)) {
 				if(clickedOwner is null || !clickedOwner.valid) {

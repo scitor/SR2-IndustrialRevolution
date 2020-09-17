@@ -1739,21 +1739,17 @@ tidy class SurfaceComponent : Component_SurfaceComponent, Savable {
 	void processColonization(Object& obj) {
 		bool isSending = false;
 		const double popPerShip = obj.owner.PopulationPerColonizer;
-		if(Population < 1.0 + popPerShip || MaxPopulation <= 1.0 || obj.owner.ForbidColonization != 0) {
-			//If we have insufficient population due to a low maximum, cancel all colony orders
-			if(MaxPopulation <= 1.0 || obj.owner.ForbidColonization != 0) {
-				uint cnt = colonization.length;
-				if(cnt > 0) {
-					for(uint i = 0; i < cnt; ++i)
-						obj.owner.unregisterColonization(obj, colonization[i].target, cancel=false);
-					colonization.length = 0;
-				}
-				isSendingColonizers = false;
+		if(obj.owner.ForbidColonization != 0) {
+			uint cnt = colonization.length;
+			if(cnt > 0) {
+				for(uint i = 0; i < cnt; ++i)
+					obj.owner.unregisterColonization(obj, colonization[i].target, cancel=false);
+				colonization.length = 0;
 			}
-			return;
+			isSendingColonizers = false;
 		}
 
-		//Process a random colonization order per attempt
+		//Process a random (@todo make that nearest) colonization order per attempt
 		for(uint i = 0, cnt = colonization.length; i < cnt; ++i) {
 			ColonizationOrder@ order = colonization[i];
 
