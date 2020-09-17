@@ -84,7 +84,7 @@ tidy class CivilianScript {
 			mesh.iconIndex = getCivilianIcon(obj.owner, type, obj.radius).index;
 		} else {
 			@icon = StrategicIconNode();
-			icon.establish(obj, 0.01, getCivilianIcon(obj.owner, type, obj.radius).sheet, getCivilianIcon(obj.owner, type, obj.radius).index);
+			icon.establish(obj, 0.02, getCivilianIcon(obj.owner, type, obj.radius).sheet, getCivilianIcon(obj.owner, type, obj.radius).index);
 			//icon.memorable = true;
 			if(obj.region !is null)
 				obj.region.addStrategicIcon(-3, obj, icon);
