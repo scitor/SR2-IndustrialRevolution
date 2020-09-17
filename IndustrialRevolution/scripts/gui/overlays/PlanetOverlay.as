@@ -1013,7 +1013,7 @@ class ResourceDisplay : DisplayBox {
 			@resourceBox = GuiSkinElement(resPanel, Alignment(Left+10, Top+10, Left+0.5f-5, Top+94), SS_PlainOverlay);
 		else
 			@resourceBox = GuiSkinElement(resPanel, Alignment(Left+10, Top+10, Right-10, Top+94), SS_PlainOverlay);
-		@resourceDesc = GuiMarkupText(resourceBox, Alignment().padded(6, 6, 100, 6));
+		@resourceDesc = GuiMarkupText(resourceBox, Alignment().padded(6, 6, 100, 20));
 		@resourcePressure = GuiMarkupText(resourceBox, Alignment(Right-85, Top+3, Right-6, Bottom-3));
 
 		//Display toggle button
@@ -1029,6 +1029,7 @@ class ResourceDisplay : DisplayBox {
 	uint reqModID = uint(-1);
 
 	void update(double time) override {
+		bool meTrait = pl.owner.hasTrait(getTrait("Mechanoid").id);
 		tree.visible = pl.owner is playerEmpire && SHOW_PLANET_TREE;
 		resPanel.visible = !tree.visible;
 		if(tree.visible)
@@ -1237,7 +1238,7 @@ class ResourceDisplay : DisplayBox {
 
 					popReq.visible = reqDisplay.length == 0 && owner.HasPopulation != 0;
 					if(popReq.visible)
-						popReq.text = format(locale::POP_REQ, standardize(lvl.requiredPop, true), toString(lv + 1));
+						popReq.text = format(meTrait ? locale::POP_REQ_MECHANOID : locale::POP_REQ, standardize(lvl.requiredPop, true), toString(lv + 1));
 
 					reqLabel.text = format(locale::REQ_FOR_LEVEL, toString(lv + 1));
 					reqLabel.tooltip = format(locale::REQ_FOR_LEVEL, toString(lv + 1));
@@ -1258,7 +1259,7 @@ class ResourceDisplay : DisplayBox {
 
 					popReq.visible = reqDisplay.length == 0 && owner.HasPopulation != 0;
 					if(popReq.visible)
-						popReq.text = format(locale::POP_REQ, standardize(lvl.requiredPop, true), toString(lv + 1));
+						popReq.text = format(meTrait ? locale::POP_REQ_MECHANOID : locale::POP_REQ, standardize(lvl.requiredPop, true), toString(lv + 1));
 
 					reqLabel.text = format(locale::REQ_FOR_LEVEL, toString(lv + 1));
 					reqLabel.tooltip = format(locale::REQ_FOR_LEVEL, toString(lv + 1));

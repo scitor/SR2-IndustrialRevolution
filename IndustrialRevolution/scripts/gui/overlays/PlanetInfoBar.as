@@ -122,7 +122,7 @@ class PlanetInfoBar : InfoBar {
 		resources.spacing.x = 6;
 		resources.horizAlign = 0.0;
 		resources.vertAlign = 0.0;
-		@resourceDesc = GuiMarkupText(resourceBox, Alignment(Left+8, Bottom-42, Right-8, Bottom));
+		@resourceDesc = GuiMarkupText(resourceBox, Alignment(Left+8, Bottom-42, Right-8, Bottom-5));
 		resourceDesc.visible = false;
 		resourceDesc.defaultColor = Color(0xaaaaaaff);
 
