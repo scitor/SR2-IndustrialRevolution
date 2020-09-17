@@ -536,7 +536,6 @@ tidy class ResourceManager : Component_ResourceManager, Savable {
 		Lock lock(budgetMutex);
 		Budget_Total += amount;
 
-	print(format("$1 $2 $3", emp.name, type, amount));
 		if(type < MoT_COUNT)
 			moneyTypes[type] += amount;
 	}

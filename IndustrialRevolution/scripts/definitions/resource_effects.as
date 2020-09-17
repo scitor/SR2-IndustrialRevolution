@@ -377,7 +377,7 @@ class OnTradeSpawn : ResourceHook {
 
 #section server
 	void onTradeSpawn(Civilian& civ, Object@ origin, Object@ target) const override {
-		print(format("onTradeSpawn $1", origin.name));
+		//print(format("onTradeSpawn $1", origin.name));
 		if(origin !is null && target !is null)
 			hook.activate(origin, civ.owner);
 	}

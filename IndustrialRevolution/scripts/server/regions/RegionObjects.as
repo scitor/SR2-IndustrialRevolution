@@ -1405,7 +1405,7 @@ tidy class RegionObjects : Component_RegionObjects, Savable {
 		civLimit *= perPlanet;
 
 		if(civOwner.CivilianTradeShips.value > civLimit) {
-			print(format("ships $1/$2 mult $3 cnt $4", civOwner.CivilianTradeShips.value, civLimit, config::CIVILIAN_TRADE_MULT, civ.getStepCount()));
+			//print(format("ships $1/$2 mult $3 cnt $4", civOwner.CivilianTradeShips.value, civLimit, config::CIVILIAN_TRADE_MULT, civ.getStepCount()));
 			civ.destroy();
 			return;
 		}

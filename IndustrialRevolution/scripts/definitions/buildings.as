@@ -104,21 +104,22 @@ tidy final class BuildingType {
 		string vname, vvalue;
 		Sprite vicon;
 		Color color;
+		tt += "[nl/]\n";
 		for(uint i = 0, cnt = hooks.length; i < cnt; ++i) {
 			if(hooks[i].getVariable(valueObject, vicon, vname, vvalue, color, isOption)) {
-				tt += format("[nl/]\n[img=$1;22][b][color=$4]$2[/color][/b] [offset=120]$3[/offset][/img]",
-					getSpriteDesc(vicon), vname, vvalue, toString(color));
+				//tt += format("[img=$1;20/]", getSpriteDesc(vicon));
+				tt += format(locale::GTT_ALIGNED_STATCI, vname, vvalue, toString(color), getSpriteDesc(vicon))+"\n";
 				color = colors::White;
 			}
 		}
 		if(showCost && !civilian) {
 			tt += "[nl/]\n";
 			if(showSize && (size.x > 1 || size.y > 1))
-				tt += format(locale::BLD_TT_SIZE, toString(size.x), toString(size.y))+"\n";
+				tt += format(locale::GTT_ALIGNED_STAT, locale::BLD_TT_SIZE, format("$1x$2", toString(size.x), toString(size.y)))+"\n";
 
 			int bld = buildCostEst, mnt = maintainCostEst;
 			if(bld != 0 || mnt != 0)
-				tt += format(locale::BLD_TT_COST, formatMoney(bld, mnt));
+				tt += format(locale::GTT_ALIGNED_STAT, locale::BLD_TT_COST, formatMoney(bld, mnt))+"\n";
 
 			if(showAffinity) {
 				for(uint n = 0, ncnt = buildAffinities.length; n < ncnt; ++n) {
@@ -146,7 +147,7 @@ tidy final class BuildingType {
 		else {
 			if(showSize && (size.x > 1 || size.y > 1)) {
 				tt += "[nl/]\n";
-				tt += format(locale::BLD_TT_SIZE, toString(size.x), toString(size.y));
+				tt += format(locale::GTT_ALIGNED_STAT, locale::BLD_TT_SIZE, format("$1x$2", toString(size.x), toString(size.y)))+"\n";
 			}
 		}
 		return tt;

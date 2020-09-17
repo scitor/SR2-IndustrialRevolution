@@ -14,11 +14,11 @@ SYSTEM_MAGNETAR: Magnetar
 REQUIRED_RESOURCES: Required for Level $1
 
 POP_REQ: <<
-[font=Small][img=ResourceIcon::8;20/] The planet needs [color=#ff9000][b]$1[/b]+[/color] population for level $2
+[font=Small]The planet needs [color=#ff9000][b]$1[/b]+[/color] population for level $2!
 [color=#ff9000]Population grows when there is enough cargo to consume.[/color][/font]
 >>
 
 POP_REQ_MECHANOID: <<
-[img=ResourceIcon::8;20/] The planet needs [color=#ff9000][b]$1[/b]+[/color] population for level $2
-[color=#90ff90]Population can be transferred directly using FTL energy.[/color]
+[font=Small]The planet needs [color=#ff9000][b]$1[/b]+[/color] population for level $2!
+[color=#90ff90]Population can be transferred directly using[/color] [color=$FTL]FTL Energy[/color][/font]
 >>

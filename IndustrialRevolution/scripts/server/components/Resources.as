@@ -1503,7 +1503,7 @@ tidy class ObjectResources : Component_Resources, Savable {
 					if(!path.valid)
 						r.usable = false;
 					else if(r.type.cargoType != "Ore" && r.exportedTo.hasCargo) {
-						print(format("check $1 $2 $3", r.exportedTo.name, r.type.cargoType, r.exportedTo.getCargoStored(r.type.cargoType)));
+						//print(format("check $1 $2 $3", r.exportedTo.name, r.type.cargoType, r.exportedTo.getCargoStored(r.type.cargoType)));
 						if(r.exportedTo.getCargoStored(r.type.cargoType) > 0) {
 							r.inTransit = false;
 						} else {
