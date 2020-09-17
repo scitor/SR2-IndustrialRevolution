@@ -8,7 +8,7 @@ A major economy overhaul focussed on empire enhancement and eye-candy.
 **Depends on having the SR2-Community-Patch installed (not activated)**
 
 **Highly recommendet to be played with a dark background**
-like _Dark Skies_ or [Milkyway](https://github.com/scitor/StarRuler2-Milkyway).
+like _Dark Skies_ or [Milkyway](https://github.com/scitor/SR2-Milkyway).
 
 # Version: 0.2-testing
 I didn't test any MP functionality and AI is partly broken.
