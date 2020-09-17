@@ -96,9 +96,6 @@ class PirateStatus : StatusHook {
 		PirateData@ dat;
 		data.retrieve(@dat);
 
-		//double thrustPct = ship.blueprint.getEfficiencySum(SV_Thrust) / ship.blueprint.design.total(SV_Thrust);
-		//obj.maxAcceleration = dat.accel * thrustPct;
-
 		if(obj.orderCount != 0) {
 			if(dat.state == PILLAGING)
 				dat.timer -= time * 0.5 * sqr(ship.blueprint.design.totalHP / ship.blueprint.currentHP);
@@ -345,6 +342,7 @@ void spawnPirateShip(Empire@ limitEmpire = null) {
 	auto@ status = getStatusType("PirateShip");
 	if(status !is null) {
 		ship.addStatus(status.id, originEmpire = limitEmpire);
+		ship.setFreeRaiding(true);
 
 		@dsg = Pirates.getDesign("Dread Pirate Buddy");
 		for(uint i = 0, cnt = randomi(1,4); i < cnt; i++)
@@ -368,9 +366,9 @@ void spawnStolenSupport(Ship@ ship) {
 			continue;
 		@dsg = other.getDesign(randomi(0, other.designCount-1));
 		if(dsg !is null && dsg.hasTag(ST_IsSupport))
-		break;
+			break;
 	}
-	if(dsg !is null) {
+	if(dsg !is null && dsg.hasTag(ST_IsSupport)) {
 		dsg.decBuilt(); //automatic built doesn't increment
 		Ship@ pirateSupport = createShip(ship, dsg, Pirates, ship, false, true);
 		pirateSupport.name = format("$1 (stolen)", pirateSupport.name);
