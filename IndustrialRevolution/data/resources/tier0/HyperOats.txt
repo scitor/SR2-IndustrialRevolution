@@ -8,7 +8,7 @@ Resource: HyperOats
 	Small Icon: ResourceIconsSmall::52
 
 	Level: 0
-	Rarity: Rare
+	Rarity: Epic
 
 	AddDummyResource(HyperOats)
 

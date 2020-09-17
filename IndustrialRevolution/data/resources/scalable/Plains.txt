@@ -8,11 +8,12 @@ Resource: Plains
 	Small Icon: ResourceIconsSmall::59
 
 	Rarity Level: 3
-	Frequency: 2
+	Rarity: Rare
 
 	Limitless Level: True
 	Can Be Terraformed: False
 	Exportable: False
+	Icon: ResourceIconsSmall::59
 
 	RegenSurface(30, 16, Biome Count = 3)
 

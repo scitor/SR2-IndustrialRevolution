@@ -7,12 +7,10 @@ Resource: Deuterium
 	Small Icon: ResourceIconsSmall::31
 
 	Level: 2
-	Rarity: Rare
 	Asteroid Frequency: 0.02
 	Asteroid Labor: 50
 
-	Affinity: Research
-	Affinity: Defense
+	Affinity: Research + Defense
 
 	Pressure: 2 Research
 	Pressure: 2 Defense

@@ -7,7 +7,6 @@ Resource: Pekelm
 	Small Icon: ResourceIconsSmall::25
 
 	Level: 2
-	Rarity: Rare
 	Asteroid Frequency: 0.02
 	Asteroid Labor: 50
 

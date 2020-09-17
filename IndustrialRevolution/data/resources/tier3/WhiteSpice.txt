@@ -1,13 +1,12 @@
 Resource: WhiteSpice
 	Name: #WHITE_SPICE
 	Description: #WHITE_SPICE_DESC
-	Native Biome: Crystallic
+	Native Biome: Desert
 
 	Icon: ResourceIcons::95
 	Small Icon: ResourceIconsSmall::95
 
 	Level: 3
-	Rarity: Epic
 	Asteroid Frequency: 0.01
 	Asteroid Labor: 60
 

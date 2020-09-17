@@ -9,6 +9,7 @@ Resource: Salts
 
 	Level: 0
 	Rarity: Uncommon
+
 	Display Requirement: False
 
 	Pressure: 1 Money

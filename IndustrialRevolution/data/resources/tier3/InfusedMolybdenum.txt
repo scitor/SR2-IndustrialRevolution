@@ -1,18 +1,16 @@
 Resource: InfusedMolybdenum
 	Name: #INFUSED_MOLYBDENUM
 	Description: #INFUSED_MOLYBDENUM_DESC
-	Native Biome: Crystallic
+	Native Biome: Mountains
 
 	Icon: ResourceIcons::97
 	Small Icon: ResourceIconsSmall::97
 
 	Level: 3
-	Rarity: Epic
 	Asteroid Frequency: 0.01
 	Asteroid Labor: 60
 
-	Affinity: Influence
-	Affinity: Money
+	Affinity: Money + Influence
 
 	Pressure: 4 Influence
 	Pressure: 4 Money

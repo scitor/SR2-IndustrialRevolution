@@ -1,10 +1,10 @@
 Resource: Vaccines
 	Name: #VACCINES
 	Description: #VACCINES_DESC
-	Native Biome: Crystallic
+	Native Biome: Forest
 
-	Icon: ResourceIcons::110
-	Small Icon: ResourceIconsSmall::110
+	Icon: ResourceIcons::109
+	Small Icon: ResourceIconsSmall::109
 
 	Level: 5
 	Affinity: Energy

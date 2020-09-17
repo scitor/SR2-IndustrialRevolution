@@ -6,10 +6,9 @@ Resource: AsteroidWaterIce
 	Icon: ConditionIcons::6
 	Small Icon: ConditionIcons::6
 
-	Rarity: Common
 	Distribution: 0
 	Asteroid Frequency: 0.5
-	Asteroid Labor: 50
+	Asteroid Labor: 100
 
 	Cargo Type: Water
 	TriggerPeriodic(RemoveCargo(Water, 10), Interval = 10)

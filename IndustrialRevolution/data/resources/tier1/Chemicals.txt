@@ -1,7 +1,7 @@
 Resource: Chemicals
 	Name: #CHEMICALS
 	Description: #CHEMICALS_DESC
-	Native Biome: Desert
+	Native Biome: Crystallic
 
 	Icon: ResourceIcons::11
 	Small Icon: ResourceIconsSmall::10

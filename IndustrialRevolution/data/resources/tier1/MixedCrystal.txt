@@ -10,7 +10,6 @@ Resource: MixedCrystal
 	Terraform Labor: 30
 
 	Level: 1
-	Rarity: Uncommon
 	Asteroid Frequency: 0.2
 	Asteroid Labor: 40
 

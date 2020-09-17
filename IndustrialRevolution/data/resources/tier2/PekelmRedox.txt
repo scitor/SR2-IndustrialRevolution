@@ -1,7 +1,7 @@
 Resource: PekelmRedox
 	Name: #PEKELM_REDOX
 	Description: #PEKELM_REDOX
-	Native Biome: Crystallic
+	Native Biome: Ice
 
 	Icon: ResourceIcons::90
 	Small Icon: ResourceIconsSmall::90

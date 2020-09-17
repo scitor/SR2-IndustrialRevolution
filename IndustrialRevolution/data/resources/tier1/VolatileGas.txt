@@ -1,7 +1,7 @@
 Resource: VolatileGas
 	Name: #VOLATILE_GAS
 	Description: #VOLATILE_GAS_DESC
-	Native Biome: Crystallic
+	Native Biome: Volcanic
 
 	Icon: ResourceIcons::88
 	Small Icon: ResourceIconsSmall::88

@@ -3,10 +3,10 @@ Resource: BioMass
 	Description: #R_BIOMASS_DESC
 	Native Biome: Crystallic
 
-	Icon: ResourceIconsSmall::104
-	Small Icon: ResourceIconsSmall::104
+	Icon: ResourceIconsSmall::103
+	Small Icon: ResourceIconsSmall::103
 
-	Rarity: Common
+	Artificial: True
 	Distribution: 0
 	Frequency: 0
 	Level: 0

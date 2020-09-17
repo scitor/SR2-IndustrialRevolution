@@ -4,6 +4,7 @@ Resource: Silicon
 	Native Biome: Desert
 	DLC: Heralds
 
+	Icon: ResourceIconsSmall::76
 	Small Icon: ResourceIconsSmall::76
 
 	Level: 1

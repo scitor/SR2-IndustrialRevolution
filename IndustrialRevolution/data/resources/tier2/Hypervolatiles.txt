@@ -4,6 +4,7 @@ Resource: Hypervolatiles
 	Native Biome: Crystallic
 	DLC: Heralds
 
+	Icon: ResourceIconsSmall::45
 	Small Icon: ResourceIconsSmall::45
 
 	Level: 2

@@ -5,9 +5,10 @@ Resource: FTLBoulder
 
 	Icon: ResourceIcons::92
 	Small Icon: ResourceIconsSmall::92
+	Distribution: 0
+	Asteroid Frequency: 0.25
+	Asteroid Labor: 30
 
-	Level: 4
-	Artificial: True
 
 	//IfLevel(5, TriggerPeriodic(RemoveCargo(ChemicalReagents, 10), Interval = 10))
 	//OnNative(TriggerPeriodic(AddCargoMax(ChemicalReagents, 11, 200), Interval = 10))

@@ -3,8 +3,8 @@ Resource: MatricCores
 	Description: #MATRIX_CORES_DESC
 	Native Biome: Crystallic
 
-	Icon: ResourceIcons::108
-	Small Icon: ResourceIconsSmall::108
+	Icon: ResourceIcons::107
+	Small Icon: ResourceIconsSmall::107
 
 	Level: 5
 	Affinity: Energy

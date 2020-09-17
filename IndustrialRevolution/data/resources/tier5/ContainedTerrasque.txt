@@ -1,10 +1,10 @@
 Resource: ContainedTerrasque
 	Name: #CONTAINED_TERRASQUE
 	Description: #CONTAINED_TERRASQUE_DESC
-	Native Biome: Crystallic
+	Native Biome: Forest
 
-	Icon: ResourceIcons::106
-	Small Icon: ResourceIconsSmall::106
+	Icon: ResourceIcons::105
+	Small Icon: ResourceIconsSmall::105
 
 	Level: 5
 	Artificial: True

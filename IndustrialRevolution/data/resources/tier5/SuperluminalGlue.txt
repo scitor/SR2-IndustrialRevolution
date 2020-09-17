@@ -1,7 +1,7 @@
 Resource: SuperluminalGlue
 	Name: #SUPERLUMINAL_GLUE
 	Description: #SUPERLUMINAL_GLUE_DESC
-	Native Biome: Crystallic
+	Native Biome: Space
 
 	Icon: ResourceIcons::102
 	Small Icon: ResourceIconsSmall::102

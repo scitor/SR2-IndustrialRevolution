@@ -1,7 +1,7 @@
 Resource: LiquidExplosives
 	Name: #LIQUID_EXPLOSIVES
 	Description: #LIQUID_EXPLOSIVES_DESC
-	Native Biome: Crystallic
+	Native Biome: Volcanic
 
 	Icon: ResourceIcons::101
 	Small Icon: ResourceIconsSmall::101

@@ -5,10 +5,12 @@ Resource: Syrup
 	Native Biome: Forest
 	DLC: Heralds
 
+	Icon: ResourceIconsSmall::79
 	Small Icon: ResourceIconsSmall::79
 
 	Level: 0
-	Rarity: Uncommon
+	Rarity: Rare
+
 	Display Requirement: False
 
 	ModPressurePct(Influence, +0.3, +1)

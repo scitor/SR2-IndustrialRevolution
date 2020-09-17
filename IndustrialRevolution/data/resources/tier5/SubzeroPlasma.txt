@@ -1,7 +1,7 @@
 Resource: SubzeroPlasma
 	Name: #SUBZERO_PLASMA
 	Description: #SUBZERO_PLASMA_DESC
-	Native Biome: Crystallic
+	Native Biome: Ice
 
 	Icon: ResourceIcons::100
 	Small Icon: ResourceIconsSmall::100

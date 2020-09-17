@@ -1,7 +1,7 @@
 Resource: NaturalGas
 	Name: #NATURAL_GAS
 	Description: #NATURAL_GAS_DESC
-	Native Biome: Desert
+	Native Biome: Forest
 
 	Icon: ResourceIcons::41
 	Small Icon: ResourceIconsSmall::41
@@ -10,7 +10,6 @@ Resource: NaturalGas
 	Terraform Labor: 30
 
 	Level: 1
-	Rarity: Uncommon
 	Asteroid Frequency: 0.2
 	Asteroid Labor: 40
 

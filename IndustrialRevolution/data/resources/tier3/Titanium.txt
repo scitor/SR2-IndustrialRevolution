@@ -7,7 +7,6 @@ Resource: Titanium
 	Small Icon: ResourceIconsSmall::33
 
 	Level: 3
-	Rarity: Epic
 	Asteroid Frequency: 0.01
 	Asteroid Labor: 60
 

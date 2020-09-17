@@ -8,6 +8,7 @@ Resource: Grain
 	Small Icon: ResourceIconsSmall::20
 
 	Level: 0
+
 	AddOverpopulation(1) #version<105
 	AddToNativeResource(AddOverpopulation(1)) #version<71
 

@@ -1,12 +1,12 @@
 Resource: BaseMaterial
 	Name: #R_BASE_MATERIAL
 	Description: #R_BASE_MATERIAL_DESC
-	Native Biome: Crystallic
+	Native Biome: Desert
 
 	Icon: ResourceIconsSmall::81
 	Small Icon: ResourceIconsSmall::81
 
-	Rarity: Common
+	Artificial: True
 	Distribution: 0
 	Frequency: 0
 	Level: 0

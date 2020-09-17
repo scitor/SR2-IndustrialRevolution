@@ -8,6 +8,7 @@ Resource: Fruit
 	Small Icon: ResourceIconsSmall::14
 
 	Level: 0
+
 	ModResourceEfficiencyBonus(+0.2) #version<105
 
 	//OnTradeSpawn(AddCargo(Fruit, -150))

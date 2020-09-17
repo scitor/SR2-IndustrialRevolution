@@ -1,10 +1,10 @@
 Resource: HighTechParts
 	Name: #HIGH_TECH_PARTS
 	Description: #HIGH_TECH_PARTS_DESC
-	Native Biome: Crystallic
+	Native Biome: Desert
 
-	Icon: ResourceIcons::107
-	Small Icon: ResourceIconsSmall::107
+	Icon: ResourceIcons::106
+	Small Icon: ResourceIconsSmall::106
 
 	Level: 5
 	Affinity: Energy

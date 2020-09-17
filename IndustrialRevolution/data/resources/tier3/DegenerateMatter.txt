@@ -7,7 +7,6 @@ Resource: DegenerateMatter
 	Small Icon: ResourceIconsSmall::42
 
 	Level: 3
-	Rarity: Epic
 	Asteroid Frequency: 0.01
 	Asteroid Labor: 60
 

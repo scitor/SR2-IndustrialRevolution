@@ -7,7 +7,6 @@ Resource: EnergyCrystal
 	Small Icon: ResourceIconsSmall::93
 
 	Level: 2
-	Rarity: Rare
 	Asteroid Frequency: 0.02
 	Asteroid Labor: 50
 

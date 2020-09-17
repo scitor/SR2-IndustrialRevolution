@@ -1,10 +1,10 @@
 Resource: EnrichedOganesson
 	Name: #ENRICHED_OGANESSON
 	Description: #ENRICHED_OGANESSON_DESC
-	Native Biome: Crystallic
+	Native Biome: Mountains
 
-	Icon: ResourceIcons::105
-	Small Icon: ResourceIconsSmall::105
+	Icon: ResourceIcons::104
+	Small Icon: ResourceIconsSmall::104
 
 	Level: 5
 	Affinity: Energy

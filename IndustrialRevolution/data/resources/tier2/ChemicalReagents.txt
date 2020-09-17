@@ -7,7 +7,6 @@ Resource: ChemicalReagents
 	Small Icon: ResourceIconsSmall::89
 
 	Level: 2
-	Rarity: Rare
 	Asteroid Frequency: 0.02
 	Asteroid Labor: 50
 

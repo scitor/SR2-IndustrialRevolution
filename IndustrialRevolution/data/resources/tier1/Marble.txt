@@ -4,6 +4,7 @@ Resource: Marble
 	Native Biome: Mountains
 	DLC: Heralds
 
+	Icon: ResourceIconsSmall::77
 	Small Icon: ResourceIconsSmall::77
 
 	Level: 1

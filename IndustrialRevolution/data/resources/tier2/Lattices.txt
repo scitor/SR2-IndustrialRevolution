@@ -4,6 +4,7 @@ Resource: Lattices
 	Native Biome: Crystallic
 	DLC: Heralds
 
+	Icon: ResourceIconsSmall::80
 	Small Icon: ResourceIconsSmall::80
 
 	Level: 2

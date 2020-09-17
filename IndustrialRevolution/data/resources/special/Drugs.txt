@@ -7,7 +7,7 @@ Resource: Drugs
 	Small Icon: ResourceIconsSmall::22
 
 	Level: 0
-	Rarity: Epic
+	Distribution: 0.001
 	Mode: Universal Unique
 
 	TriggerPeriodic(RemoveCargo(Drugs, 10), Interval = 10)

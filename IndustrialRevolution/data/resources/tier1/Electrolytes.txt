@@ -1,13 +1,12 @@
 Resource: Electrolytes
 	Name: #ELECTROLYTES
 	Description: #ELECTROLYTES_DESC
-	Native Biome: Crystallic
+	Native Biome: Oceanic
 
-	Icon: ResourceIcons::70
+	Icon: ResourceIconsSmall::70
 	Small Icon: ResourceIconsSmall::70
 
 	Level: 1
-	Rarity: Uncommon
 	Asteroid Frequency: 0.1
 	Asteroid Labor: 40
 

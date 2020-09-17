@@ -1,10 +1,10 @@
 Resource: SyntheticBacteria
 	Name: #SYNTHETIC_BACTERIA
 	Description: #SYNTHETIC_BACTERIA_DESC
-	Native Biome: Crystallic
+	Native Biome: Oceanic
 
-	Icon: ResourceIcons::104
-	Small Icon: ResourceIconsSmall::104
+	Icon: ResourceIcons::103
+	Small Icon: ResourceIconsSmall::103
 
 	Level: 5
 	Artificial: True

@@ -1,7 +1,7 @@
 Resource: Molybdenum
 	Name: #MOLYBDENUM
 	Description: #MOLYBDENUM_DESC
-	Native Biome: Crystallic
+	Native Biome: Mountains
 
 	Icon: ResourceIcons::96
 	Small Icon: ResourceIconsSmall::96
