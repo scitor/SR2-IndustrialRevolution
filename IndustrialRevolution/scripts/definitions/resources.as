@@ -77,6 +77,7 @@ enum MoneyType {
 
 	Mot_MothershipPopulation, // changed to labor, but just in case
 	MoT_Evangelized,
+	MoT_Base_Income,
 
 	MoT_COUNT
 };

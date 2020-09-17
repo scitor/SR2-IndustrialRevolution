@@ -31,7 +31,7 @@ void init(Empire& emp) {
 	emp.initAttributes();
 	emp.modFTLCapacity(+250);
 	emp.modFTLIncome(+1);
-	emp.modTotalBudget(+550, MoT_Planet_Income);
+	emp.modTotalBudget(+500, MoT_Base_Income);
 
 	//Handle handicap
 	if(emp.handicap < 0) {
