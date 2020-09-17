@@ -18,6 +18,8 @@ Status: AncientPlanet
 	IfNotNativeClass(Scalable, IfNativeLevel(1, SetMaxLevel(1), Exact = True, Limit = False)) #version>=159
 	IfNotNativeClass(Scalable, IfNativeLevel(2, SetMaxLevel(2), Exact = True, Limit = False)) #version>=159
 	IfNotNativeClass(Scalable, IfNativeLevel(3, SetMaxLevel(3), Exact = True, Limit = False)) #version>=159
+	IfNotNativeClass(Scalable, IfNativeLevel(4, SetMaxLevel(4), Exact = True, Limit = False)) #version>=159
+	IfNotNativeClass(Scalable, IfNativeLevel(5, SetMaxLevel(5), Exact = True, Limit = False)) #version>=159
 	IfNativeClass(Scalable, SetMaxLevelStatusCount(Base = 2, Status = AncientScalable)) #version>=159
 	IfNativeClass(Scalable, PlanetLevelIncomeMod(0, 0, Step = -50)) #version>=159
 
@@ -25,3 +27,5 @@ Status: AncientPlanet
 	IfLevel(1, AddFleetCommand(-50), Exact = True, Limit = False)
 	IfLevel(2, AddFleetCommand(-200), Exact = True, Limit = False)
 	IfLevel(3, AddFleetCommand(-350), Exact = True, Limit = False)
+	IfLevel(4, AddFleetCommand(-500), Exact = True, Limit = False)
+	IfLevel(5, AddFleetCommand(-650), Exact = True, Limit = False)
