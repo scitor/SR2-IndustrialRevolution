@@ -2,7 +2,6 @@ Building: FTLEnrichmentCenter
 	Name: #BLD_FTL_ENRICHMENT_CENTER
 	Description: #BLD_FTL_ENRICHMENT_CENTER_DESC
 	Sprite: FTLEnrichment::0
-	Sprite Offset: 0x0
 	Animate Sprite: True
 	Animation FPS: 8
 

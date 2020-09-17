@@ -2,7 +2,6 @@ Building: FTLEnergyExtractor
 	Name: #BLD_FTL_ENERGY_EXTRACTOR
 	Description: #BLD_FTL_ENERGY_EXTRACTOR_DESC
 	Sprite: FTLEnrichment::0
-	Sprite Offset: 0x0
 	Animate Sprite: True
 	Animation FPS: 8
 

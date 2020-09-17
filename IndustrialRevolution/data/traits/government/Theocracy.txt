@@ -16,6 +16,7 @@ Trait: Theocracy
 	GainInfluenceCard(SenateBuilding)
 
 	AddStoredFTL(250)
+	AddFTLStorage(250)
 
 	SpawnShip(Scout)
 	SpawnShip(Scout)

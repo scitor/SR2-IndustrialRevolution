@@ -29,8 +29,6 @@ uint getMajorEmpireCount() {
 void init(Empire& emp) {
 	emp.initResearch();
 	emp.initAttributes();
-	emp.modFTLCapacity(+250);
-	emp.modFTLIncome(+1);
 	emp.modTotalBudget(+500, MoT_Base_Income);
 
 	//Handle handicap

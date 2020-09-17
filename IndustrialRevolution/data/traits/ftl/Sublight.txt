@@ -25,6 +25,3 @@ Trait: Sublight
 
 	ReplaceTechnologyNodes(FTLHurdle, EnergyHurdle)
 	ReplaceTechnologyNodes(FTL, Thrust)
-
-	AddFTLStorage(-250)
-	AddFTLIncome(-1)
