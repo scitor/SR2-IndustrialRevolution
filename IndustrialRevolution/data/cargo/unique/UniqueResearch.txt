@@ -1,0 +1,6 @@
+Cargo: UniqueResearch
+	Name: #UNIQUE_RESEARCH
+	Description: #CARGO_DESCRIPTION_CONSUMED:60:min
+
+	IconL: ResourceIconsSmall::56
+	Icon: ResourceIconsSmall::56

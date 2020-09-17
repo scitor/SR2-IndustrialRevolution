@@ -957,7 +957,7 @@ class GivePlanetIncomeToOriginEmpire : StatusHook {
 		}
 
 		if(newAmount != curAmount) {
-			status.originEmpire.modTotalBudget(newAmount - curAmount, MoT_Misc);
+			status.originEmpire.modTotalBudget(newAmount - curAmount, MoT_Evangelized);
 			data.store(newAmount);
 		}
 		return true;

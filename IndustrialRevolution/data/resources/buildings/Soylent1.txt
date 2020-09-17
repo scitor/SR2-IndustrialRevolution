@@ -1,0 +1,17 @@
+Resource: Soylent1
+	Name: #SOYLENT1
+	Description: #SOYLENT1_DESC
+	Native Biome: Forest
+	Class: Food
+
+	Icon: ResourceIconsSmall::87
+	Small Icon: ResourceIconsSmall::87
+	Display Weight: -10
+
+	Level: 0
+	Exportable: False
+	Artificial: True
+
+
+	IfLevel(1, TriggerPeriodic(RemoveCargo(Soylent1, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(Soylent1, 11, 200), Interval = 10))

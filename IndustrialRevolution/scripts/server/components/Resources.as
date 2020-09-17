@@ -3,6 +3,7 @@ import systems;
 import resources;
 import planet_levels;
 import statuses;
+from traits import getTraitID;
 from resources import _tempResource;
 import bool getCheatsEverOn() from "cheats";
 
@@ -35,7 +36,6 @@ tidy class ObjectResources : Component_Resources, Savable {
 	bool deltaPath = false;
 	bool resourcesEnabled = true;
 	bool terraforming = false;
-	bool blockaded = false;
 	double ResourceCheck = 1.0;
 	float resEfficiency = 1.f;
 	double resEfficiencyBonus = 0.0;
@@ -586,16 +586,6 @@ tidy class ObjectResources : Component_Resources, Savable {
 		terraforming = false;
 	}
 
-	void setBlockadedStatus(Object& obj, bool status = true) {
-		blockaded = status;
-		deltaRes = true;
-		checkResources(obj, true);
-	}
-
-	bool isBlockaded() {
-		return blockaded;
-	}
-
 	void removeResource(Object& obj, int id, bool wasManual = false) {
 		NativeResource@ r;
 		uint index = 0;
@@ -688,10 +678,11 @@ tidy class ObjectResources : Component_Resources, Savable {
 
 	uint getResourceTargetLevel(Object& obj) {
 		//Check planet levels
+		bool specialTraits = obj.owner.hasTrait(getTraitID("Ancient")) || obj.owner.hasTrait(getTraitID("Mechanoid"));
 		int maxPlanetLevel= getMaxPlanetLevel(obj);
 		for(uint i = 1, cnt = maxPlanetLevel; i <= cnt; ++i) {
 			const PlanetLevel@ lvl = getPlanetLevel(obj, i);
-			if(lvl !is null && !lvl.reqs.satisfiedBy(availableResources))
+			if(lvl !is null && !(lvl.reqs.satisfiedBy(availableResources) && (specialTraits || lvl.reqs.enoughCargo(obj))))
 				return i-1;
 		}
 		return maxPlanetLevel;
@@ -842,10 +833,24 @@ tidy class ObjectResources : Component_Resources, Savable {
 		return nativeResources[i].usable;
 	}
 
+	bool get_nativeResourceInTransit(uint i) {
+		if(i >= nativeResources.length)
+			return false;
+		return nativeResources[i].inTransit;
+	}
+
 	bool getNativeResourceUsableByID(int id) {
 		for(uint i = 0, cnt = nativeResources.length; i < cnt; ++i) {
 			if(nativeResources[i].id == id)
 				return nativeResources[i].usable;
+		}
+		return false;
+	}
+
+	bool getNativeResourceInTransitByID(int id) {
+		for(uint i = 0, cnt = nativeResources.length; i < cnt; ++i) {
+			if(nativeResources[i].id == id)
+				return nativeResources[i].inTransit;
 		}
 		return false;
 	}
@@ -1019,9 +1024,8 @@ tidy class ObjectResources : Component_Resources, Savable {
 		TradePath@ path = r.path;
 		if(path.goal !is null && (!path.valid || !path.isUsablePath))
 			return locale::EXPBLOCK_DISCONNECTED;
-		auto@ status = getStatusType("BlockadedExport");
-		if(status !is null && obj.hasStatuses && obj.hasStatusEffect(status.id))
-			return locale::EXPBLOCK_BLOCKADED_EXPORT;
+		if(!r.usable && r.inTransit)
+			return locale::EXPBLOCK_IN_TRANSIT;
 		if(!r.usable)
 			return locale::EXPBLOCK_UNUSABLE;
 		return "";
@@ -1045,10 +1049,6 @@ tidy class ObjectResources : Component_Resources, Savable {
 			if(r.usable)
 				obj.removeAvailableResource(obj, r.id, wasManual);
 		}
-		// remove all blockades, since res could be used locally
-		auto@ status = getStatusType("BlockadedExport");
-		if(status !is null && obj.hasStatuses && obj.hasStatusEffect(status.id))
-			obj.removeStatusInstanceOfType(status.id);
 
 		//Add to our new export
 		if(to !is null) {
@@ -1474,12 +1474,13 @@ tidy class ObjectResources : Component_Resources, Savable {
 			NativeResource@ r = nativeResources[i];
 			//Check usability
 			bool prev = r.usable;
-			r.usable = resourcesEnabled && ResourceLevel >= r.type.level && !blockaded
+			r.usable = resourcesEnabled && ResourceLevel >= r.type.level
 				&& r.disabled == 0 && (!terraforming || r.type.artificial);
 			r.efficiency = obj.resourceEfficiency;
-			
+
 			bool exporting = r.exportedTo !is null;
 
+			r.inTransit = false;
 			//Check pathing
 			if(exporting) {
 				TradePath@ path = r.path;
@@ -1501,6 +1502,15 @@ tidy class ObjectResources : Component_Resources, Savable {
 					}
 					if(!path.valid)
 						r.usable = false;
+					else if(r.type.cargoType != "Ore" && r.exportedTo.hasCargo) {
+						//print(format("check $1 $2 $3", r.exportedTo.name, r.type.cargoType, r.exportedTo.getCargoStored(r.type.cargoType)));
+						if(r.exportedTo.getCargoStored(r.type.cargoType) > 0) {
+							r.inTransit = false;
+						} else {
+							r.usable = false;
+							r.inTransit = true;
+						}
+					}
 				}
 			}
 
@@ -1765,7 +1775,9 @@ tidy class ObjectResources : Component_Resources, Savable {
 			Resource@ r = nativeResources[i];
 			if(obj.owner is null || !obj.owner.valid)
 				continue;
-			r.type.nativeTick(obj, r, time);
+
+			if(ResourceLevel >= r.type.level)
+				r.type.nativeTick(obj, r, time);
 
 			if(!r.usable)
 				continue;
@@ -1826,22 +1838,12 @@ tidy class ObjectResources : Component_Resources, Savable {
 				}
 			}
 		}
-		// are we blockaded?
-		if(obj.hasStatuses) {
-			auto@ status = getStatusType("BlockadedExport");
-			if(status !is null) {
-				if(!hasExports())
-					obj.removeStatusInstanceOfType(status.id);
-				blockaded = obj.hasStatusEffect(status.id);
-			}
-		}
 		//Deal with civilian trade
 		civilianTimer += time;
 	}
 
 	void _writeRes(Message& msg) {
 		msg << terraforming;
-		msg << blockaded;
 		msg << float(resVanishBonus);
 		availableResources.write(msg);
 

@@ -1,0 +1,5 @@
+Cargo: ContainedTerrasque
+	Name: #CONTAINED_TERRASQUE
+	Description: #PROCESSED_CARGO_DESCRIPTION
+
+	Icon: ResourceIconsSmall::106

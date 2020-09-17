@@ -1,0 +1,21 @@
+Resource: Coal
+	Name: #COAL
+	Description: #COAL_DESC
+	Native Biome: Mountains
+	Class: Fuel
+
+	Icon: ResourceIcons::43
+	Small Icon: ResourceIconsSmall::12
+
+	Level: 1
+	Asteroid Frequency: 0.1
+	Asteroid Labor: 40
+
+	Affinity: Energy
+
+	Pressure: 2 Energy
+
+	ModCivResourceMult(Labor, +0.3)
+
+	IfLevel(2, TriggerPeriodic(RemoveCargo(Coal, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(Coal, 11, 200), Interval = 10))

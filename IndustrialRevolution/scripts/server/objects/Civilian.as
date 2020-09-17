@@ -6,16 +6,19 @@ import civilians;
 import statuses;
 import oddity_navigation;
 from traits import getTraitID;
+from cargo import getCargoType;
 
 const double ACC_STATION = 0.1;
-const double ACC_SYSTEM = 2.0;
+const double ACC_SYSTEM = 4.0;
 const double ACC_INTERSYSTEM = 65.0;
-const double ACC_INTERSYSTEM_FTL = 200.0;
+const double ACC_INTERSYSTEM_FTL = 3000.0;
 const double CIV_REPAIR = 1.0;
 const double BLOCKADE_TIMER = 3.0 * 60.0;
 const double DEST_RANGE = 20.0;
+const double CARGO_DELIVERY_STORAGE_CAP = 3600.0; // don't deliver more than that amount of cargo, ever
 
 tidy class CivilianScript {
+	StrategicIconNode@ icon;
 	uint type = 0;
 	Object@ origin;
 	Object@ pathTarget;
@@ -156,13 +159,15 @@ tidy class CivilianScript {
 		cargoType = CT_Resource;
 		cargoWorth = (cargoResource.cargoWorth * obj.radius * CIV_RADIUS_WORTH) / (1.0+double(config::CIVILIAN_TRADE_MULT-1)/10);
 
+		if(mainRun && cargoResource !is null) {
+			for (uint i = 0, cnt = cargoResource.hooks.length; i < cnt; ++i)
+				cargoResource.hooks[i].onTradeSpawn(obj, origin, pathTarget);
+		}
 		modIncomeFromCargoWorth(obj);
 	}
 
 	void modIncomeFromCargoWorth(Civilian& obj) {
-		if(obj.getCivilianType() == CiT_CustomsOffice)
-			obj.modIncome(CIV_COFFICE_UPKEEP - income);
-		else if(obj.getCivilianType() == CiT_Freighter)
+		if(obj.getCivilianType() == CiT_Freighter)
 			obj.modIncome(getCivilianFreighterUpkeep(obj.radius) + calcIncomeFromCargoWorth(cargoWorth) - income);
 		else if(obj.getCivilianType() != CiT_PirateHoard)
 			// add 10% of transported cargo worth as income
@@ -218,11 +223,11 @@ tidy class CivilianScript {
 			// for orbiting
 			obj.activateMover();
 			obj.maxAcceleration = ACC_STATION;
-			obj.rotationSpeed = 0.5;
+			obj.rotationSpeed = 0.01;
 			obj.stopMoving();
+			obj.noCollide = true;
 			addAmbientSource(CURRENT_PLAYER, "ambient_station", obj.id, obj.position, STATION_SND_RAD);
 		}
-		obj.noCollide = true;
 		makeMesh(obj);
 		Health = get_maxHealth(obj);
 		delta = true;
@@ -232,9 +237,17 @@ tidy class CivilianScript {
 		MeshDesc mesh;
 		@mesh.model = getCivilianModel(obj.owner, type, obj.radius);
 		@mesh.material = getCivilianMaterial(obj.owner, type, obj.radius);
-		@mesh.iconSheet = getCivilianIcon(obj.owner, type, obj.radius).sheet;
-		mesh.iconIndex = getCivilianIcon(obj.owner, type, obj.radius).index;
 
+		if(obj.getCivilianType() == CiT_Freighter) {
+			@mesh.iconSheet = getCivilianIcon(obj.owner, type, obj.radius).sheet;
+			mesh.iconIndex = getCivilianIcon(obj.owner, type, obj.radius).index;
+		} else {
+			@icon = StrategicIconNode();
+			icon.establish(obj, 0.02, getCivilianIcon(obj.owner, type, obj.radius).sheet, getCivilianIcon(obj.owner, type, obj.radius).index);
+			//icon.memorable = true;
+			if(obj.region !is null)
+				obj.region.addStrategicIcon(-3, obj, icon);
+		}
 		bindMesh(obj, mesh);
 	}
 
@@ -260,25 +273,23 @@ tidy class CivilianScript {
 				cargoResource.hooks[i].onTradeDestroy(obj, origin, pathTarget, null);
 		}
 		// did we have an origin? set blockaded
-		if(origin !is null) {
+		if(origin !is null)
 			origin.removeAssignedCivilian(obj);
-			auto@ status = getStatusType("BlockadedExport");
-			if(status !is null && origin.hasStatuses && origin.owner is obj.owner && !origin.hasStatusEffect(status.id))
-				origin.addStatus(status.id);
-		} else if(!mainRun && pathTarget !is null && pathTarget.isPlanet && pathTarget.owner is obj.owner) {
-			auto@ status = getStatusType("Blockaded");
-			if(status !is null)
-				pathTarget.addStatus(status.id, timer=BLOCKADE_TIMER);
-		}
 		if(obj.getCivilianType() != CiT_Freighter)
 			removeAmbientSource(CURRENT_PLAYER, obj.id);
 		leaveRegion(obj);
-		removeBeam();
+		//removeBeam();
 		if(obj.owner !is null && obj.owner.valid) {
 			if(type == CiT_Freighter)
 				obj.owner.CivilianTradeShips -= 1;
 			if(income != 0)
 				obj.owner.modTotalBudget(-income, MoT_Trade);
+		}
+		if(icon !is null) {
+			if(obj.region !is null)
+				obj.region.removeStrategicIcon(-3, icon);
+			icon.markForDeletion();
+			@icon = null;
 		}
 	}
 
@@ -386,6 +397,8 @@ tidy class CivilianScript {
 		if(obj.hasMover)
 			obj.moverTick(time);
 
+		if(icon !is null)
+			icon.visible = obj.isVisibleTo(playerEmpire);
 	//obj.name = obj.id;
 		//Tick occasional stuff
 		timer -= float(time);
@@ -447,7 +460,7 @@ tidy class CivilianScript {
 						break;
 					}
 					@nextRegion = path.pathNode[1].object;
-					if(randomi(0,9)<3) {
+					if(!mainRun && randomi(0,9)<3) {
 						// (1/3 chance to) check out a local trade station first
 						navState = CiNS_PathToIntermediate;
 						break;
@@ -534,7 +547,7 @@ tidy class CivilianScript {
 				break;
 			}
 			case CiNS_MovingToTarget: {
-				removeBeam(); // remove beams we have started
+				//removeBeam(); // remove beams we have started
 				if ((moveTargetObj is null || !moveTargetObj.valid) && moveTargetPos == vec3d()) {
 					//print("no move target");
 					navState = CiNS_NeedPath;
@@ -565,6 +578,7 @@ tidy class CivilianScript {
 				break;
 			}
 			case CiNS_FTLToTarget: {
+				//removeBeam(); // remove beams we have started
 				if(moveTargetPos == vec3d()) {
 					navState = CiNS_NeedPath;
 					@nextRegion = null;
@@ -614,7 +628,7 @@ tidy class CivilianScript {
 				@nextRegion = null;
 				if(prevRegion !is null)
 					prevRegion.bumpTradeCounter(obj.owner);
-				if(randomi(0,9)<3) {
+				if(!mainRun && randomi(0,9)<3) {
 					// (1/3 chance to) check out a local trade station first
 					navState = CiNS_PathToIntermediate;
 					break;
@@ -635,15 +649,22 @@ tidy class CivilianScript {
 				if(destRegion !is null)
 					destRegion.bumpTradeCounter(obj.owner);
 				if(mainRun) {
-					if(origin !is null) {
-						if(cargoResource !is null && !pathTarget.isRegion) {
+					if(origin !is null && cargoResource !is null) {
+						if(!pathTarget.isRegion)
 							for (uint i = 0, cnt = cargoResource.hooks.length; i < cnt; ++i)
 								cargoResource.hooks[i].onTradeDeliver(obj, origin, pathTarget);
-						}
-						if(origin.hasStatuses) {
-							auto @status = getStatusType("BlockadedExport");
-							if(status !is null)
-								origin.removeStatusInstanceOfType(status.id);
+
+						if(pathTarget !is null && pathTarget.hasCargo) {
+							uint amount = uint(pathTarget.getCargoStored(cargoResource.cargoType));
+							double toAdd = min(CARGO_DELIVERY_STORAGE_CAP - amount, obj.radius * CIV_RADIUS_HEALTH);
+							// quickhack @TODO: do properly
+							if(cargoResource.ident == "BaseMaterial" || cargoResource.ident == "BioMass" || cargoResource.ident == "Ore")
+								toAdd = min(CARGO_DELIVERY_STORAGE_CAP - amount, obj.radius * CIV_RADIUS_FIRST);
+
+							if(toAdd > 0) {
+								auto@ type = ::getCargoType(cargoResource.cargoType);
+								pathTarget.addCargo(type.id, toAdd);
+							}
 						}
 					}
 					// start trading with the planets resource
@@ -663,7 +684,7 @@ tidy class CivilianScript {
 	}
 
 	bool tradeWithObject(Civilian& obj, Object@ tradeObj) {
-		startBeam(obj, tradeObj);
+		//startBeam(obj, tradeObj);
 		// who do we have here
 		Civilian@ tradeStation = cast<Civilian>(tradeObj);
 		if(tradeStation !is null) {

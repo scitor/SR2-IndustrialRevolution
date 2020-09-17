@@ -1,0 +1,5 @@
+Cargo: Electrolytes
+	Name: #ELECTROLYTES
+	Description: #CARGO_DESCRIPTION_CONSUMED:60:min
+
+	Icon: ResourceIconsSmall::70

@@ -1,0 +1,5 @@
+Cargo: Supercarbons
+	Name: #SUPERCARBONS
+	Description: #PROCESSED_CARGO_DESCRIPTION
+
+	Icon: ResourceIconsSmall::39

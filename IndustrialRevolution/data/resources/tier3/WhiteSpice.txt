@@ -1,0 +1,21 @@
+Resource: WhiteSpice
+	Name: #WHITE_SPICE
+	Description: #WHITE_SPICE_DESC
+	Native Biome: Desert
+
+	Icon: ResourceIcons::95
+	Small Icon: ResourceIconsSmall::95
+
+	Level: 3
+	Asteroid Frequency: 0.01
+	Asteroid Labor: 60
+
+	Affinity: Influence
+
+	Pressure: 7 Influence
+
+	ModLoyalty(+6)
+	AddPressureCap(1)
+
+	IfLevel(4, TriggerPeriodic(RemoveCargo(WhiteSpice, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(WhiteSpice, 11, 200), Interval = 10))

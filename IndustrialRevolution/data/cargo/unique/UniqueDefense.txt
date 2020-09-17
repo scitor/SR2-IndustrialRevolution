@@ -1,0 +1,6 @@
+Cargo: UniqueDefense
+	Name: #UNIQUE_DEFENSE
+	Description: #CARGO_DESCRIPTION_CONSUMED:60:min
+
+	IconL: ResourceIconsSmall::58
+	Icon: ResourceIconsSmall::58

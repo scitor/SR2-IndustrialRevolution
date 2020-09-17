@@ -1,0 +1,21 @@
+System: NebulaHydrogen
+	Frequency: 0.01
+
+	Repeat(0:1)
+		MakePlanet(RandomRarity:Uncommon, Orbit Spacing = 0, Radius = 24, Distribute Resource = True)
+
+	ExpandSystem(400:800)
+
+	Repeat(0:2)
+		MakeAnomaly()
+	Repeat(0:2)
+		MakeArtifact()
+	Repeat(0:2)
+		MakeAsteroidBelt()
+
+	ExpandSystem(500)
+	MakeNebula(#643067:#5f0442:#981993)
+
+	MakeCreepCamp(Offset = 1200)
+	AddRegionStatus(LimitedSight)
+	SetStaticSeeableRange(100)

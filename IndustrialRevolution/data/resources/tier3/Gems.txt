@@ -1,0 +1,27 @@
+Resource: Gems
+	Name: #GEMS
+	Description: #GEMS_DESC
+	Native Biome: Mountains
+
+	Icon: ResourceIconsSmall::51
+	Small Icon: ResourceIconsSmall::51
+
+	Level: 3
+	Rarity: Rare
+	Asteroid Frequency: 0.01
+	Asteroid Labor: 60
+
+	Affinity: ALL
+
+	Pressure: 1 Money
+	Pressure: 1 Research
+	Pressure: 1 Influence
+	Pressure: 1 Defense
+	Pressure: 1 Energy
+
+	OnTradeDeliver(AddStatus(Happy, Duration = 180))
+
+	Cargo Worth: 150
+
+	IfLevel(4, TriggerPeriodic(RemoveCargo(Gems, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(Gems, 11, 200), Interval = 10))

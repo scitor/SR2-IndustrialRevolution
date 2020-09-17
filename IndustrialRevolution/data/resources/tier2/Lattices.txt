@@ -1,0 +1,25 @@
+Resource: Lattices
+	Name: #R_LATTICES
+	Description: #R_LATTICES_DESC
+	Native Biome: Crystallic
+	DLC: Heralds
+
+	Icon: ResourceIconsSmall::80
+	Small Icon: ResourceIconsSmall::80
+
+	Level: 2
+	Rarity: Rare
+	Asteroid Frequency: 0.02
+	Asteroid Labor: 50
+
+	Affinity: Research
+	Affinity: Money
+
+	Pressure: 3 Research
+	Pressure: 3 Money
+
+	ModPressurePct(Research, +0.40, +1)
+	ModPressurePct(Energy, -0.40, -1)
+
+	IfLevel(3, TriggerPeriodic(RemoveCargo(Lattices, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(Lattices, 11, 200), Interval = 10))

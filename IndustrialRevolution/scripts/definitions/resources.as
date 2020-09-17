@@ -75,6 +75,10 @@ enum MoneyType {
 	//Update save version when adding
 	// See: components.ResourceManager
 
+	Mot_MothershipPopulation, // changed to labor, but just in case
+	MoT_Evangelized,
+	MoT_Base_Income,
+
 	MoT_COUNT
 };
 
@@ -104,6 +108,7 @@ tidy final class ResourceType {
 	int totalPressure = 0;
 	int displayWeight = 0;
 	int cargoWorth = 0;
+	string cargoType;
 	array<uint> affinities;
 	ResourceRarity rarity = RR_Common;
 	bool artificial = false;
@@ -276,6 +281,7 @@ interface IResourceHook {
 	void applyGraphics(Object& obj, Node& node) const;
 	void onTerritoryAdd(Object& obj, Resource@ r, Territory@ terr) const;
 	void onTerritoryRemove(Object& obj, Resource@ r, Territory@ terr) const;
+	void onTradeSpawn(Civilian& civ, Object@ origin, Object@ target) const;
 	void onTradeDeliver(Civilian& civ, Object@ origin, Object@ target) const;
 	void onTradeDestroy(Civilian& civ, Object@ origin, Object@ target, Object@ destroyer) const;
 
@@ -309,6 +315,7 @@ class ResourceHook : Hook, IResourceHook {
 	void onGenerate(Object& obj, Resource@ native) const {}
 	void nativeTick(Object&, Resource@ native, double time) const {}
 	void onDestroy(Object&, Resource@ native) const {}
+	void onTradeSpawn(Civilian& civ, Object@ origin, Object@ target) const {}
 	void onTradeDeliver(Civilian& civ, Object@ origin, Object@ target) const {}
 	void onTradeDestroy(Civilian& civ, Object@ origin, Object@ target, Object@ destroyer) const {}
 	void nativeSave(Resource@ native, SaveFile& file) const {}
@@ -465,9 +472,13 @@ string getResourceTooltip(const ResourceType@ type, const Resource@ r = null, Ob
 				if(r.origin is drawFrom) {
 					if(r.exportedTo is null)
 						base = locale::EXPBLOCK_USE;
+					else if(r.inTransit)
+						base = locale::EXPBLOCK_IN_TRANSIT;
 					else
 						base = locale::EXPBLOCK_EXPORT;
 				}
+				else if(r.inTransit)
+					base = locale::EXPBLOCK_IN_TRANSIT;
 				else {
 					base = locale::EXPBLOCK_IMPORT;
 				}
@@ -766,6 +777,56 @@ tidy final class ResourceRequirements {
 		reqs.sortAsc();
 	}
 
+	bool enoughCargo(Object& planet) const {
+		//Planet@ planet = cast<Planet>(obj);
+		if(planet is null || !planet.hasCargo)
+			return true;
+		//print(format("enoughCargo $1 $2", planet.name, planet.hasCargo ? 1 : 0));
+
+		uint unsatisfied = 0;
+		uint reqCnt = reqs.length;
+		for(uint i = 0; i < reqCnt; ++i) {
+			ResourceRequirement@ r = reqs[i];
+			unsatisfied = r.amount * 10;
+
+	//print(format("1uns $1", unsatisfied));
+			switch(r.type) {
+				case RRT_Resource:
+					if(r.resource.mode == RM_Normal)
+						unsatisfied = max(0, unsatisfied - uint(planet.getCargoStored(r.resource.cargoType)));
+					break;
+				case RRT_Class:
+					for(uint i = 0, cnt = r.cls.types.length; i < cnt; ++i) {
+						const ResourceType@ rtype = r.cls.types[i];
+						uint cargo = uint(planet.getCargoStored(rtype.cargoType));
+						unsatisfied = max(0, unsatisfied - cargo);
+						if(unsatisfied < 1)
+							break;
+					}
+				break;
+				case RRT_Level:
+					for(uint i = 0, cnt = resources::resources.length; i < cnt; ++i) {
+						const ResourceType@ rtype = resources::resources[i];
+						if(rtype.level != r.level)
+							continue;
+						uint cargo = uint(planet.getCargoStored(rtype.cargoType));
+						unsatisfied = max(0, unsatisfied - cargo);
+						if(unsatisfied < 1)
+							break;
+					}
+				break;
+				case RRT_Class_Types:
+				case RRT_Level_Types:
+					print("enoughCargo: not implemented, but not used so... @todo ;)");
+				break;
+			}
+			if(unsatisfied>0)
+				return false;
+		}
+
+		return unsatisfied == 0;
+	}
+
 	bool satisfiedBy(const Resources@ res, array<int>@ remaining = null,
 			bool allowUniversal = true, array<int>@ reqRemaining = null) const {
 		int universal = res.universalCount;
@@ -952,6 +1013,7 @@ tidy class Resource : Serializable, Savable {
 	Object@ origin;
 	Object@ exportedTo;
 	bool usable = true;
+	bool inTransit = false;
 	bool locked = false;
 	uint8 disabled = 0;
 	double vanishTime;
@@ -967,6 +1029,7 @@ tidy class Resource : Serializable, Savable {
 		msg << disabled;
 		msg << efficiency;
 		msg << locked;
+		msg << inTransit;
 		if(type.vanishMode != VM_Never)
 			msg << float(vanishTime);
 	}
@@ -980,6 +1043,7 @@ tidy class Resource : Serializable, Savable {
 		msg >> disabled;
 		msg >> efficiency;
 		msg >> locked;
+		msg >> inTransit;
 		if(type.vanishMode != VM_Never)
 			vanishTime = msg.read_float();
 	}
@@ -994,6 +1058,7 @@ tidy class Resource : Serializable, Savable {
 		msg << vanishTime;
 		msg << efficiency;
 		msg << locked;
+		msg << inTransit;
 	}
 
 	void load(SaveFile& msg) {
@@ -1011,6 +1076,8 @@ tidy class Resource : Serializable, Savable {
 
 		if(msg >= SV_0027)
 			msg >> locked;
+		if(msg >= SV_0164_IR)
+			msg >> inTransit;
 	}
 
 	void descFrom(const Resource@ other) {
@@ -1393,6 +1460,7 @@ void loadResources(const string& filename) {
 				addResourceType(r);
 			@r = ResourceType();
 			r.ident = value;
+			r.cargoType = value;
 		}
 		else if(key == "Level Chain") {
 			advance = !readLevelChain(file);
@@ -1442,6 +1510,9 @@ void loadResources(const string& filename) {
 		}
 		else if(key == "Cargo Worth") {
 			r.cargoWorth = toInt(value);
+		}
+		else if(key == "Cargo Type") {
+			r.cargoType = value;
 		}
 		else if(key == "Vanish Mode") {
 			if(value == "Never")
@@ -1620,7 +1691,7 @@ void preInit() {
 
 		}
 		if(type.unique)
-			freq *= config::UNIQUE_RESOURCE_OCCURANCE / 0.3;
+			freq *= config::UNIQUE_RESOURCE_OCCURANCE;
 
 		resources::totalFrequency += freq;
 		type.rarityScore = freq;

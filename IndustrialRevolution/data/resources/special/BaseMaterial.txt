@@ -1,0 +1,15 @@
+Resource: BaseMaterial
+	Name: #R_BASE_MATERIAL
+	Description: #R_BASE_MATERIAL_DESC
+	Native Biome: Desert
+
+	Icon: ResourceIconsSmall::81
+	Small Icon: ResourceIconsSmall::81
+
+	Artificial: True
+	Distribution: 0
+	Frequency: 0
+	Level: 0
+
+	OnNative(TriggerPeriodic(AddCargoMax(BaseMaterial, 1, 200), Interval = 5))
+

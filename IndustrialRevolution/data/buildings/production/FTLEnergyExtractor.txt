@@ -1,0 +1,24 @@
+Building: FTLEnergyExtractor
+	Name: #BLD_FTL_ENERGY_EXTRACTOR
+	Description: #BLD_FTL_ENERGY_EXTRACTOR_DESC
+	Sprite: FTLEnrichment::0
+	Animate Sprite: True
+	Animation FPS: 8
+
+	Category: Production
+
+	Size: 2x2
+
+	Base Cost: 140
+	Tile Cost: 10
+	Base Maintenance: 30
+	Tile Maintenance: 20
+	ConsumeCargo(FTLShards, 20)
+
+	Build Affinity: Mountains
+
+	In Queue: True
+
+	RequireTrait(Sublight)
+
+	ActiveWhenCargoConsumed(FTLShards, 10, 10, AddEnergyIncome(+0.5))

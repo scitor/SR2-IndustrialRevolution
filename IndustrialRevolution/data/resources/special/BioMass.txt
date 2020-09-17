@@ -1,0 +1,14 @@
+Resource: BioMass
+	Name: #R_BIOMASS
+	Description: #R_BIOMASS_DESC
+	Native Biome: Crystallic
+
+	Icon: ResourceIconsSmall::103
+	Small Icon: ResourceIconsSmall::103
+
+	Artificial: True
+	Distribution: 0
+	Frequency: 0
+	Level: 0
+
+	OnNative(TriggerPeriodic(AddCargoMax(BioMass, 1, 200), Interval = 5))

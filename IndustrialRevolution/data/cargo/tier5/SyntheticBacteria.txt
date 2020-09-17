@@ -1,0 +1,5 @@
+Cargo: SyntheticBacteria
+	Name: #SYNTHETIC_BACTERIA
+	Description: #PROCESSED_CARGO_DESCRIPTION
+
+	Icon: ResourceIconsSmall::103

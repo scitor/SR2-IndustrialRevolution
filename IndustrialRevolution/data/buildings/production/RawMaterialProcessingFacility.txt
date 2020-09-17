@@ -1,0 +1,21 @@
+Building: RawMaterialProcessingFacility
+	Name: Raw Material Processing Facility
+	Description: RawMaterialProcessingFacility needs Ore //@todo i18n this
+	Sprite: RawMaterialProcessingFacility::0
+	Animate Sprite: True
+	Animation FPS: 20
+
+	Category: Production
+
+	Size: 3x3
+
+	Base Cost: 100
+	Tile Cost: 10
+	Build Time: 10
+
+	Build Affinity: Mountains
+
+	In Queue: True
+
+	AddPlanetResource(ToxicSolutions)
+	ActiveWhenCargoConsumed(Ore, 1, 6, AddStatus(RawMaterialProcessingActive))

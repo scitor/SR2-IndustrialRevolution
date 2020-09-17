@@ -1,0 +1,6 @@
+Cargo: AsteroidGrowth
+	Name: #ASTEROID_GROWTH
+	Description: #CARGO_DESCRIPTION_CONSUMED:60:min
+
+	IconL: ResourceIcons::3
+	Icon: ResourceIconsSmall::20

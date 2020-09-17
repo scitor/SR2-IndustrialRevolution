@@ -3,6 +3,7 @@ import resources;
 import civilians;
 
 tidy class CivilianScript {
+	StrategicIconNode@ icon;
 	uint type = 0;
 	uint cargoType = 0;
 	const ResourceType@ cargoResource;
@@ -51,6 +52,12 @@ tidy class CivilianScript {
 	void destroy(Civilian& obj) {
 		removeAmbientSource(obj.id);
 		leaveRegion(obj);
+		if (icon !is null) {
+			if(obj.region !is null)
+				obj.region.removeStrategicIcon(-1, icon);
+			icon.markForDeletion();
+			@icon = null;
+		}
 	}
 
 	bool onOwnerChange(Civilian& obj, Empire@ prevOwner) {
@@ -60,6 +67,8 @@ tidy class CivilianScript {
 
 	double tick(Civilian& obj, double time) {
 		updateRegion(obj);
+		if(icon !is null)
+			icon.visible = obj.isVisibleTo(playerEmpire);
 		if(obj.hasMover)
 			obj.moverTick(time);
 		return 0.2;
@@ -69,9 +78,17 @@ tidy class CivilianScript {
 		MeshDesc mesh;
 		@mesh.model = getCivilianModel(obj.owner, type, obj.radius);
 		@mesh.material = getCivilianMaterial(obj.owner, type, obj.radius);
-		@mesh.iconSheet = getCivilianIcon(obj.owner, type, obj.radius).sheet;
-		mesh.iconIndex = getCivilianIcon(obj.owner, type, obj.radius).index;
 
+		if(obj.getCivilianType() == CiT_Freighter) {
+			@mesh.iconSheet = getCivilianIcon(obj.owner, type, obj.radius).sheet;
+			mesh.iconIndex = getCivilianIcon(obj.owner, type, obj.radius).index;
+		} else {
+			@icon = StrategicIconNode();
+			icon.establish(obj, 0.02, getCivilianIcon(obj.owner, type, obj.radius).sheet, getCivilianIcon(obj.owner, type, obj.radius).index);
+			//icon.memorable = true;
+			if(obj.region !is null)
+				obj.region.addStrategicIcon(-3, obj, icon);
+		}
 		bindMesh(obj, mesh);
 	}
 

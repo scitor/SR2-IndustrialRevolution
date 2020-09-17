@@ -1,0 +1,6 @@
+Cargo: UniqueEnergy
+	Name: #UNIQUE_ENERGY
+	Description: #CARGO_DESCRIPTION_CONSUMED:60:min
+
+	IconL: ResourceIconsSmall::57
+	Icon: ResourceIconsSmall::57

@@ -1,0 +1,19 @@
+Resource: Ore
+	Name: #LOCAL_ASTEROID_FIELD
+	Description: #LOCAL_ASTEROID_FIELD_DESC
+	Native Biome: Desert
+
+	Icon: ResourceIcons::28
+	Small Icon: ResourceIconsSmall::28
+
+	Level: 0
+	Distribution: 0
+	Asteroid Frequency: 0
+	Asteroid Labor: 10
+	Exportable: False
+
+	Cargo Type: Ore
+	OnNative(TriggerPeriodic(AddCargoMax(Ore, 1, 200), Interval = 60))
+	AsteroidGraphics()
+
+	AI: DistributeToImportantPlanet()

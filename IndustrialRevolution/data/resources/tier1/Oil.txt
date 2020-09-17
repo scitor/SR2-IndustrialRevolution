@@ -1,0 +1,21 @@
+Resource: Oil
+	Name: #OIL
+	Description: #OIL_DESC
+	Native Biome: Desert
+
+	Icon: ResourceIcons::8
+	Small Icon: ResourceIconsSmall::7
+
+	Terraform Cost: 1000
+	Terraform Labor: 60
+
+	Level: 1
+	Asteroid Frequency: 0.1
+	Asteroid Labor: 40
+
+	Affinity: Money
+
+	Pressure: 3 Money
+
+	IfLevel(2, TriggerPeriodic(RemoveCargo(Oil, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(Oil, 11, 200), Interval = 10))

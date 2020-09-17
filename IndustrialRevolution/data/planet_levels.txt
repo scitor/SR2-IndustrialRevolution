@@ -14,7 +14,7 @@ Level: 1
 	Icon: PlanetIcon1
 	Required: 1 WaterType, 1 Food
 	Population: 3
-	PopGrowth: 1.2
+	PopGrowth: 1.6
 	RequiredPop: 2
 	BasePressure: 1
 	BaseIncome: 80
@@ -27,7 +27,7 @@ Level: 1
 Level: 2
 	Icon: PlanetIcon2
 	Required: 1 WaterType, 2 Food, 1 Level1
-	PopGrowth: 1.6
+	PopGrowth: 2.0
 	Population: 8
 	RequiredPop: 6
 	BasePressure: 12
@@ -42,7 +42,7 @@ Level: 2
 Level: 3
 	Icon: PlanetIcon3
 	Required: 1 WaterType, 3 Food, 2 Level1, 1 Level2
-	PopGrowth: 1.7
+	PopGrowth: 2.4
 	Population: 16
 	RequiredPop: 8
 	BasePressure: 22
@@ -56,8 +56,8 @@ Level: 3
 
 Level: 4
 	Icon: PlanetIcon4
-	Required: 1 WaterType, 4 Food, 4 Level1, 2 Level2
-	PopGrowth: 1.8
+	Required: 1 WaterType, 4 Food, 3 Level1, 2 Level2, 1 Level3
+	PopGrowth: 2.8
 	Population: 24
 	RequiredPop: 14
 	BasePressure: 40
@@ -70,8 +70,8 @@ Level: 4
 
 Level: 5
 	Icon: PlanetIcon5
-	Required: 1 WaterType, 5 Food, 6 Level1, 4 Level2
-	PopGrowth: 1.8
+	Required: 1 WaterType, 5 Food, 4 Level1, 3 Level2, 2 Level3, 1 Level4
+	PopGrowth: 3.2
 	Population: 36
 	RequiredPop: 20
 	BasePressure: 65
@@ -81,3 +81,17 @@ Level: 5
 	NeighbourLoyalty: 3
 	BaseSupport: 1500
 	Points: 2600
+
+Level: 6
+	Icon: PlanetIcon6
+	Required: 1 WaterType, 6 Food, 5 Level1, 4 Level2, 3 Level3, 2 Level4, 1 Level5
+	PopGrowth: 4.0
+	Population: 50
+	RequiredPop: 30
+	BasePressure: 90
+	ExportPressurePenalty: 20
+	BaseIncome: 2400
+	BaseLoyalty: 28
+	NeighbourLoyalty: 3
+	BaseSupport: 2000
+	Points: 4000

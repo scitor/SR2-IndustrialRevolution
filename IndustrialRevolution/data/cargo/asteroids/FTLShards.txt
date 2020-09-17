@@ -1,0 +1,7 @@
+Cargo: FTLShards
+	Name: #ASTEROID_FTL
+	Description: #ASTEROID_FTL_CARGO_DESC
+
+	Icon: ResourceIconsSmall::47
+
+	Resource Type: AsteroidFTL

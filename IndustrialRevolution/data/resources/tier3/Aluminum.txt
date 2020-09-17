@@ -1,0 +1,20 @@
+Resource: Aluminum
+	Name: #ALUMINUM
+	Description: #ALUMINUM_DESC
+	Native Biome: Mountains
+
+	Icon: ResourceIcons::1
+	Small Icon: ResourceIconsSmall::16
+
+	Level: 3
+	Asteroid Frequency: 0.01
+	Asteroid Labor: 60
+
+	Affinity: Labor
+
+	Pressure: 6 Labor
+
+	AddPressureCap(1)
+
+	IfLevel(4, TriggerPeriodic(RemoveCargo(Aluminum, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(Aluminum, 11, 200), Interval = 10))

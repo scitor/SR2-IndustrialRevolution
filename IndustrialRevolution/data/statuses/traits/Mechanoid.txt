@@ -1,0 +1,13 @@
+Status: Mechanoid
+	Visible To: Nobody
+	Collapses: True
+
+	PerPopulationAddResource(2.0, Labor, Ignore First = 1)
+
+	GrantAbility(MechanoidColonize)
+
+	AddDummyResource(Water, 1, Base Chain Only = True)
+	AddDummyResource(Meat, 6, Base Chain Only = True)
+	IfNativeLevel(0, SetMaxLevel(0), Exact = True)
+
+	PlanetLevelIncomeMod(0, -160, Step = -80)

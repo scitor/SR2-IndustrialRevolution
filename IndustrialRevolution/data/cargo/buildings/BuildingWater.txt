@@ -1,0 +1,6 @@
+Cargo: BuildingWater
+	Name: #BUILDING_WATER
+	Description: #CARGO_DESCRIPTION_CONSUMED:60:min
+	Class: WaterType
+
+	Icon: ResourceIconsSmall::86*#8cff00

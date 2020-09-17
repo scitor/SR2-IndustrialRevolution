@@ -1,0 +1,5 @@
+Status: CustomsOffice
+	Name: #STATUS_CUSTOMS_OFFICE
+	Description: #STATUS_CUSTOMS_OFFICE_DESC
+	Icon: AngryMeteorIconsSet::70
+	Color: #00aa00

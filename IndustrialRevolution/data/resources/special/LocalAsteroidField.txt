@@ -1,0 +1,16 @@
+Resource: LocalAsteroidField
+	Name: #LOCAL_ASTEROID_FIELD
+	Description: #LOCAL_ASTEROID_FIELD_DESC
+	Native Biome: Desert
+
+	Icon: ResourceIcons::28
+	Small Icon: ResourceIconsSmall::28
+
+	Exportable: False
+	Distribution: 0
+	Affinity: Labor
+
+	Pressure: 10 Labor
+	Artificial: True
+	ModCivResourceMult(Labor, +0.5) #version>=71
+	AsteroidGraphics()

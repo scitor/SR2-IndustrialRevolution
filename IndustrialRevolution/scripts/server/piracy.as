@@ -7,6 +7,7 @@ import civilians;
 from game_start import getClosestSystem, getRandomSystem, systemCount, getSystem;
 from regions.regions import extentMin, extentMax;
 from statuses import StatusHook;
+from components.ObjectManager import getDefenseDesign;
 
 const double PIRATE_GAMETIME = 30.0 * 60.0;
 const double HOARD_TIME = 30.0;
@@ -95,9 +96,6 @@ class PirateStatus : StatusHook {
 		PirateData@ dat;
 		data.retrieve(@dat);
 
-		double thrustPct = ship.blueprint.getEfficiencySum(SV_Thrust) / ship.blueprint.design.total(SV_Thrust);
-		obj.maxAcceleration = dat.accel * thrustPct;
-
 		if(obj.orderCount != 0) {
 			if(dat.state == PILLAGING)
 				dat.timer -= time * 0.5 * sqr(ship.blueprint.design.totalHP / ship.blueprint.currentHP);
@@ -143,6 +141,8 @@ class PirateStatus : StatusHook {
 				if(!ship.inCombat) {
 					ship.Supply = ship.MaxSupply;
 					ship.repairShip(10000000);
+					if(ship.canGainSupports && randomi(0,9) <3)
+						spawnStolenSupport(ship);
 				}
 			} break;
 			case PILLAGING: {
@@ -340,8 +340,38 @@ void spawnPirateShip(Empire@ limitEmpire = null) {
 	Ship@ ship = createShip(pos, dsg, Pirates, free=true);
 
 	auto@ status = getStatusType("PirateShip");
-	if(status !is null)
-		ship.addStatus(status.id, originEmpire=limitEmpire);
-	else
+	if(status !is null) {
+		ship.addStatus(status.id, originEmpire = limitEmpire);
+		ship.setFreeRaiding(true);
+
+		@dsg = Pirates.getDesign("Dread Pirate Buddy");
+		for(uint i = 0, cnt = randomi(1,4); i < cnt; i++)
+			createShip(pos, dsg, Pirates, ship, free=true);
+
+		while(ship.canGainSupports && randomi(0,9) <3)
+			spawnStolenSupport(ship);
+
+	} else
 		error("Error: Could not find 'PirateShip' status for managing pirate vessel.");
+}
+
+void spawnStolenSupport(Ship@ ship) {
+	const Design@ dsg;
+	uint rs = 10;
+	while (rs-->0) {
+		Empire@ other = getEmpire(randomi(0, getEmpireCount()-1));
+		if(!other.major)
+			continue;
+		if(Pirates.mask & other.mask != 0)
+			continue;
+		@dsg = other.getDesign(randomi(0, other.designCount-1));
+		if(dsg !is null && dsg.hasTag(ST_IsSupport))
+			break;
+	}
+	if(dsg !is null && dsg.hasTag(ST_IsSupport)) {
+		dsg.decBuilt(); //automatic built doesn't increment
+		Ship@ pirateSupport = createShip(ship, dsg, Pirates, ship, false, true);
+		pirateSupport.name = format("$1 (stolen)", pirateSupport.name);
+		pirateSupport.named = true;
+	}
 }

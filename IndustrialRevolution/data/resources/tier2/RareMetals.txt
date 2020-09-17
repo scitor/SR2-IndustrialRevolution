@@ -1,0 +1,21 @@
+Resource: RareMetals
+	Name: #RARE_METALS
+	Description: #RARE_METALS_DESC
+	Native Biome: Mountains
+
+	Icon: ResourceIcons::12
+	Small Icon: ResourceIconsSmall::11
+
+	Level: 2
+	Rarity: Uncommon
+	Asteroid Frequency: 0.02
+	Asteroid Labor: 50
+
+	Affinity: Research
+
+	Pressure: 3 Research
+
+	AddPressureCap(1)
+
+	IfLevel(3, TriggerPeriodic(RemoveCargo(RareMetals, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(RareMetals, 11, 200), Interval = 10))

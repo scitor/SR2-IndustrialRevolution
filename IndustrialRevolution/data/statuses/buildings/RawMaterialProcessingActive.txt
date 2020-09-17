@@ -1,0 +1,4 @@
+Status: RawMaterialProcessingActive
+	Visible To: Nobody
+
+	//TriggerPeriodic(AddCargo(ConstructionMaterials, 10), Interval = 10)

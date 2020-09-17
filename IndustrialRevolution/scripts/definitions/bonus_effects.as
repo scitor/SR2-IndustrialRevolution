@@ -1063,7 +1063,12 @@ class PricedAsteroid : BonusEffect {
 
 #section server
 	void activate(Object@ obj, Empire@ emp) const override {
-		Asteroid@ roid = createAsteroid(obj.position);
+		vec3d pos = obj.position;
+		vec2d off = random2d(obj.radius * 2, obj.radius * 5);
+		pos.x += off.x;
+		pos.z += off.y;
+
+		Asteroid@ roid = createAsteroid(pos);
 		Region@ reg = obj.region;
 		if(reg !is null) {
 			roid.orbitAround(reg.position);
@@ -1083,7 +1088,7 @@ class OwnedAsteroid : BonusEffect {
 #section server
 	void activate(Object@ obj, Empire@ emp) const override {
 		vec3d pos = obj.position;
-		vec2d off = random2d(5.0);
+		vec2d off = random2d(obj.radius * 2, obj.radius * 5);
 		pos.x += off.x;
 		pos.z += off.y;
 
@@ -1115,33 +1120,28 @@ class SpawnAsteroids : BonusEffect {
 	void activate(Object@ obj, Empire@ emp) const override {
 		for(uint i = 0, cnt = arguments[0].integer; i < cnt; ++i) {
 			vec3d pos = obj.position;
+			vec2d rpos;
 			if(obj.isRegion)
-				pos += random3d(200.0, obj.radius * 0.75);
+				rpos = random2d(obj.radius * 0.3, obj.radius * 0.8);
 			else
-				pos += random3d(arguments[1].decimal + obj.radius);
+				rpos = random2d(obj.radius + arguments[1].decimal);
+			pos += vec3d(rpos.x, pos.y, rpos.y);
 
 			double totChance = config::ASTEROID_OCCURANCE + config::RESOURCE_ASTEROID_OCCURANCE;
 			double resChance = config::RESOURCE_ASTEROID_OCCURANCE;
 			double roll = randomd(0, totChance);
 
-			int cargoType = cargo.integer;
-			if(cargoType == -1) {
-				auto@ ore = getCargoType("Ore");
-				if(ore !is null)
-					cargoType = ore.id;
-			}
-
 			Asteroid@ roid = createAsteroid(pos, delay=true);
-			Region@ reg = obj.region;
-			if(reg !is null) {
-				roid.orbitAround(reg.position);
-				roid.orbitSpin(randomd(20.0, 60.0));
-			}
+			if(obj.isRegion)
+				roid.orbitAround(obj.position);
+			else
+				roid.orbitAround(obj);
+			roid.orbitSpin(randomd(20.0, 60.0));
 
-			if(!resource_only.boolean && (cargo.integer != -1 || (cargoType != -1 && roll >= resChance))) {
-				roid.addCargo(cargoType, cargo_amount.fromRange());
-			}
-			else {
+			if(cargo.integer != -1) {
+				const ResourceType@ type = getResource("Ore");
+				roid.addAvailable(type.id, type.asteroidCost);
+			} else {
 				do {
 					const ResourceType@ type = getDistributedAsteroidResource();
 					if(roid.getAvailableCostFor(type.id) < 0.0)
@@ -3350,3 +3350,38 @@ class ModStat : BonusEffect {
 	}
 #section all
 };
+
+class AddCargoMax : BonusEffect {
+	Document doc("Add an amount of a particular type of cargo to the object, with a maximum.");
+	Argument type(AT_Cargo, doc="Type of cargo to add.");
+	Argument amount(AT_Decimal, doc="Amount of cargo to add.");
+	Argument maximum(AT_Decimal, doc="Amount over which no cargo will be added.");
+
+#section server
+	void activate(Object@ obj, Empire@ emp) const override {
+		if(obj is null || !obj.hasCargo)
+			return;
+		double cargoStored = obj.getCargoStored(type.integer);
+		double toAdd = maximum.decimal > 0 ? min(maximum.decimal - cargoStored, amount.decimal) : amount.decimal;
+		if(toAdd > 0)
+			obj.addCargo(type.integer, toAdd);
+	}
+#section all
+}
+
+class RemoveCargo : BonusEffect {
+	Document doc("Remove an amount of a particular type of cargo from the object.");
+	Argument type(AT_Cargo, doc="Type of cargo to remove.");
+	Argument amount(AT_Decimal, doc="Amount of cargo to remove.");
+
+#section server
+	void activate(Object@ obj, Empire@ emp) const override {
+		if(obj is null || !obj.hasCargo)
+			return;
+		double cargoStored = obj.getCargoStored(type.integer);
+		double toSub = min(cargoStored, amount.decimal);
+		if(toSub > 0)
+			obj.removeCargo(type.integer, toSub);
+	}
+#section all
+}

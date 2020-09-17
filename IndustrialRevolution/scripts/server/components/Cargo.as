@@ -1,6 +1,7 @@
 import cargo;
 
 tidy class Cargo : CargoStorage, Component_Cargo {
+	uint CargoModId = 0;
 	void getCargo() {
 		yield(this);
 	}
@@ -20,6 +21,13 @@ tidy class Cargo : CargoStorage, Component_Cargo {
 		return get(type);
 	}
 
+	double getCargoStored(const string& typeIdent) {
+		auto@ type = getCargoType(typeIdent);
+		if(type is null)
+			return -1.0;
+		return get(type);
+	}
+
 	uint get_cargoTypes() {
 		if(types is null)
 			return 0;
@@ -34,8 +42,13 @@ tidy class Cargo : CargoStorage, Component_Cargo {
 		return types[index].id;
 	}
 
+	uint get_cargoModID() const {
+		return CargoModId;
+	}
+
 	void modCargoStorage(double amount) {
 		capacity += amount;
+		CargoModId++;
 		delta = true;
 	}
 
@@ -43,6 +56,7 @@ tidy class Cargo : CargoStorage, Component_Cargo {
 		auto@ type = getCargoType(typeId);
 		if(type is null)
 			return;
+		CargoModId++;
 		add(type, amount);
 	}
 
@@ -50,6 +64,7 @@ tidy class Cargo : CargoStorage, Component_Cargo {
 		auto@ type = getCargoType(typeId);
 		if(type is null)
 			return;
+		CargoModId++;
 		consume(type, amount, true);
 	}
 
@@ -57,6 +72,7 @@ tidy class Cargo : CargoStorage, Component_Cargo {
 		auto@ type = getCargoType(typeId);
 		if(type is null)
 			return 0.0;
+		CargoModId++;
 		return consume(type, amount, partial);
 	}
 
@@ -76,6 +92,7 @@ tidy class Cargo : CargoStorage, Component_Cargo {
 				break;
 			}
 		}
+		CargoModId++;
 	}
 
 	void transferPrimaryCargoTo(Object@ other, double rate) {
@@ -86,6 +103,7 @@ tidy class Cargo : CargoStorage, Component_Cargo {
 		realAmount = consume(type, realAmount, partial=true);
 		if(realAmount > 0)
 			other.addCargo(type.id, realAmount);
+		CargoModId++;
 	}
 
 	void transferCargoTo(uint typeId, Object@ other) {
@@ -105,6 +123,7 @@ tidy class Cargo : CargoStorage, Component_Cargo {
 				cap -= cons;
 			}
 		}
+		CargoModId++;
 	}
 
 	void writeCargo(Message& msg) {

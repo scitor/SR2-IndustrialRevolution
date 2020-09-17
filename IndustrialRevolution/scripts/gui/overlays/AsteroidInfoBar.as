@@ -130,24 +130,7 @@ class AsteroidInfoBar : InfoBar {
 			if(owner !is null)
 				name.color = owner.color;
 
-			if(obj.cargoTypes != 0) {
-				//Update cargo display
-				auto@ cargo = getCargoType(obj.cargoType[0]);
-				resourceBox.visible = cargo !is null;
-				if(cargo !is null) {
-					cargoIcon.desc = cargo.icon;
-					cargoName.text = cargo.name+":";
-					cargoValue.text = standardize(obj.getCargoStored(cargo.id), true);
-				}
-
-				cargoIcon.visible = true;
-				cargoName.visible = true;
-				cargoValue.visible = true;
-				resources.visible = false;
-
-				state.text = locale::ASTEROID_MINING;
-			}
-			else if(obj.nativeResourceCount != 0) {
+			if(obj.nativeResourceCount != 0) {
 				//Update resource display
 				resources.resources.syncFrom(obj.getAllResources());
 				resources.resources.sortDesc();
@@ -164,6 +147,23 @@ class AsteroidInfoBar : InfoBar {
 					state.text = locale::ASTEROID_OWNED;
 				else
 					state.text = locale::ASTEROID_UNOWNED;
+			}
+			else if(obj.cargoTypes != 0) {
+				//Update cargo display
+				auto@ cargo = getCargoType(obj.cargoType[0]);
+				resourceBox.visible = cargo !is null;
+				if(cargo !is null) {
+					cargoIcon.desc = cargo.icon;
+					cargoName.text = cargo.name+":";
+					cargoValue.text = standardize(obj.getCargoStored(cargo.id), true);
+				}
+
+				cargoIcon.visible = true;
+				cargoName.visible = true;
+				cargoValue.visible = true;
+				resources.visible = false;
+
+				state.text = locale::ASTEROID_MINING;
 			}
 			else {
 				resourceBox.visible = false;

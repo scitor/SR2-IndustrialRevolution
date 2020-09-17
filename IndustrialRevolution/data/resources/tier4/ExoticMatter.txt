@@ -1,0 +1,19 @@
+Resource: ExoticMatter
+	Name: #EXOTIC_MATTER
+	Description: #EXOTIC_MATTER_DESC
+	Native Biome: Crystallic
+
+	Icon: ResourceIcons::20
+	Small Icon: ResourceIconsSmall::3
+
+	Level: 4
+	Artificial: True
+
+	Affinity: Research
+
+	Pressure: 16 Research
+
+	ModBuildingConstructRate(100000000)
+
+	IfLevel(5, TriggerPeriodic(RemoveCargo(ExoticMatter, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(ExoticMatter, 11, 200), Interval = 10))

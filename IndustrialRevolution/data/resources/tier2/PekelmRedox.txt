@@ -1,0 +1,13 @@
+Resource: PekelmRedox
+	Name: #PEKELM_REDOX
+	Description: #PEKELM_REDOX
+	Native Biome: Ice
+
+	Icon: ResourceIcons::90
+	Small Icon: ResourceIconsSmall::90
+
+	Level: 2
+	Artificial: True
+
+	//IfLevel(3, TriggerPeriodic(RemoveCargo(PekelmRedox, 10), Interval = 10))
+	//OnNative(TriggerPeriodic(AddCargoMax(PekelmRedox, 11, 200), Interval = 10))

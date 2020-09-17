@@ -1,0 +1,13 @@
+// not a lens yet, just fake fade to black,  but will be there, if it's possible
+varying vec2 uv;
+
+void main()
+{
+	vec2 r = (uv - vec2(0.5)) * 2.0;
+	float d = length(r);
+	if(d > 1.0)
+		discard;
+
+	gl_FragColor = gl_Color;
+	gl_FragColor.a = smoothstep(1.0, 0.4, d);
+}

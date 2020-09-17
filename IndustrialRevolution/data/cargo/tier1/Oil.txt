@@ -1,0 +1,5 @@
+Cargo: Oil
+	Name: #OIL
+	Description: #CARGO_DESCRIPTION_CONSUMED:60:min
+
+	Icon: ResourceIconsSmall::7

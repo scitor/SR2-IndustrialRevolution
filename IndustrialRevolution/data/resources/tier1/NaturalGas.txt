@@ -1,0 +1,21 @@
+Resource: NaturalGas
+	Name: #NATURAL_GAS
+	Description: #NATURAL_GAS_DESC
+	Native Biome: Forest
+
+	Icon: ResourceIcons::41
+	Small Icon: ResourceIconsSmall::41
+
+	Terraform Cost: 500
+	Terraform Labor: 30
+
+	Level: 1
+	Asteroid Frequency: 0.2
+	Asteroid Labor: 40
+
+	Affinity: Energy
+
+	Pressure: 3 Energy
+
+	IfLevel(2, TriggerPeriodic(RemoveCargo(NaturalGas, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(NaturalGas, 11, 200), Interval = 10))

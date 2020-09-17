@@ -1,0 +1,13 @@
+Resource: ToxicSolutions
+	Name: #TOXIC_SOLUTIONS
+	Description: #TOXIC_SOLUTIONS_DESC
+	Native Biome: Crystallic
+
+	Icon: ResourceIcons::99
+	Small Icon: ResourceIconsSmall::99
+
+	Level: 5
+	Artificial: True
+
+	//IfLevel(5, TriggerPeriodic(RemoveCargo(ChemicalReagents, 10), Interval = 10))
+	//OnNative(TriggerPeriodic(AddCargoMax(ChemicalReagents, 11, 200), Interval = 10))

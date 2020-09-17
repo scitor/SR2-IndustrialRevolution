@@ -1,0 +1,39 @@
+SpriteSheet: FTLEnrichment
+	Inherit: Image2D
+	Size: 64,64
+	LoadPriority: Game
+	Texture: data/images/buildings/bio/ftl_enrichment.png
+
+SpriteSheet: AngryMeteorIconsSet
+	Inherit: Image2D
+	Size: 18,18
+	LoadPriority: Game
+	Texture: data/images/sprites14c.png
+
+Material: PlanetIcon6
+	Inherit: Image2D
+	LoadPriority: Game
+	Texture: data/images/planet_level_6.png
+
+SpriteSheet: RawMaterialProcessingFacility
+	Inherit: Image2D
+	Size: 256,256
+	LoadPriority: Game
+	Texture: data/images/buildings/bio/raw_material_processing_facility.png
+
+Material: CustomsOffice
+	Inherit: Image2D
+	Texture: data/images/buildings/colony/customs_office.png
+
+Material: PlanetLevel6
+	Inherit: DistantIcon
+	Shader: DistantPlanetIcon
+	LoadPriority: Game
+	Texture: data/images/planet_level_6.png
+	Texture2: data/images/planet_type.png
+	Texture3: data/images/planetary_resources_small.png
+	Texture4: data/images/planetary_resources_small_mods.png
+
+Material: GravitationLens
+	Alpha: Yes
+	Shader: GravitationLens

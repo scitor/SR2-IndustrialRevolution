@@ -45,11 +45,13 @@ class PlanetPopup : Popup {
 	GuiResourceGrid@ resources;
 
 	GuiSkinElement@ statusBox;
+	GuiSkinElement@ cargoBox;
 
 	GuiProgressbar@ health;
 	GuiProgressbar@ strength;
 
 	GuiCargoDisplay@ cargo;
+	GuiText@ speedometer;
 
 	Planet@ pl;
 	bool selected = false;
@@ -60,54 +62,62 @@ class PlanetPopup : Popup {
 		super(parent);
 		size = vec2i(190, 216);
 
-		@name = GuiText(this, Alignment(Left+50, Top+6, Right-4, Top+28));
-		@ownerName = GuiText(this, Alignment(Left+48, Top+28, Right-6, Top+46));
+		@name = GuiText(this, Alignment(Left+50, Top+6, Right-4, Height=22));
+		@ownerName = GuiText(this, Alignment(Left+48, Top+28, Right-6, Height=14));
 		ownerName.horizAlign = 1.0;
 
-		@objView = Gui3DObject(this, Alignment(Left+4, Top+50+3, Right-4, Height=60));
+		@objView = Gui3DObject(this, Alignment(Left+4, Top+53, Right-4, Height=100));
 
-		@cargo = GuiCargoDisplay(this, Alignment(Left+4, Top+50, Right-4, Height=25));
+		@speedometer = GuiText(objView, Alignment(Left+6, Bottom-32, Right-2, Height=12));
+		speedometer.font = FT_Detail;
+		speedometer.stroke = colors::Black;
+		speedometer.visible = false;
+		speedometer.horizAlign = 1.0;
 
 		@defIcon = GuiSprite(this, Alignment(Left+4, Top+50, Width=40, Height=40));
 		defIcon.desc = icons::Defense;
 		setMarkupTooltip(defIcon, locale::TT_IS_DEFENDING);
 		defIcon.visible = false;
 
-		@strength = GuiProgressbar(this, Alignment(Left+3, Bottom-61, Right-4, Bottom-35));
-		strength.visible = false;
-		strength.tooltip = locale::FLEET_STRENGTH;
-
-		GuiSprite strIcon(strength, Alignment(Left, Top, Left+24, Bottom), icons::Strength);
-		strIcon.noClip = true;
-
-		GuiSkinElement band(this, Alignment(Left+3, Bottom-35, Right-4, Bottom-2), SS_SubTitle);
-		band.color = Color(0xaaaaaaff);
-
-		@popBox = BaseGuiElement(this, Alignment(Left+3, Bottom-93-26, Left+50, Bottom-61-26));
-		@popIcon = GuiSprite(popBox, Alignment(Left-12, Top+2, Left+24, Bottom+6));
+		@popBox = BaseGuiElement(objView, Alignment(Left-2, Top+60, Left+70, Height=32));
+		@popIcon = GuiSprite(popBox, Alignment(Left, Top, Width=22, Height=22));
 		popIcon.desc = icons::Population;
-		@popValue = GuiText(popBox, Alignment(Left+26, Top+12, Right, Height=20));
+		popIcon.color = Color(0xffffff80);
+		@popValue = GuiText(popBox, Alignment(Left, Top+2, Left+40, Height=20));
 		popIcon.tooltip = locale::POPULATION;
 		popValue.tooltip = locale::POPULATION;
+		popValue.horizAlign = 1.0;
+		popValue.stroke = colors::Black;
 
-		@loyBox = BaseGuiElement(this, Alignment(Right-50, Bottom-93-26, Right-5, Bottom-61-26));
-		@loyIcon = GuiSprite(loyBox, Alignment(Right-24, Top+8, Right, Bottom-1));
+		@loyBox = BaseGuiElement(this, Alignment(Right-50, Top+44, Right-2, Height=32));
+		@loyIcon = GuiSprite(loyBox, Alignment(Right-22, Top+8, Right, Height=20));
 		loyIcon.desc = icons::Loyalty;
-		@loyValue = GuiText(loyBox, Alignment(Right-50, Top+12, Right-26, Height=20));
+		//loyIcon.color = Color(0xffffff80);
+		@loyValue = GuiText(loyBox, Alignment(Left, Top+6, Right-22, Height=20));
 		loyValue.horizAlign = 1.0;
 		loyIcon.tooltip = locale::LOYALTY;
 		loyValue.tooltip = locale::LOYALTY;
+		loyValue.stroke = colors::Black;
 
-		@resources = GuiResourceGrid(band, Alignment(Left+4, Top+4, Right-3, Bottom-4));
+		@cargo = GuiCargoDisplay(this, Alignment(Left+4, Top+132, Right-4, Height=26));
+
+		@health = GuiProgressbar(this, Alignment(Left+3, Top+158, Right-4, Height=24));
+		auto@ healthIcon = GuiSprite(health, Alignment(Left+2, Top, Width=24, Height=24), icons::Health);
+		healthIcon.noClip = true;
+
+		@strength = GuiProgressbar(this, Alignment(Left+3, Bottom-58, Right-4, Height=24));
+		strength.visible = false;
+		strength.tooltip = locale::FLEET_STRENGTH;
+		GuiSprite strIcon(strength, Alignment(Left, Top-1, Left+24, Bottom), icons::Strength);
+		strIcon.noClip = true;
+
+		GuiSkinElement band(this, Alignment(Left+3, Bottom-35, Right-4, Height=33), SS_SubTitle);
+		band.color = Color(0xaaaaaaff);
+		@resources = GuiResourceGrid(band, Alignment(Left+4, Top+4, Right-3, Height=25));
 
 		@statusBox = GuiSkinElement(this, Alignment(Right-2, Top, Right+34, Bottom), SS_PlainBox);
 		statusBox.noClip = true;
 		statusBox.visible = false;
-
-		@health = GuiProgressbar(this, Alignment(Left+3, Bottom-61-26, Right-4, Bottom-35-26));
-
-		auto@ healthIcon = GuiSprite(health, Alignment(Left+2, Top+1, Width=24, Height=24), icons::Health);
-		healthIcon.noClip = true;
 
 		updateAbsolutePosition();
 	}
@@ -146,7 +156,7 @@ class PlanetPopup : Popup {
 			if(owner.flag !is null) {
 				vec2i s = objView.absolutePosition.size;
 				owner.flag.draw(
-					objView.absolutePosition
+					objView.absolutePosition.padded(128, -10)
 						.resized(s.x*0.5, s.y*0.5, 0.0, 0.0)
 						.aspectAligned(1.0, horizAlign=0.0, vertAlign=0.0),
 					owner.color * Color(0xffffff40));
@@ -165,8 +175,7 @@ class PlanetPopup : Popup {
 
 		objView.draw();
 
-		if(cargo.visible)
-			drawRectangle(cargo.absolutePosition, Color(0x00000040));
+		drawRectangle(cargo.absolutePosition, Color(0x00000040));
 
 		//Construction display
 		if(cons.length != 0) {
@@ -179,7 +188,7 @@ class PlanetPopup : Popup {
 			}
 
 			//Draw the construction
-			recti plPos = objView.absolutePosition;
+			recti plPos = objView.absolutePosition.padded(0, 10, 0, 14);
 			const Font@ ft = skin.getFont(FT_Small);
 			drawConstructible(cons[consDisp], plPos, ft);
 		}
@@ -283,6 +292,12 @@ class PlanetPopup : Popup {
 			}
 		}
 
+		if(pl.velocity.length > 0) {
+			speedometer.visible = true;
+			speedometer.text = formatSpeed(pl.velocity.length);
+		} else
+			speedometer.visible = false;
+
 		//Update health
 		health.progress = pl.Health / pl.MaxHealth;
 		health.frontColor = colors::Red.interpolate(colors::Green, health.progress);
@@ -294,8 +309,7 @@ class PlanetPopup : Popup {
 		resources.setSingleMode();
 
 		//Update cargo
-		cargo.visible = pl.cargoTypes > 0;
-		if(cargo.visible)
+		//if(pl.cargoTypes > 0)
 			cargo.update(pl);
 
 		//Update population display
@@ -306,7 +320,7 @@ class PlanetPopup : Popup {
 			else if(maxPop >= 10.0 || pop >= 10.0)
 				popValue.text = toString(pl.population, 0);
 			else
-				popValue.text = toString(floor(pl.population), 0) + "/" + toString(pl.maxPopulation, 0);
+				popValue.text = standardize(pl.population, true) + "/" + toString(pl.maxPopulation, 0);
 			popValue.color = Color(0xffffffff);
 			popValue.visible = true;
 			popIcon.visible = true;
@@ -344,6 +358,9 @@ class PlanetPopup : Popup {
 		if(cons.length > consIndex)
 			cons.length = consIndex;
 
+		uint yOffset = 0;
+		yOffset += strength.visible ? 23 : 0;
+		size = vec2i(190, 216 + yOffset);
 		Popup::update();
 		Popup::updatePosition(pl);
 	}

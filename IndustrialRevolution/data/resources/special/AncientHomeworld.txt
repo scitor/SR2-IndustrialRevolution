@@ -1,0 +1,15 @@
+Resource: AncientHomeworld
+	Name: Ancient Homeworld
+	Description:
+	Native Biome: Desert
+
+	Icon: ResourceIconsSmall::81
+	Small Icon: ResourceIconsSmall::81
+
+	Level: 2
+	Artificial: True
+	Exportable: False
+
+	Affinity: Labor
+
+	Pressure: 16 Labor

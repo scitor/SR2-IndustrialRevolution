@@ -1,0 +1,18 @@
+Resource: Fruit
+	Name: #FRUIT
+	Blurb: #FOOD_BLURB
+	Native Biome: Forest
+	Class: Food
+
+	Icon: ResourceIcons::4
+	Small Icon: ResourceIconsSmall::14
+
+	Level: 0
+
+	ModResourceEfficiencyBonus(+0.2) #version<105
+
+	//OnTradeSpawn(AddCargo(Fruit, -150))
+	//OnTradeDeliver(AddCargo(Fruit, 150))
+
+	IfLevel(1, TriggerPeriodic(RemoveCargo(Fruit, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(Fruit, 11, 200), Interval = 10))

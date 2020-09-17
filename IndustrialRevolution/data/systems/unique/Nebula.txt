@@ -1,0 +1,29 @@
+System: Nebula
+	Frequency: 0.01
+	Unique: Global
+
+	Repeat(0:1)
+		MakePlanet(RandomRarity:Uncommon, Radius = 24, Orbit Spacing = 0, Distribute Resource = True)
+	Repeat(1:4)
+		MakeMoon()
+
+	ExpandSystem(400:800)
+
+	Repeat(1:6)
+		MakeAnomaly()
+	Repeat(1:6)
+		MakeArtifact()
+	Repeat(0:2)
+		MakeAsteroidBelt()
+
+	Repeat(0:1)
+		MakePlanet(RandomRarity:Uncommon, Orbit Spacing = 0, Distribute Resource = True)
+
+	ExpandSystem(500)
+	MakeNebula(#306040:#604030:#603040)
+
+	MakeCreepCamp(Offset = 1200)
+
+	AddRegionStatus(LimitedSight)
+	NoRegionVision()
+	SetStaticSeeableRange(100)

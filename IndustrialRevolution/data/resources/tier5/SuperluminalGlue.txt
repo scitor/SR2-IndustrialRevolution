@@ -1,0 +1,14 @@
+Resource: SuperluminalGlue
+	Name: #SUPERLUMINAL_GLUE
+	Description: #SUPERLUMINAL_GLUE_DESC
+	Native Biome: Space
+
+	Icon: ResourceIcons::102
+	Small Icon: ResourceIconsSmall::102
+
+	Level: 5
+	Affinity: Energy
+	Artificial: True
+
+	//IfLevel(6, TriggerPeriodic(RemoveCargo(AdvancedComponents, 10), Interval = 10))
+	//OnNative(TriggerPeriodic(AddCargoMax(AdvancedComponents, 11, 200), Interval = 10))

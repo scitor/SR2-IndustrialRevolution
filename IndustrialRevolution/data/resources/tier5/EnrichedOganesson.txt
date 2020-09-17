@@ -1,0 +1,14 @@
+Resource: EnrichedOganesson
+	Name: #ENRICHED_OGANESSON
+	Description: #ENRICHED_OGANESSON_DESC
+	Native Biome: Mountains
+
+	Icon: ResourceIcons::104
+	Small Icon: ResourceIconsSmall::104
+
+	Level: 5
+	Affinity: Energy
+	Artificial: True
+
+	//IfLevel(6, TriggerPeriodic(RemoveCargo(AdvancedComponents, 10), Interval = 10))
+	//OnNative(TriggerPeriodic(AddCargoMax(AdvancedComponents, 11, 200), Interval = 10))

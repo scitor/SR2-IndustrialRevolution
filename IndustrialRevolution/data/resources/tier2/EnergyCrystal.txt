@@ -1,0 +1,18 @@
+Resource: EnergyCrystal
+	Name: #ENERGY_CRYSTAL
+	Description: #ENERGY_CRYSTAL_DESC
+	Native Biome: Crystallic
+
+	Icon: ResourceIcons::93
+	Small Icon: ResourceIconsSmall::93
+
+	Level: 2
+	Asteroid Frequency: 0.02
+	Asteroid Labor: 50
+
+	Affinity: Energy
+
+	Pressure: 4 Energy
+
+	IfLevel(3, TriggerPeriodic(RemoveCargo(EnergyCrystal, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(EnergyCrystal, 11, 200), Interval = 10))

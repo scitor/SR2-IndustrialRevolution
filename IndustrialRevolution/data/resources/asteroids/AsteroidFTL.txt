@@ -1,0 +1,19 @@
+Resource: AsteroidFTL
+	Name: #ASTEROID_FTL
+	Description: #ASTEROID_FTL_DESC
+
+	Icon: ResourceIcons::22
+	Small Icon: ResourceIconsSmall::47
+
+	Distribution: 0
+	Asteroid Frequency: 0.5
+	Asteroid Labor: 30
+
+	//AddFTLIncome(+0.5)
+	//AddPermanentFTLStorage(+100)
+
+	Cargo Type: FTLShards
+	//TriggerPeriodic(RemoveCargo(FTLShards, 10), Interval = 10)
+	OnNative(TriggerPeriodic(AddCargoMax(FTLShards, 11, 200), Interval = 10))
+
+	AI: DistributeToImportantPlanet()

@@ -1,0 +1,17 @@
+Building: CustomsOffice
+	Name: #BLD_CUSTOMS_OFFICE
+	Description: #BLD_CUSTOMS_OFFICE_DESC
+	Sprite: CustomsOffice
+
+	Category: Economy
+
+	Size: 2x2
+
+	Base Cost: 100
+	Tile Cost: 10
+	Build Time: 60
+
+	Build Affinity: Mountains
+
+
+	AddStatus(CustomsOffice)

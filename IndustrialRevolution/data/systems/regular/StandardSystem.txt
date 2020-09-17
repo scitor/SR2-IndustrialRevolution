@@ -1,0 +1,13 @@
+System: StandardSystem
+	Inherit: BaseSystem
+	Frequency: 0.50
+
+	MakeStar(Temperature = 500:1000, Radius = 40:50)
+
+	ExpandSystem(400:600)
+
+	Repeat(0:1)
+		MakeAsteroidBelt()
+
+	RepeatModified(3:6, $PLANET_FREQUENCY)
+		MakePlanet()

@@ -1,0 +1,13 @@
+Resource: ContainedTerrasque
+	Name: #CONTAINED_TERRASQUE
+	Description: #CONTAINED_TERRASQUE_DESC
+	Native Biome: Forest
+
+	Icon: ResourceIcons::105
+	Small Icon: ResourceIconsSmall::105
+
+	Level: 5
+	Artificial: True
+
+	IfLevel(6, TriggerPeriodic(RemoveCargo(ContainedTerrasque, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(ContainedTerrasque, 11, 200), Interval = 10))

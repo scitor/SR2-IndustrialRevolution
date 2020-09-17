@@ -1,0 +1,19 @@
+Resource: Deuterium
+	Name: #DEUTERIUM
+	Description: #DEUTERIUM_DESC
+	Native Biome: Ice
+
+	Icon: ResourceIcons::31
+	Small Icon: ResourceIconsSmall::31
+
+	Level: 2
+	Asteroid Frequency: 0.02
+	Asteroid Labor: 50
+
+	Affinity: Research + Defense
+
+	Pressure: 2 Research
+	Pressure: 2 Defense
+
+	IfLevel(3, TriggerPeriodic(RemoveCargo(Deuterium, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(Deuterium, 11, 200), Interval = 10))

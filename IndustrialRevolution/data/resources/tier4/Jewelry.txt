@@ -1,0 +1,18 @@
+Resource: Jewelry
+	Name: #JEWELRY
+	Description: #JEWELRY_DESC
+	Native Biome: Crystallic
+
+	Icon: ResourceIcons::18
+	Small Icon: ResourceIconsSmall::1
+
+	Level: 4
+	Artificial: True
+
+	Affinity: Money + Influence
+
+	Pressure: 8 Money
+	Pressure: 8 Influence
+
+	IfLevel(5, TriggerPeriodic(RemoveCargo(Jewelry, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(Jewelry, 11, 200), Interval = 10))

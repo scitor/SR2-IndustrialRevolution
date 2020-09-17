@@ -1,0 +1,29 @@
+Building: FTLEnrichmentCenter
+	Name: #BLD_FTL_ENRICHMENT_CENTER
+	Description: #BLD_FTL_ENRICHMENT_CENTER_DESC
+	Sprite: FTLEnrichment::0
+	Animate Sprite: True
+	Animation FPS: 8
+
+	Category: Production
+
+	Size: 2x2
+
+	Base Cost: 140
+	Tile Cost: 10
+	Base Maintenance: 30
+	Tile Maintenance: 20
+	ConsumeCargo(FTLShards, 20)
+
+	Build Affinity: Mountains
+
+	In Queue: True
+
+	AddFTLStorage(50)
+	IfNative(FTL, AddFTLStorage(50))
+
+	RequireNotTrait(Sublight)
+
+	ActiveWhenCargoConsumed(FTLShards, 10, 10, AddFTLIncome(+1.0))
+
+	AI: AsFTLStorage()

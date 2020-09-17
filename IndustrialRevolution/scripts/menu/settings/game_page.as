@@ -12,17 +12,17 @@ class GamePage : GameSettingsPage {
 		icon = Sprite(material::TabPlanets);
 
 		Title(locale::NG_UNIVERSE_GENERATION);
-		Frequency(locale::NG_PLANET_FREQUENCY, "PLANET_FREQUENCY", min = 0.2, max = 3.0);
-		Occurance(locale::NG_ANOMALY_OCCURANCE, "ANOMALY_OCCURANCE");
-		Occurance(locale::NG_REMNANT_OCCURANCE, "REMNANT_OCCURANCE");
-		Occurance(locale::NG_ASTEROID_OCCURANCE, "ASTEROID_OCCURANCE");
-		Occurance(locale::NG_RESOURCE_ASTEROID_OCCURANCE, "RESOURCE_ASTEROID_OCCURANCE");
-		Occurance(locale::NG_UNIQUE_SYSTEM_OCCURANCE, "UNIQUE_SYSTEM_OCCURANCE");
-		Occurance(locale::NG_UNIQUE_RESOURCE_OCCURANCE, "UNIQUE_RESOURCE_OCCURANCE");
-		Occurance(locale::NG_RESOURCE_SCARCITY, "RESOURCE_SCARCITY", max=2.0, tooltip=locale::NGTT_RESOURCE_SCARCITY);
-		Frequency(locale::NG_CIVILIAN_TRADE, "CIVILIAN_TRADE_MULT", min = 0.5, max = 3.0, tooltip=locale::NGTT_CIVILIAN_TRADE);
-		Frequency(locale::NG_ARTIFACT_FREQUENCY, "ARTIFACT_FREQUENCY", min = 0.2, max = 3.0);
-		Frequency(locale::NG_SYSTEM_SIZE, "SYSTEM_SIZE", min = 0.2, max = 3.0);
+		Frequency(locale::NG_PLANET_FREQUENCY, "PLANET_FREQUENCY", min = 0.2, max = 5.0);
+		Occurance(locale::NG_ANOMALY_OCCURANCE, "ANOMALY_OCCURANCE", min = 0.2, max = 5.0);
+		Occurance(locale::NG_REMNANT_OCCURANCE, "REMNANT_OCCURANCE", min = 0.2, max = 5.0);
+		Occurance(locale::NG_ASTEROID_OCCURANCE, "ASTEROID_OCCURANCE", min = 0.2, max = 5.0);
+		//Occurance(locale::NG_RESOURCE_ASTEROID_OCCURANCE, "RESOURCE_ASTEROID_OCCURANCE");
+		Occurance(locale::NG_UNIQUE_SYSTEM_OCCURANCE, "UNIQUE_SYSTEM_OCCURANCE", min = 0.2, max = 5.0);
+		Occurance(locale::NG_UNIQUE_RESOURCE_OCCURANCE, "UNIQUE_RESOURCE_OCCURANCE", min = 0.2, max = 5.0);
+		Occurance(locale::NG_RESOURCE_SCARCITY, "RESOURCE_SCARCITY", min = 0.2, max = 5.0, tooltip=locale::NGTT_RESOURCE_SCARCITY);
+		Frequency(locale::NG_CIVILIAN_TRADE, "CIVILIAN_TRADE_MULT", min = 0.2, max = 5.0, tooltip=locale::NGTT_CIVILIAN_TRADE);
+		Frequency(locale::NG_ARTIFACT_FREQUENCY, "ARTIFACT_FREQUENCY", min = 0.2, max = 5.0);
+		Frequency(locale::NG_SYSTEM_SIZE, "SYSTEM_SIZE", min = 8.0, max = 12.0);
 
 		emptyline();
 		Title(locale::NG_GAME_OPTIONS);
@@ -31,7 +31,7 @@ class GamePage : GameSettingsPage {
 		/*Toggle(locale::NG_ENABLE_CIVILIAN_TRADE, "ENABLE_CIVILIAN_TRADE", halfWidth=true);*/
 		Toggle(locale::NG_ENABLE_INFLUENCE_EVENTS, "ENABLE_INFLUENCE_EVENTS", halfWidth=true, tooltip=locale::NGTT_ENABLE_INFLUENCE_EVENTS);
 		Toggle(locale::NG_DISABLE_STARTING_FLEETS, "DISABLE_STARTING_FLEETS", halfWidth=true, tooltip=locale::NGTT_DISABLE_STARTING_FLEETS);
-		Toggle(locale::NG_REMNANT_AGGRESSION, "REMNANT_AGGRESSION", halfWidth=true, tooltip=locale::NGTT_REMNANT_AGGRESSION);
+		//Toggle(locale::NG_REMNANT_AGGRESSION, "REMNANT_AGGRESSION", halfWidth=true, tooltip=locale::NGTT_REMNANT_AGGRESSION);
 		Toggle(locale::NG_ALLOW_TEAM_SURRENDER, "ALLOW_TEAM_SURRENDER", halfWidth=true, tooltip=locale::NGTT_ALLOW_TEAM_SURRENDER);
 		Toggle(locale::NG_START_EXPLORED_MAP, "START_EXPLORED_MAP", halfWidth=true, tooltip=locale::NGTT_START_EXPLORED_MAP);
 
@@ -59,7 +59,7 @@ class AdvancedGamePage : GameSettingsPage {
 		Description(locale::NG_ADVANCED_OPTIONS_DESC, 4);
 	
 		Title(locale::NG_UNIVERSE_GENERATION);
-		Occurance(locale::NG_PLANET_MOON_CHANCE, "PLANET_MOON_CHANCE", max = 0.5, tooltip=locale::NGTT_PLANET_MOON_CHANCE);
+		Occurance(locale::NG_PLANET_MOON_CHANCE, "PLANET_MOON_CHANCE", max = 1.0, tooltip=locale::NGTT_PLANET_MOON_CHANCE);
 		Occurance(locale::NG_PLANET_CONDITION_CHANCE, "PLANET_CONDITION_CHANCE", max = 1.0, tooltip=locale::NGTT_PLANET_CONDITION_CHANCE);
 		
 		emptyline();
@@ -87,8 +87,8 @@ class CrazyGamePage : GameSettingsPage {
 		Description(locale::NG_CRAZY_OPTIONS_DESC, 5);
 
 		Title(locale::NG_UNIVERSE_GENERATION);
-		Occurance(locale::NG_ASTEROID_PERMANENT_FREQ, "ASTEROID_PERMANENT_FREQ", max=5.0, tooltip=locale::NGTT_ASTEROID_PERMANENT_FREQ);
-		Number(locale::NG_ASTEROID_MASS, "ASTEROID_MASS", step=500, tooltip=locale::NGTT_ASTEROID_MASS);
+		//Occurance(locale::NG_ASTEROID_PERMANENT_FREQ, "ASTEROID_PERMANENT_FREQ", max=5.0, tooltip=locale::NGTT_ASTEROID_PERMANENT_FREQ);
+		//Number(locale::NG_ASTEROID_MASS, "ASTEROID_MASS", step=500, tooltip=locale::NGTT_ASTEROID_MASS);
 		Number(locale::NG_SYSTEMS_PER_WORMHOLE, "SYSTEMS_PER_WORMHOLE", min=5, step=5, tooltip=locale::NGTT_SYSTEMS_PER_WORMHOLE);
 		Number(locale::NG_GALAXY_MIN_WORMHOLES, "GALAXY_MIN_WORMHOLES", max=15, step=1, tooltip=locale::NGTT_GALAXY_MIN_WORMHOLES);
 

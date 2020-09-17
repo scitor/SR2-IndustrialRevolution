@@ -1,0 +1,23 @@
+Resource: Iron
+	Name: #IRON
+	Description: #IRON_DESC
+	Native Biome: Mountains
+
+	Icon: ResourceIcons::7
+	Small Icon: ResourceIconsSmall::15
+
+	Terraform Cost: 750
+	Terraform Labor: 45
+
+	Level: 1
+	Asteroid Frequency: 0.2
+	Asteroid Labor: 40
+
+	Affinity: Labor
+
+	Pressure: 4 Labor
+
+	ModSupportBuildSpeed(+0.3)
+
+	IfLevel(2, TriggerPeriodic(RemoveCargo(Iron, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(Iron, 11, 200), Interval = 10))

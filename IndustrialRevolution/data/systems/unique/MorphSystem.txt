@@ -1,0 +1,18 @@
+System: MorphSystem
+	Frequency: 0.01
+	Unique: Global
+
+	MakeStar(Temperature = 5778, Radius = 75)
+
+	ExpandSystem(400:600)
+
+	Repeat(3)
+		MakePlanet(AsteroidAffinity)
+
+	Repeat(0:1)
+		MakeAsteroidBelt()
+
+	MakeAnomaly(MorphRed)
+	MakeAnomaly(MorphBlue)
+	MakeAnomaly(MorphGreen)
+	AddAdjacentAnomalies(1)

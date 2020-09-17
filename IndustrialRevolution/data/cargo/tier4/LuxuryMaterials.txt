@@ -1,0 +1,5 @@
+Cargo: LuxuryMaterials
+	Name: #LUXURY_MATERIALS
+	Description: #PROCESSED_CARGO_DESCRIPTION
+
+	Icon: ResourceIconsSmall::32

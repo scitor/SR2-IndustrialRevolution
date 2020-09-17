@@ -1,0 +1,21 @@
+System: BrightGiant
+	Inherit: BaseSystem
+	Frequency: 0.01
+
+	NameSystemByType(BrightGiant)
+	MakeStar(Temperature = 15000:20000, Radius = 1250:1500)
+
+	ExpandSystem(1000)
+
+	MakePlanet()
+
+	Repeat(0:1)
+		MakeAnomaly()
+	Repeat(0:2)
+		MakeArtifact()
+
+	Repeat(0:1)
+		MakeAsteroidBelt()
+
+	RepeatModified(1:3, $PLANET_FREQUENCY)
+		MakePlanet()

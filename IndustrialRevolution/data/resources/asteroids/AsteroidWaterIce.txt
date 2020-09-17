@@ -1,0 +1,15 @@
+Resource: AsteroidWaterIce
+	Name: #ASTEROID_WATER_ICE
+	Description: #ASTEROID_WATER_ICE_DESC
+	Class: WaterType
+
+	Icon: ConditionIcons::6
+	Small Icon: ConditionIcons::6
+
+	Distribution: 0
+	Asteroid Frequency: 0.5
+	Asteroid Labor: 100
+
+	Cargo Type: Water
+	TriggerPeriodic(RemoveCargo(Water, 10), Interval = 10)
+	OnNative(TriggerPeriodic(AddCargoMax(Water, 11, 200), Interval = 10))

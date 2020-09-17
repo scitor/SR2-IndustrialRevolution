@@ -1,0 +1,19 @@
+Resource: BuildingWater
+	Name: #BUILDING_WATER
+	Description: #BUILDING_WATER_DESC
+	Native Biome: Oceanic
+	Class: WaterType
+
+	Icon: ResourceIconsSmall::86*#8cff00
+	Small Icon: ResourceIconsSmall::86*#8cff00
+	Display Weight: -10
+
+	Level: 0
+	Exportable: False
+	Artificial: True
+
+
+	IfLevel(1, TriggerPeriodic(RemoveCargo(BuildingWater, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(BuildingWater, 11, 200), Interval = 10))
+
+	//AddCargo(BuildingWater, 10)

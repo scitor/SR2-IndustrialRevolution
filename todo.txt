@@ -1,0 +1,28 @@
+### done
+- more asteroids (more shards, resource asteroids got companions too. needs tuning)
+- changed civilian trade ship navigation
+    - asteroids with mining bases spawn trade ships (which can be destroyed, thus blockaded)
+    - added "Blockaded Export" status, the specific resource is blockaded if ships are shot down until new ones arrive
+      old "Blockaded" status still applies to the target planet, if the ship was carrying goods from a trade station (currently disabled)
+    - trade ships don't reassign to random planets after delivering inter-system resources anymore.
+- moved trade stations to be at 'exit points' of systems, repurposed back to trading
+- every planet has a "Customs Office" now, will spawn ships slower until CO is present
+- civilians (from a foreign empire) are enemies too for AI (Remnants attack Civs now)
+- added Statuses to Asteroids
+- multiple ships per route (every 3 or 2min)
+- almost complete restructure of civilian navigation
+- removes blockaded status when a planet/asteroid changes export target.
+  (in case its still under siege it will regain status quickly)
+
+### todo (ideas)
+- rework pirates (smaller, interceptable, more hideouts, camping on lanes, occasional raid)
+- change ore asteroids to use a mining bases like a resource (like `OreRate` resource)
+    - with shards there would be one main roid per group where a mining base has to be built to start operations (maybe w/ fake ships).
+    - like a resource, as soon as you connect it it's available, with a random yield ore/min on the receiving planet (or global)
+    - maybe add upgrades (planet buildings or orbitals)
+- change AI to care for all this (prob no pirates for them or fake ones)
+- add inter-trade-station traffic as tech (for more income, maybe inter-empire as treaty, check treaty code functionality)
+- change customs offices to be invul (or super-recharge) as long as there are supports around (so they can't be sniped)
+- try to add new category (or whatever) to let player design it's civilian ships with hexes (miner/trader/hauler/etc), maybe spawn like supports
+- add the ability to _just transport_ goods, with ships ofc. with storages, planets could be used as hubs to spread res where they're needed most.
+- change planet requirements to not accept the same resource multiple times, or better only use up one worth of each res only. no more all-apples planets. make other soylents available (esp. the green one looks promising ;) )

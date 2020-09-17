@@ -1,0 +1,6 @@
+Cargo: AsteroidAffinity
+	Name: #ASTEROID_AFFINITY
+	Description: #CARGO_DESCRIPTION_CONSUMED:60:min
+
+	IconL: ResourceIcons::44
+	Icon: ResourceIconsSmall::44

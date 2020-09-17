@@ -1,0 +1,21 @@
+Resource: Explosives
+	Name: #EXPLOSIVES
+	Description: #EXPLOSIVES_DESC
+	Native Biome: Volcanic
+
+	Icon: ResourceIcons::6
+	Small Icon: ResourceIconsSmall::13
+
+	Terraform Cost: 500
+	Terraform Labor: 30
+
+	Level: 1
+	Asteroid Frequency: 0.2
+	Asteroid Labor: 40
+
+	Affinity: Defense
+
+	Pressure: 3 Defense
+
+	IfLevel(2, TriggerPeriodic(RemoveCargo(Explosives, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(Explosives, 11, 200), Interval = 10))

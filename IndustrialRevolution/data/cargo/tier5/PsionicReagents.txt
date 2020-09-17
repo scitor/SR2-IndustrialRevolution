@@ -1,0 +1,5 @@
+Cargo: PsionicReagents
+	Name: #PSIONIC_REAGENTS
+	Description: #PROCESSED_CARGO_DESCRIPTION
+
+	Icon: ResourceIconsSmall::37

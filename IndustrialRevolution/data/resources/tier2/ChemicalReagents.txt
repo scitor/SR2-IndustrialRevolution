@@ -1,0 +1,18 @@
+Resource: ChemicalReagents
+	Name: #CHEMICAL_REAGENTS
+	Description: #CHEMICAL_REAGENTS_DESC
+	Native Biome: Crystallic
+
+	Icon: ResourceIcons::89
+	Small Icon: ResourceIconsSmall::89
+
+	Level: 2
+	Asteroid Frequency: 0.02
+	Asteroid Labor: 50
+
+	Affinity: Research
+
+	Pressure: 4 Research
+
+	IfLevel(3, TriggerPeriodic(RemoveCargo(ChemicalReagents, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(ChemicalReagents, 11, 200), Interval = 10))

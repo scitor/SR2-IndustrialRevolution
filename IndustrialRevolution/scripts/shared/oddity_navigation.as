@@ -188,7 +188,7 @@ bool hasOddityLink(array<Oddity@>& gates, Region@ fromRegion, Region@ toRegion, 
 bool hasOddityLink(Region@ fromRegion, const vec3d& nearPosition, double maxDistance, double minDuration = 0.0) {
 	if(fromRegion is null)
 		return false;
-
+	maxDistance *= maxDistance;
 	ReadLock lck(mutex);
 	for(uint i = 0, cnt = gates.length; i < cnt; ++i) {
 		auto@ obj = gates[i];
@@ -198,7 +198,7 @@ bool hasOddityLink(Region@ fromRegion, const vec3d& nearPosition, double maxDist
 			continue;
 
 		vec3d dest = obj.getGateDest();
-		if(dest.distanceTo(nearPosition) < maxDistance)
+		if(dest.distanceToSQ(nearPosition) < maxDistance)
 			return true;
 	}
 	return false;

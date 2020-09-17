@@ -1,0 +1,14 @@
+Resource: SubzeroPlasma
+	Name: #SUBZERO_PLASMA
+	Description: #SUBZERO_PLASMA_DESC
+	Native Biome: Ice
+
+	Icon: ResourceIcons::100
+	Small Icon: ResourceIconsSmall::100
+
+	Level: 5
+	Affinity: Energy
+	Artificial: True
+
+	//IfLevel(6, TriggerPeriodic(RemoveCargo(AdvancedComponents, 10), Interval = 10))
+	//OnNative(TriggerPeriodic(AddCargoMax(AdvancedComponents, 11, 200), Interval = 10))

@@ -1,0 +1,19 @@
+Resource: Plastics
+	Name: #PLASTICS
+	Description: #PLASTICS_DESC
+	Native Biome: Desert
+
+	Icon: ResourceIcons::10
+	Small Icon: ResourceIconsSmall::9
+
+	Level: 4
+	Artificial: True
+
+	Affinity: Energy
+	Affinity: Labor
+
+	Pressure: 8 Labor
+	Pressure: 8 Energy
+
+	IfLevel(5, TriggerPeriodic(RemoveCargo(Plastics, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(Plastics, 11, 200), Interval = 10))

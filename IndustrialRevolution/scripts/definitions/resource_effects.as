@@ -333,6 +333,31 @@ class LockOnExport : ResourceHook {
 #section all
 };
 
+//OnTradeDeliver(<Hook>())
+// Triggers a bonus effect when delivering the resource with a civilian trade ship.
+class OnTradeDeliver : ResourceHook {
+	BonusEffect@ hook;
+
+	Document doc("The inner hook is triggered when a civilian ship carrying this resource delivers its cargo.");
+	Argument hookID(AT_Hook, "bonus_effects::BonusEffect");
+
+	bool instantiate() override {
+		@hook = cast<BonusEffect>(parseHook(arguments[0].str, "bonus_effects::"));
+		if(hook is null) {
+			error("OnTradeDeliver(): could not find inner hook: "+escape(arguments[0].str));
+			return false;
+		}
+		return ResourceHook::instantiate();
+	}
+
+#section server
+	void onTradeDeliver(Civilian& civ, Object@ origin, Object@ target) const override {
+		if(target is null || !target.isRegion)
+			hook.activate(target, civ.owner);
+	}
+#section all
+};
+
 //OnTradeSpawn(<Hook>())
 // Triggers a bonus effect when spawning the resource with a civilian trade ship.
 class OnTradeSpawn : ResourceHook {
@@ -352,7 +377,7 @@ class OnTradeSpawn : ResourceHook {
 
 #section server
 	void onTradeSpawn(Civilian& civ, Object@ origin, Object@ target) const override {
-		print(format("onTradeSpawn $1", origin.name));
+		//print(format("onTradeSpawn $1", origin.name));
 		if(origin !is null && target !is null)
 			hook.activate(origin, civ.owner);
 	}

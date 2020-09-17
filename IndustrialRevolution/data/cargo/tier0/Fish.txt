@@ -1,0 +1,5 @@
+Cargo: Fish
+	Name: #FISH
+	Description: #CARGO_DESCRIPTION_CONSUMED:60:min
+
+	Icon: ResourceIconsSmall::19

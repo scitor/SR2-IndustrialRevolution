@@ -1,0 +1,18 @@
+Resource: Titanium
+	Name: #TITANIUM
+	Description: #TITANIUM_DESC
+	Native Biome: Desert
+
+	Icon: ResourceIcons::33
+	Small Icon: ResourceIconsSmall::33
+
+	Level: 3
+	Asteroid Frequency: 0.01
+	Asteroid Labor: 60
+
+	Affinity: Labor
+
+	Pressure: 8 Labor
+
+	IfLevel(4, TriggerPeriodic(RemoveCargo(Titanium, 10), Interval = 10))
+	OnNative(TriggerPeriodic(AddCargoMax(Titanium, 11, 200), Interval = 10))
