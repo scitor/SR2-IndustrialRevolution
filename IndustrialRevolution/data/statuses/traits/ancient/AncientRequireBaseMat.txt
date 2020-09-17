@@ -4,4 +4,4 @@ Status: AncientRequireBaseMat
 	Collapses: True
 
 	Color: #ff0000
-	Icon: ResourceIconsSmall::73 * #ffaaaa
+	Icon: ResourceIconsSmall::81 * #ffaaaa
