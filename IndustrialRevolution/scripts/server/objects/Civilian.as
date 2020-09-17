@@ -728,7 +728,8 @@ tidy class CivilianScript {
 		else if(tradeObj.hasResources)
 			resId = tradeObj.primaryResourceType;
 
-		if(resId == uint(-1))
+		const ResourceType@ rtype = getResource(resId);
+		if(rtype is null || !rtype.exportable)
 			return false;
 
 		if(obj.getCargoType() == CT_Goods) {
