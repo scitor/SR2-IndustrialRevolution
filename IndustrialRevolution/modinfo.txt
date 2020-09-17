@@ -2,21 +2,32 @@
 	Compatibility: 200
 	Derives From: SR2 Community Patch
 	Description: <<
-This mod makes civilian transport ships more important.
+A major economy overhaul focussed on empire enhancement and eye-candy.
+[color=#777]Best enjoyed with dark background (like SR2-Milkyway)[/color]
 
 [b][color=#944]Depends on having the SR2-Community-Patch installed (not activated)[/color][/b]
 
-[b]Trade ships / stations generate more income when dealing with higher value resources[/b]
-Recalculated values of most resources depending on level, rarity and generated pressure
+[b]New resource connection mechanic[/b]
+Regular resources generate Cargo, which has to be transported for the resource effects (pressure, etc.) to work.
 
-[b]Resource connections rely directly on arriving trade ships[/b]
-When trade ships are destroyed the connection they represent will be disabled until the next ship actually arrives.
+[b]New trade income mechanic[/b]
+Trade ships / stations generate income depending on transported resource value. Recalculated values of most resources depending on level, rarity and generated pressure
 
-[b]Customs Offices for faster trading[/b]
-Planets automatically* spawn customs offices easing space access and improving trade ship spawning, for a small fee.
+[b]Customs Office Orbital for more trading[/b]
+Improves trade income and ship spawn rate.
 
-[b]No more random traders in your empty systems[/b]
-...wasting precious cargo space for sightseeing tours. There [i]is[/i] more trade traffic, but for another reason...
+[b]Sytem scaling defaults to 10x, sublight speed limit and rebalanced FTL[/b]
+Everything takes a lot longer, seriously! There is a maximum sublight speed which can only be overtaken by FTL technology. (unfinished)
 
-Improved performance / code of trade ship navigation
-	>>
+[b]Tier IV and V Resources, changed planet requirements and resources[/b]
+Planets requirements changed, resource distribution adapted accordingly. (unfinished)
+
+[b]Changed Gas/Map generation, new Stars[/b]
+Made system planes transparent and trade-lanes less prominent, icon sizes and orbital planes altered. (unfinished)
+
+[b]Changed graphics and GUI[/b]
+Animated surface buildings (experimental)
+
+[b]Experimental balance changes[/b]
+check readme.md for more
+>>

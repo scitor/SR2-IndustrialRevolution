@@ -1,45 +1,44 @@
+# First, most thanks go to the creators of this great game! Thank you, awesome stuff!
 
-All content created by myself falls under the license found in LICENSE.txt
+Many ideas for this mod come from talks in discord or playing other mods like RS or SoI.
+This is just a collection of changes to the game I wanted to do.
+It's made available online so others can enjoy it, there are no guarantees or promises.
 
-#
+Afaik I didn't copy any code but ideas were taken for which I'm very thankful.
+If you find anything that doesn't belong in here, please contact me asap!
 
-Bio Industry (Factorio Mod) animated building sprites (data/images/buildings/bio)
+# Assets
+
+## Bio Industry (Factorio Mod) animated building sprites (data/images/buildings/bio)
 Author: TheSAguy
 Link: https://forums.factorio.com/viewtopic.php?f=93&t=17548
 License: Usage permission
 
-#
-
-HQ Resource Images (data/images/planetary_resources(_small).png)
+## HQ Resource Images (data/images/planetary_resources(_small).png)
 Author: CraftPix.net 2D Game Assets
 Link: https://craftpix.net/freebies/
 License: "Freebie products"
 
-#
-
-2d static sprites/icons (data/images/sprites14c.png)
+## 2d static sprites/icons (data/images/sprites14c.png)
 Author: Angrymeteor (Submitted by PancInteractive)
 Link: https://opengameart.org/content/2d-static-spritesicons
 Licence: CC-BY 3.0
 
-#
-
-Space Ship & Mech Construction Kit 2 (data/images/buildings/mech)
+## Space Ship & Mech Construction Kit 2 (data/images/buildings/mech)
 Author: Skorpio
 Link: https://opengameart.org/content/space-ship-mech-construction-kit-2
 License: CC-BY-SA 3.0
 
-#
-
-Colony sim assets (data/image/buildings/colony)
+## Colony sim assets (data/image/buildings/colony)
 Author: Buch
 Link: https://opengameart.org/content/colony-sim-assets
 License: CC0
 
-#
-
-Colony Sim Extended Version (data/images/buildings/colony)
+## Colony Sim Extended Version (data/images/buildings/colony)
 Author: rubberduck
 Collaborators: Buch
 Link: https://opengameart.org/content/colony-sim-extended-version
 License: CC0
+
+# All other content created by myself
+... if not mentioned otherwise, falls under the license found in LICENSE.txt
