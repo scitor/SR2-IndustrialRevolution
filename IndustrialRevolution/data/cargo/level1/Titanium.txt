@@ -1,6 +1,0 @@
-Cargo: Titanium
-	Name: #TITANIUM
-	Description: #RESOURCE_CARGO_DESCRIPTION
-
-	IconL: ResourceIcons::33
-	Icon: ResourceIconsSmall::33

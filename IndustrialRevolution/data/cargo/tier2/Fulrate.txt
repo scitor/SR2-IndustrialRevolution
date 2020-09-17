@@ -1,0 +1,5 @@
+Cargo: Fulrate
+	Name: #FULRATE
+	Description: #CARGO_DESCRIPTION_CONSUMED:60:min
+
+	Icon: ResourceIconsSmall::43

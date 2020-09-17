@@ -1,6 +1,0 @@
-Cargo: Water
-	Name: #WATER
-	Description: #RESOURCE_CARGO_DESCRIPTION
-
-	IconL: ResourceIcons::0
-	Icon: ResourceIconsSmall::18

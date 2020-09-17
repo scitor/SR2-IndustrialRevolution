@@ -1,6 +1,0 @@
-Cargo: PekelmRedox
-	Name: #PEKELM_REDOX
-	Description: #PROCESSED_CARGO_DESCRIPTION
-
-	Icon: ResourceIcons::90
-	Small Icon: ResourceIconsSmall::90

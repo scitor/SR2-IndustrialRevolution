@@ -1,6 +1,0 @@
-Cargo: Explosives
-	Name: #EXPLOSIVES
-	Description: #RESOURCE_CARGO_DESCRIPTION
-
-	IconL: ResourceIcons::6
-	Icon: ResourceIconsSmall::13

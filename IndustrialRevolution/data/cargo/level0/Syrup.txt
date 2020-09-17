@@ -1,5 +1,0 @@
-Cargo: Syrup
-	Name: #R_SYRUP
-	Description: #RESOURCE_CARGO_DESCRIPTION
-
-	IconL: ResourceIconsSmall::79

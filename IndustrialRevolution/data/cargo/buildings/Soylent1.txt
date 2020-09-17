@@ -1,7 +1,6 @@
 Cargo: Soylent1
 	Name: #SOYLENT1
-	Description: #SOYLENT1_DESC
+	Description: #CARGO_DESCRIPTION_CONSUMED:60:min
 	Class: Food
 
-	IconL: ResourceIconsSmall::87
 	Icon: ResourceIconsSmall::87

@@ -1,6 +1,0 @@
-Cargo: MatricCores
-	Name: #MATRIX_CORES
-	Description: #PROCESSED_CARGO_DESCRIPTION
-
-	Icon: ResourceIcons::108
-	Small Icon: ResourceIconsSmall::108

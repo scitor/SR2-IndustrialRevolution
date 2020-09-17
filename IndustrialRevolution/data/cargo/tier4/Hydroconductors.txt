@@ -1,0 +1,5 @@
+Cargo: Hydroconductors
+	Name: #HYDROCONDUCTORS
+	Description: #PROCESSED_CARGO_DESCRIPTION
+
+	Icon: ResourceIconsSmall::40

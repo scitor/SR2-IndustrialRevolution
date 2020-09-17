@@ -1,6 +1,0 @@
-Cargo: Supercomputers
-	Name: #SUPERCOMPUTERS
-	Description: #PROCESSED_CARGO_DESCRIPTION
-
-	Icon: ResourceIcons::109
-	Small Icon: ResourceIconsSmall::109

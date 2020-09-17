@@ -1,6 +1,0 @@
-Cargo: NativeGold
-	Name: #NATIVE_GOLD
-	Description: #RESOURCE_CARGO_DESCRIPTION
-
-	IconL: ResourceIcons::30
-	Icon: ResourceIconsSmall::30

@@ -1,6 +1,0 @@
-Cargo: Fruit
-	Name: #FRUIT
-	Description: #RESOURCE_CARGO_DESCRIPTION
-
-	IconL: ResourceIcons::4
-	Icon: ResourceIconsSmall::14

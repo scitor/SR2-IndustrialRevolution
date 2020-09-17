@@ -1,6 +1,0 @@
-Cargo: Chemicals
-	Name: #CHEMICALS
-	Description: #RESOURCE_CARGO_DESCRIPTION
-
-	IconL: ResourceIcons::11
-	Icon: ResourceIconsSmall::10

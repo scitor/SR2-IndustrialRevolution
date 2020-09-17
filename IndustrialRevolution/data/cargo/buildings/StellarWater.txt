@@ -1,7 +1,6 @@
 Cargo: StellarWater
 	Name: #STELLAR_WATER
-	Description: #STELLAR_WATER_DESC
+	Description: #CARGO_DESCRIPTION_CONSUMED:60:min
 	Class: WaterType
 
-	IconL: ResourceIcons::0
 	Icon: ResourceIconsSmall::86*#00ffe9

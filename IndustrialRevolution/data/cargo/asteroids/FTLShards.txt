@@ -1,6 +1,6 @@
 Cargo: FTLShards
 	Name: #ASTEROID_FTL
-	Description: #RESOURCE_CARGO_DESCRIPTION
+	Description: #ASTEROID_FTL_CARGO_DESC
 
 	Icon: ResourceIconsSmall::47
 

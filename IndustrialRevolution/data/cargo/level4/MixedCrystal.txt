@@ -1,6 +1,0 @@
-Cargo: MixedCrystal
-	Name: #MIXED_CRYSTAL
-	Description: #PROCESSED_CARGO_DESCRIPTION
-
-	Icon: ResourceIcons::94
-	Small Icon: ResourceIconsSmall::94

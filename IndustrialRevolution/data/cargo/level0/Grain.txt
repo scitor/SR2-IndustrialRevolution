@@ -1,6 +1,0 @@
-Cargo: Grain
-	Name: #GRAIN
-	Description: #RESOURCE_CARGO_DESCRIPTION
-
-	IconL: ResourceIcons::3
-	Icon: ResourceIconsSmall::20

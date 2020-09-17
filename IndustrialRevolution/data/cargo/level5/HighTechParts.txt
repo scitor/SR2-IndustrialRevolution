@@ -1,6 +1,0 @@
-Cargo: HighTechParts
-	Name: #HIGH_TECH_PARTS
-	Description: #PROCESSED_CARGO_DESCRIPTION
-
-	Icon: ResourceIcons::107
-	Small Icon: ResourceIconsSmall::107

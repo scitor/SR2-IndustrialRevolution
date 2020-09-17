@@ -1,6 +1,0 @@
-Cargo: ExoticMatter
-	Name: #EXOTIC_MATTER
-	Description: #RESOURCE_CARGO_DESCRIPTION
-
-	IconL: ResourceIcons::20
-	Icon: ResourceIconsSmall::3

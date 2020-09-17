@@ -1,0 +1,5 @@
+Cargo: Chemicals
+	Name: #CHEMICALS
+	Description: #CARGO_DESCRIPTION_CONSUMED:60:min
+
+	Icon: ResourceIconsSmall::10

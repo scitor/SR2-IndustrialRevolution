@@ -1,6 +1,0 @@
-Cargo: Electrolytes
-	Name: #ELECTROLYTES
-	Description: #PROCESSED_CARGO_DESCRIPTION
-
-	Icon: ResourceIcons::104
-	Small Icon: ResourceIconsSmall::104

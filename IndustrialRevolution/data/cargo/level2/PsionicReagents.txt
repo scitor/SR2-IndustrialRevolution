@@ -1,6 +1,0 @@
-Cargo: PsionicReagents
-	Name: #PSIONIC_REAGENTS
-	Description: #RESOURCE_CARGO_DESCRIPTION
-
-	IconL: ResourceIcons::37
-	Icon: ResourceIconsSmall::37

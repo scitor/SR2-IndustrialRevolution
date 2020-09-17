@@ -1,6 +1,0 @@
-Cargo: Hadocite
-	Name: #HADOCITE
-	Description: #RESOURCE_CARGO_DESCRIPTION
-
-	IconL: ResourceIcons::29
-	Icon: ResourceIconsSmall::29

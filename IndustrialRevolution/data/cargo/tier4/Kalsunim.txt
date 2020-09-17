@@ -1,0 +1,5 @@
+Cargo: Kalsunim
+	Name: #KALSUNIM
+	Description: #PROCESSED_CARGO_DESCRIPTION
+
+	Icon: ResourceIconsSmall::48

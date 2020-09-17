@@ -1,6 +1,0 @@
-Cargo: Phasite
-	Name: #PHASITE
-	Description: #RESOURCE_CARGO_DESCRIPTION
-
-	IconL: ResourceIcons::24
-	Icon: ResourceIconsSmall::24

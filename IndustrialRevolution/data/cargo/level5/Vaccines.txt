@@ -1,6 +1,0 @@
-Cargo: Vaccines
-	Name: #VACCINES
-	Description: #PROCESSED_CARGO_DESCRIPTION
-
-	Icon: ResourceIcons::110
-	Small Icon: ResourceIconsSmall::110

@@ -1,0 +1,5 @@
+Cargo: ExoticMatter
+	Name: #EXOTIC_MATTER
+	Description: #PROCESSED_CARGO_DESCRIPTION
+
+	Icon: ResourceIconsSmall::3

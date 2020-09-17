@@ -1,5 +1,0 @@
-Cargo: Lattices
-	Name: #R_LATTICES
-	Description: #RESOURCE_CARGO_DESCRIPTION
-
-	Icon: ResourceIconsSmall::80

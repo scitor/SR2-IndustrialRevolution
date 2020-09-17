@@ -1,6 +1,0 @@
-Cargo: SuperluminalGlue
-	Name: #SUPERLUMINAL_GLUE
-	Description: #PROCESSED_CARGO_DESCRIPTION
-
-	Icon: ResourceIcons::102
-	Small Icon: ResourceIconsSmall::102

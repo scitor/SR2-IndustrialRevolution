@@ -1,0 +1,5 @@
+Cargo: Illinium
+	Name: #ILLINIUM
+	Description: #PROCESSED_CARGO_DESCRIPTION
+
+	Icon: ResourceIconsSmall::50

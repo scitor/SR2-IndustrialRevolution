@@ -1,5 +1,0 @@
-Cargo: Atium
-	Name: #R_ATIUM
-	Description: #RESOURCE_CARGO_DESCRIPTION
-
-	IconL: ResourceIconsSmall::78
