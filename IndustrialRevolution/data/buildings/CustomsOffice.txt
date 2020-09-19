@@ -13,5 +13,7 @@ Building: CustomsOffice
 
 	Build Affinity: Mountains
 
+	RequireNotTrait(Ancient)
+	RequireNotTrait(StarChildren)
 
 	AddStatus(CustomsOffice)

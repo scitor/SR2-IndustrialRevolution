@@ -71,6 +71,7 @@ BLD_FTLBREEDER_DESC_D: <<
 	[b]When completed, [color=#ff8080]1B mechanoid population[/color] will be expended to be integrated into the massive facility.[/b]
 >>
 
+
 ORB_FLING_CORE_DESC: <<|
 	Allows use of fling-based FTL near the beacon.
 
@@ -86,6 +87,17 @@ ORB_FTL_JAMMER_DESC: <<|
 
 	[b]Costs [color=$FTL]0.15 FTL/s[/color] [img=ResourceIcon::3;20/] to maintain.[/b]
 >>
+
+ORB_FTL_ENRICHMENT_ORBITAL: FTL Enrichment Orbital
+ORB_FTL_ENRICHMENT_ORBITAL_DESC: <<
+	This orbital processes raw FTL shards [img=ResourceIconsSmall::47;20/] from the planet into usable [img=ResourceIcon::3;20/] FTL energy.
+
+	[bbloc=#GTT_ALIGNED_STAT:Cargo usage:60 FTL shards/min/]
+	[bbloc=#GTT_ALIGNED_STATC:FTL generation:+1.0 FTL/s:$FTL/]
+	[bbloc=#GTT_ALIGNED_STATC:FTL storage:50 FTL Energy:$FTL/]
+
+>>
+
 BLD_SPIRE_DESC: <<|
 	A habitation spire that pierces the sky and stretches all the way into space.
 
