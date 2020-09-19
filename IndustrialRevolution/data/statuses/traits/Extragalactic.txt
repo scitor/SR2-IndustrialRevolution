@@ -2,5 +2,5 @@ Status: Extragalactic
 	Visible To: Nobody
 	Collapses: True
 
-	PlanetLevelIncomeMod(+80, -160, Step = -80)
+	//PlanetLevelIncomeMod(+80, -160, Step = -80)
 	NoNeedPopulationForLevel()

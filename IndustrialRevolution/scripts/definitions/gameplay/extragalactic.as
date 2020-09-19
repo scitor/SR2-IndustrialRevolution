@@ -147,7 +147,7 @@ final class Coordinate : Savable {
 
 		sendTimer -= time * speed;
 
-		if(sendTimer <= 0.0) {
+		if(sendTimer <= 0.0 && emp.EstNextBudget > 100) {
 			Planet@ bestPlanet;
 			RefugeeData@ bestBeacon;
 			double bestWeight = 0.0;
@@ -236,12 +236,6 @@ final class Coordinate : Savable {
 				break;
 			}
 		}
-
-		//Deal with generic resource value
-		if(resource.cls is foodClass)
-			w *= 1.5;
-		else if(resource.cls is waterClass)
-			w *= 1.5;
 
 		w /= ceil(pl.position.distanceTo(rd.obj.position) / 5000.0);
 		return w;

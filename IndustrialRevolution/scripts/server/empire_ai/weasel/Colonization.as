@@ -886,7 +886,7 @@ final class Colonization : AIComponent {
 			}
 		}
 
-		if (ai.empire.EstNextBudget <= 0) {
+		if (ai.empire.EstNextBudget <= -100) {
 			//We are in trouble. Abandon planets sucking budget up
 			if (log)
 				ai.print("Colonization: negative budget, abandoning planets");
@@ -904,7 +904,7 @@ final class Colonization : AIComponent {
 				}
 			}
 			//If we are still in trouble, abandon more planets
-			if (ai.empire.EstNextBudget <= 0) {
+			if (ai.empire.EstNextBudget <= -200) {
 				for (uint i = 0, cnt = planets.planets.length; i < cnt; i++) {
 					auto@ pl = planets.planets[i].obj;
 					if (pl is homeworld)
@@ -917,7 +917,7 @@ final class Colonization : AIComponent {
 						pl.forceAbandon();
 				}
 				//More!
-				if (ai.empire.EstNextBudget <= 0) {
+				if (ai.empire.EstNextBudget <= -300) {
 					for (uint i = 0, cnt = planets.planets.length; i < cnt; i++) {
 						auto@ pl = planets.planets[i].obj;
 						if (pl is homeworld)

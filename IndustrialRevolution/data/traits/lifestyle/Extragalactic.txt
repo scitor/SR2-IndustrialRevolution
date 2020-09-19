@@ -13,7 +13,7 @@ Trait: Extragalactic //Planetary Planetary
 	ModAttribute(PopulationGrowthFactor, Multiply, 0)
 	ModAttribute(ForbidColonization, Add, 1)
 	ModAttribute(NoAutoColonize, Add, 1)
-	ModAttribute(ColonizerMaintFactor, Multiply, 0)
+	//ModAttribute(ColonizerMaintFactor, Multiply, 0)
 
 	AddStatusOwnedPlanets(Extragalactic)
 
