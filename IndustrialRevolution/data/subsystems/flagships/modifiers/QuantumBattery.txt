@@ -1,4 +1,4 @@
-Template: var/PowerUse, !tag/NoQuantumBattery, !tag/SupportHull
+Template: var/PowerUse, !tag/NoQuantumBattery, !tag/SupportHull, !tag/IndustrialHull
 	Module: QuantumBattery
 		Name: #S_QUANTUM_BATTERY
 		Description: #S_QUANTUM_BATTERY_DESC
