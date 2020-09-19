@@ -40,5 +40,10 @@ Collaborators: Buch
 Link: https://opengameart.org/content/colony-sim-extended-version
 License: CC0
 
+## Powerup (Animated Orb) (data/images/planet_type.png)
+Author: jcrown41
+Link: https://opengameart.org/content/powerup-animated-orb
+License: CC0
+
 # All other content created by myself
 ... if not mentioned otherwise, falls under the license found in LICENSE.txt
