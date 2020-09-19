@@ -1,0 +1,22 @@
+Subsystem: SupportStructuralScaffolding
+	Name: #STRUCTURAL_SCAFFOLDING
+	Description: #STRUCTURAL_SCAFFOLDING_DESC
+	BaseColor: #a9a9a9
+	Elevation: -3
+
+	Tags: DefaultUnlock, NoCore, NoWall, NoFloor, NonContiguous
+	Tags: Category:Defense, Defense, PassExterior, ExternalSpace
+	Hull: Support, Industrial
+
+	Size := HexSize * Hexes
+
+	Ship.ExternalHexes := Ship.ExternalHexes + ExteriorHexes
+
+	Hex.HP := 1 * HexSize
+	Hex.Mass := 0.1 * HexSize
+
+	Hex.BuildCost := 0.15 * HexSize
+	Hex.LaborCost := 0.04 * HexSize
+
+	Module: Default
+		Sprite: StructuralScaffolding

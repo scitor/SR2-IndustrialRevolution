@@ -1,0 +1,16 @@
+STRUCTURAL_SCAFFOLDING: Structural scaffolding
+STRUCTURAL_SCAFFOLDING_DESC: <<
+	Structural scaffolding holds ships together.
+
+	[img=Plus]Ultra-light construction.[/img]
+	[img=Plus]Does not use up interior space when placed like armor.[/img]
+	[img=Minus]No health.[/img]
+	[img=Minus]No protection.[/img]
+>>
+
+S_JEFFERIES_TUBE_NAME: Jefferies Tube
+S_JEFFERIES_TUBE_DESC: <<
+	Jefferies Tubes are a network of narrow tunnels or corridors inside a starship.
+
+	[img=Plus]Increases ship repair rate.[/img]
+>>

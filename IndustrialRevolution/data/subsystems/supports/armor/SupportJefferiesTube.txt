@@ -1,0 +1,22 @@
+Subsystem: SupportJefferiesTube
+	Name: #S_JEFFERIES_TUBE_NAME
+	Description: #S_JEFFERIES_TUBE_DESC
+	BaseColor: #a9a9a9
+	Elevation: 0
+
+	Tags: DefaultUnlock, NoCore, NoWall, Category:Defense, Defense
+	Hull: Support, Industrial
+
+	Size := HexSize * Hexes
+
+	Hex.HP := 10 * HexSize
+
+	Hex.Mass := 1.0 * HexSize
+
+	Repair := 2 * HexSize * Hexes
+
+	Hex.BuildCost := 0.3 * HexSize
+	Hex.LaborCost := 0.1 * HexSize
+
+	Module: Default
+		Sprite: Chassis
