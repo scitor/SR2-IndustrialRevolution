@@ -2146,7 +2146,7 @@ class Construction : BaseGuiElement {
 		else
 			redoButton.setIcon(icons::Redo);
 
-		//randomButton.visible = editor.concept.getSelectedTypeTag() != "Station";
+		randomButton.visible = editor.concept.getSelectedTypeTag() != "Industrial";
 		//configButton.visible = randomButton.visible;
 
 		globalStats.setStats(getDesignStats(editor.design));
@@ -2716,6 +2716,8 @@ class Construction : BaseGuiElement {
 			type = DT_Station;
 		else if(ttag == "Satellite")
 			type = DT_Satellite;
+		//else if(ttag == "Industrial")
+			//type = DT_Industrial;
 
 		double t = getExactTime();
 
@@ -3072,6 +3074,8 @@ class Concept : BaseGuiElement {
 		typeBox.addItem(GuiListText(locale::DESIGN_STATION, Sprite(spritesheet::GuiOrbitalIcons, 0, Color(0x00e5f7ff))));
 		if(hasDLC("Heralds"))
 			typeBox.addItem(GuiListText(locale::DESIGN_SATELLITE, Sprite(spritesheet::GuiOrbitalIcons, 14, Color(0xe759ffff))));
+		if(hasDLC("Heralds"))
+			typeBox.addItem(GuiListText(locale::DESIGN_CIVILIAN, Sprite(spritesheet::ShipIcons, 3, Color(0xe759ffff))));
 
 		@sizeLabel = GuiText(this, Alignment(Left+330, Top+44, Left+370, Height=30),
 				locale::DESIGN_SIZE_INPUT);
@@ -3145,6 +3149,7 @@ class Concept : BaseGuiElement {
 			case 1: return "Support";
 			case 2: return "Station";
 			case 3: return "Satellite";
+			case 4: return "Industrial";
 		}
 		return "Flagship";
 	}
@@ -3165,6 +3170,8 @@ class Concept : BaseGuiElement {
 		}
 		else if(dsg.hull.hasTag("Station"))
 			typeBox.selected = 2;
+		else if(dsg.hull.hasTag("Industrial"))
+			typeBox.selected = 4;
 		else
 			typeBox.selected = 0;
 

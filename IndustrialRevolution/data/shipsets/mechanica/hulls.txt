@@ -153,3 +153,68 @@ Hull: MechanicaSatellite
 	Tags: Satellite
 	MinSize: 1
 	Subsystem: SatelliteHull
+
+Hull: MechanicaMiner
+	Name: Miner
+	Background: MechanicaBlueprint
+	BackgroundScale: 0.9
+	ModelScale: 1.0
+	Material: MechanicaGenericPBR
+	Model: MechanicaMiner
+	Shape: data/shipsets/mechanica/support_tiny.shape.png
+
+	//Tags: Industrial
+	MinSize: 1
+	Subsystem: IndustrialHull
+
+Hull: MechanicaMissionary
+	Name: Missionary
+	Background: MechanicaBlueprint
+	BackgroundScale: 0.9
+	ModelScale: 1.0
+	Material: MechanicaGenericPBR
+	Model: MechanicaMissionary
+	Shape: data/shipsets/mechanica/support_tiny.shape.png
+
+	Tags: Industrial
+	MinSize: 1
+	Subsystem: IndustrialHull
+
+Hull: MechanicaFreighter
+	Name: Freighter
+	Background: MechanicaBlueprint
+	BackgroundScale: 0.9
+	ModelScale: 1.0
+	Material: MechanicaGenericPBR
+	Model: MechanicaFreighter
+	Shape: data/shipsets/mechanica/support_tiny.shape.png
+
+	Tags: Industrial
+	MinSize: 1
+	Subsystem: IndustrialHull
+
+Hull: MechanicaColony
+	Name: ColonyShip
+	Background: MechanicaBlueprint
+	BackgroundScale: 0.9
+	ModelScale: 1.0
+	Material: MechanicaGenericPBR
+	Model: MechanicaColony
+	Shape: data/shipsets/mechanica/support_tiny.shape.png
+
+	Tags: Industrial
+	MinSize: 1
+	Subsystem: IndustrialHull
+
+Hull: MechanicaTractor
+	Name: Tractor
+	Background: MechanicaBlueprint
+	BackgroundScale: 0.9
+	ModelScale: 1.0
+	Material: MechanicaGenericPBR
+	Model: MechanicaTractor
+	Shape: data/shipsets/mechanica/support_tiny.shape.png
+
+	//Tags: Industrial
+	MinSize: 1
+	Subsystem: IndustrialHull

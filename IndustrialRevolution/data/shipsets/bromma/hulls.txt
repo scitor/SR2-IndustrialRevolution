@@ -153,3 +153,68 @@ Hull: BrommaSatellite
 	Tags: Satellite
 	MinSize: 1
 	Subsystem: SatelliteHull
+
+Hull: BrommaMiner
+	Name: Miner
+	Background: VolkurBlueprint
+	BackgroundScale: 0.9
+	ModelScale: 1.0
+	Material: BrommaGenericPBR
+	Model: BrommaMiner
+	Shape: data/shipsets/bromma/support_tiny.shape.png
+
+	//Tags: Industrial
+	MinSize: 1
+	Subsystem: IndustrialHull
+
+Hull: BrommaMissionary
+	Name: Missionary
+	Background: VolkurBlueprint
+	BackgroundScale: 0.9
+	ModelScale: 1.0
+	Material: BrommaGenericPBR
+	Model: BrommaMissionary
+	Shape: data/shipsets/bromma/support_tiny.shape.png
+
+	Tags: Industrial
+	MinSize: 1
+	Subsystem: IndustrialHull
+
+Hull: BrommaFreighter
+	Name: Freighter
+	Background: VolkurBlueprint
+	BackgroundScale: 0.9
+	ModelScale: 1.0
+	Material: BrommaGenericPBR
+	Model: BrommaFreighter
+	Shape: data/shipsets/bromma/support_tiny.shape.png
+
+	Tags: Industrial
+	MinSize: 1
+	Subsystem: IndustrialHull
+
+Hull: BrommaColony
+	Name: ColonyShip
+	Background: VolkurBlueprint
+	BackgroundScale: 0.9
+	ModelScale: 1.0
+	Material: BrommaGenericPBR
+	Model: BrommaColony
+	Shape: data/shipsets/bromma/support_tiny.shape.png
+
+	Tags: Industrial
+	MinSize: 1
+	Subsystem: IndustrialHull
+
+Hull: BrommaTractor
+	Name: Tractor
+	Background: VolkurBlueprint
+	BackgroundScale: 0.9
+	ModelScale: 1.0
+	Material: BrommaGenericPBR
+	Model: BrommaTractor
+	Shape: data/shipsets/bromma/support_tiny.shape.png
+
+	//Tags: Industrial
+	MinSize: 1
+	Subsystem: IndustrialHull

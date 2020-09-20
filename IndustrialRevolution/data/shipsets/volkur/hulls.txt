@@ -153,3 +153,68 @@ Hull: VolkurSatellite
 	Tags: Satellite
 	MinSize: 1
 	Subsystem: SatelliteHull
+
+Hull: VolkurMiner
+	Name: Miner
+	Background: VolkurBlueprint
+	BackgroundScale: 0.9
+	ModelScale: 1.0
+	Material: VolkurGenericPBR
+	Model: VolkurMiner
+	Shape: data/shipsets/volkur/support_tiny.shape.png
+
+	//Tags: Industrial
+	MinSize: 1
+	Subsystem: IndustrialHull
+
+Hull: VolkurMissionary
+	Name: Missionary
+	Background: VolkurBlueprint
+	BackgroundScale: 0.9
+	ModelScale: 1.0
+	Material: VolkurGenericPBR
+	Model: VolkurMissionary
+	Shape: data/shipsets/volkur/support_tiny.shape.png
+
+	Tags: Industrial
+	MinSize: 1
+	Subsystem: IndustrialHull
+
+Hull: VolkurFreighter
+	Name: Freighter
+	Background: VolkurBlueprint
+	BackgroundScale: 0.9
+	ModelScale: 1.0
+	Material: VolkurGenericPBR
+	Model: VolkurFreighter
+	Shape: data/shipsets/volkur/support_tiny.shape.png
+
+	Tags: Industrial
+	MinSize: 1
+	Subsystem: IndustrialHull
+
+Hull: VolkurColony
+	Name: ColonyShip
+	Background: VolkurBlueprint
+	BackgroundScale: 0.9
+	ModelScale: 1.0
+	Material: VolkurGenericPBR
+	Model: VolkurColony
+	Shape: data/shipsets/volkur/support_tiny.shape.png
+
+	Tags: Industrial
+	MinSize: 1
+	Subsystem: IndustrialHull
+
+Hull: VolkurTractor
+	Name: Tractor
+	Background: VolkurBlueprint
+	BackgroundScale: 0.9
+	ModelScale: 1.0
+	Material: VolkurGenericPBR
+	Model: VolkurTractor
+	Shape: data/shipsets/volkur/support_tiny.shape.png
+
+	//Tags: IndustrialInvis
+	MinSize: 1
+	Subsystem: IndustrialHull

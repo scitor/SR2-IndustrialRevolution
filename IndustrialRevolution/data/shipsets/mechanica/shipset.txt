@@ -13,6 +13,11 @@ Shipset: Mechanica
 	Hull: MechanicaTiny
 	Hull: MechanicaStation
 	Hull: MechanicaSatellite
+	Hull: MechanicaMiner
+	Hull: MechanicaMissionary
+	Hull: MechanicaFreighter
+	Hull: MechanicaColony
+	Hull: MechanicaTractor
 
 	Skin: Miner
 		Model: MechanicaMiner

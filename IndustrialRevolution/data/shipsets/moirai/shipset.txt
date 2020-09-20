@@ -13,6 +13,11 @@ Shipset: Moirai
 	Hull: MoiraiTiny
 	Hull: MoiraiStation
 	Hull: MoiraiSatellite
+	Hull: MoiraiCivilianMiner
+	Hull: MoiraiCivilianMissionary
+	Hull: MoiraiCivilianFreighter
+	Hull: MoiraiCivilianColony
+	Hull: MoiraiCivilianTractor
 
 	Skin: Miner
 		Model: MoiraiCivilianMiner

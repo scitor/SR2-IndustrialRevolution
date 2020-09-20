@@ -153,3 +153,68 @@ Hull: VecturSatellite
 	Tags: Satellite
 	MinSize: 1
 	Subsystem: SatelliteHull
+
+Hull: VecturCivilianMiner
+	Name: Miner
+	Background: VecturBlueprint
+	BackgroundScale: 0.9
+	ModelScale: 1.0
+	Material: VecturGenericPBR
+	Model: VecturCivilianMiner
+	Shape: data/shipsets/vectur/support_tiny.shape.png
+
+	//Tags: Industrial
+	MinSize: 1
+	Subsystem: IndustrialHull
+
+Hull: VecturCivilianMissionary
+	Name: Missionary
+	Background: VecturBlueprint
+	BackgroundScale: 0.9
+	ModelScale: 1.0
+	Material: VecturGenericPBR
+	Model: VecturCivilianMissionary
+	Shape: data/shipsets/vectur/support_tiny.shape.png
+
+	Tags: Industrial
+	MinSize: 1
+	Subsystem: IndustrialHull
+
+Hull: VecturCivilianFreighter
+	Name: Freighter
+	Background: VecturBlueprint
+	BackgroundScale: 0.9
+	ModelScale: 1.0
+	Material: VecturGenericPBR
+	Model: VecturCivilianFreighter
+	Shape: data/shipsets/vectur/support_tiny.shape.png
+
+	Tags: Industrial
+	MinSize: 1
+	Subsystem: IndustrialHull
+
+Hull: VecturCivilianColony
+	Name: ColonyShip
+	Background: VecturBlueprint
+	BackgroundScale: 0.9
+	ModelScale: 1.0
+	Material: VecturGenericPBR
+	Model: VecturCivilianColony
+	Shape: data/shipsets/vectur/support_tiny.shape.png
+
+	Tags: Industrial
+	MinSize: 1
+	Subsystem: IndustrialHull
+
+Hull: VecturCivilianTractor
+	Name: Tractor
+	Background: VecturBlueprint
+	BackgroundScale: 0.9
+	ModelScale: 1.0
+	Material: VecturGenericPBR
+	Model: VecturCivilianTractor
+	Shape: data/shipsets/vectur/support_tiny.shape.png
+
+	//Tags: Industrial
+	MinSize: 1
+	Subsystem: IndustrialHull
