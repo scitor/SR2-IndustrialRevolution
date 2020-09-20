@@ -10,7 +10,6 @@ Subsystem: SupportJefferiesTube
 	Size := HexSize * Hexes
 
 	Hex.HP := 10 * HexSize
-
 	Hex.Mass := 1.0 * HexSize
 
 	Repair := 2 * HexSize * Hexes
@@ -20,3 +19,4 @@ Subsystem: SupportJefferiesTube
 
 	Module: Default
 		Sprite: JefferiesTube
+		OnCheckErrors: heralds_designs::checkSurroundedInSubsystems

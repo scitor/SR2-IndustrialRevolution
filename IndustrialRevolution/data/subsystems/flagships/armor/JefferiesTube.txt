@@ -20,3 +20,4 @@ Subsystem: JefferiesTube
 
 	Module: Default
 		Sprite: JefferiesTube
+		OnCheckErrors: heralds_designs::checkSurroundedInSubsystems

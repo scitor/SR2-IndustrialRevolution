@@ -54,3 +54,25 @@ bool checkSurroundedInSystem(Design& design, Subsystem& sys, const vec2u& hex) {
 	}
 	return false;
 }
+
+bool checkSurroundedInSubsystems(Design& design, Subsystem& sys, const vec2u& hex) {
+	bool valid = true;
+	for(uint d = 0; d < 6; ++d) {
+		vec2u other = hex;
+		if(design.hull.active.advance(other, HexGridAdjacency(d))) {
+			auto@ otherSys = design.subsystem(other);
+			if(otherSys is null) {
+				design.addErrorHex(other);
+				valid = false;
+			}
+		}
+	}
+
+	if(!valid) {
+		auto@ mod = design.module(hex.x, hex.y);
+		design.addErrorHex(hex);
+		design.addError(true, format(locale::ERROR_MUST_SURROUND, sys.type.name, locale::SUBSYSTEM), null, mod, hex);
+		return true;
+	}
+	return false;
+}
