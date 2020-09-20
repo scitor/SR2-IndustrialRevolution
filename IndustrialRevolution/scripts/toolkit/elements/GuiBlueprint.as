@@ -10,6 +10,7 @@ import elements.GuiSkinElement;
 import elements.MarkupTooltip;
 import util.formatting;
 from resources import getBuildCost;
+from traits import getTraitID;
 
 export GuiBlueprint;
 export GuiDownloadedBlueprint;
@@ -908,6 +909,10 @@ class GuiBlueprint : BaseGuiElement {
 					quaterniond_fromAxisAngle(vec3d_front(), pi * -0.5),
 					hull.backgroundScale);
 
+		const Material@ floorMat = material::HexFloor;
+		if(design.owner.hasTrait(getTraitID("Verdant")))
+			@floorMat = material::HexFloorVerdant;
+
 		//Draw all the hexes
 		uint width = hull.gridSize.width;
 		uint height = hull.gridSize.height;
@@ -921,7 +926,7 @@ class GuiBlueprint : BaseGuiElement {
 		for(uint i = 0, cnt = emptyFloors.length; i < cnt; ++i)
 			material::HexEmpty.draw(emptyFloors[i], emptyColors[i]);
 		for(uint i = 0, cnt = hexFloors.length; i < cnt; ++i)
-			material::HexFloor.draw(hexFloors[i], floorColors[i]);
+			floorMat.draw(hexFloors[i], floorColors[i]);
 
 		/*for(uint y = 0; y < height; ++y) {*/
 		/*	for(uint x = 0; x < width; x += 2)*/

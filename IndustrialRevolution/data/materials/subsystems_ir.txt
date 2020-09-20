@@ -38,3 +38,10 @@ Material: KugelblitzPropulsion
 Material: PulsedPlasmaThruster
 	Inherit: Subsystem
 	Texture: data/images/subsystems/thruster_pulsed_plasma.png
+
+Material: HexFloorVerdant
+	Inherit: Subsystem
+	Shader: MaskColored
+	Mipmap: True
+	Texture: data/images/hexwall_floor_verdant.png
+	Texture2: data/images/hexwall_floor_mask.png
