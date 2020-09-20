@@ -1,0 +1,59 @@
+Subsystem: CivilianControl
+	Name: #S_CIVILIAN_CREW_DECK
+	Description: #S_CIVILIAN_CREW_DECK_DESC
+	BaseColor: #F980F0
+	Picture: SubsystemButtonArt::8
+	Elevation: 4
+	
+	Tags: BaseCost, Category:Control, BadFiller
+	Tags: DefaultUnlock, Crewed, Control, ControlCore, HasInternals
+	Tags: NoBulkhead, Important
+	Hull: Flagship, Station
+	
+	EvaluationOrder: -10
+	
+	Size := HexSize * Hexes
+	Crew := floor(40 * Size)
+	Command := Hexes
+
+	SupplyRate := 5 * HexSize * (Hexes-1)
+
+	Repair := 1 * HexSize * (Hexes-1)
+	RepairSupplyCost := 2.0 * Repair
+	out SupplyDrain := RepairSupplyCost
+	
+	Hex.Resistance := 0.2
+	Hex.HP := 18 * HexSize
+	Hex.Mass := HexSize
+
+	Effect: ControlCore
+
+	Assert: TagCount.Crewed == 0
+		Message: #ERROR_BRIDGE_CIV
+		Unique: True
+
+	Assert: TagCount.AICore == 0
+		Message: #ERROR_BRIDGE_CIV
+		Unique: True
+
+	Assert: TagCount.Weapon == 0
+		Message: #ERROR_CANNOT_HAVE_WEAPONS
+
+	Assert: Sum.SupportCapacity == 0
+		Message: #ERROR_CANNOT_HAVE_SUPPORT
+
+	Provides:
+		Crew = Crew
+		Command = Command
+	
+	Module: Default
+		Sprite: CivilianQuarters
+	
+	Module: Core
+		Sprite: CivilianBridge
+		Hex.HP := 2 * Hex.HP
+		Hex.Resistance := 0.35
+
+		Hex.BuildCost := 5 * Hex.BuildCost
+		Hex.Mass := 5 * Hex.Mass
+
