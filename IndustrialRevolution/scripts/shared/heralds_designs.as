@@ -35,7 +35,7 @@ bool checkSurroundedInSystem(Design& design, Subsystem& sys, const vec2u& hex) {
 		if(design.hull.active.advance(other, HexGridAdjacency(d))) {
 			auto@ otherSys = design.subsystem(other);
 			auto@ otherMod = design.module(other);
-			if(!sinewConnection && otherSys.type.hasTag(SINEW_SUBSYSTEM_TAG)) {
+			if(!sinewConnection && otherSys !is null && otherSys.type !is null && otherSys.type.hasTag(SINEW_SUBSYSTEM_TAG)) {
 				sinewConnection = true; // allow one sinew hex
 				continue;
 			}
