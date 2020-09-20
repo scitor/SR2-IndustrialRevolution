@@ -6,7 +6,7 @@ Subsystem: VerdantSinew
 	EvaluationOrder: -10
 
 	Tags: Category:Control, Control, NoCore, NonContiguous, IsArmor
-	Tags: BaseCost, PassExterior, RaceSpecial
+	Tags: BaseCost, PassExterior, RaceSpecial, Sinew
 	Hull: Flagship, Station
 
 	HexLimit := Sum.HexLimit * -0.2
