@@ -10,7 +10,7 @@ STRUCTURAL_SCAFFOLDING_DESC: <<
 
 S_JEFFERIES_TUBE_NAME: Jefferies Tube
 S_JEFFERIES_TUBE_DESC: <<
-	Jefferies Tubes are a network of narrow tunnels or corridors inside a starship.
+	Jefferies Tubes are narrow tunnels or corridors inside a starship. They can be vertically or horizontally oriented, and form a network that allows travel throughout large volumes of a starship.
 
 	[img=Plus]Increases ship repair rate.[/img]
 >>

@@ -2,7 +2,6 @@ Subsystem: JefferiesTube
 	Name: #S_JEFFERIES_TUBE_NAME
 	Description: #S_JEFFERIES_TUBE_DESC
 	BaseColor: #a9a9a9
-	Sprite: HexagonSubsystems::0 * #cf00ff
 	Elevation: 0
 
 	Tags: DefaultUnlock, NoCore, NoWall, Category:Defense, Defense
@@ -20,4 +19,4 @@ Subsystem: JefferiesTube
 	Hex.LaborCost := 0.1 * HexSize
 
 	Module: Default
-		Sprite: Chassis
+		Sprite: JefferiesTube

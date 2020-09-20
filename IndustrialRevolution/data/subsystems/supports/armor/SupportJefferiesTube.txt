@@ -19,4 +19,4 @@ Subsystem: SupportJefferiesTube
 	Hex.LaborCost := 0.1 * HexSize
 
 	Module: Default
-		Sprite: Chassis
+		Sprite: JefferiesTube
