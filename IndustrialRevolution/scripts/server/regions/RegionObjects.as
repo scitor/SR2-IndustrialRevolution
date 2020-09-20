@@ -1189,8 +1189,10 @@ tidy class RegionObjects : Component_RegionObjects, Savable {
 			pl.setCivilianTimer(0.0);
 
 			Civilian@ customsOffice;
-			auto@ status = getStatusType("CustomsOffice");
-			if(status !is null && pl.hasStatusEffect(status.id)) {
+			if(pl.hasStatusEffect(getStatusID("CustomsOffice"))
+				|| pl.hasStatusEffect(getStatusID("AncientPlanet"))
+				|| pl.hasStatusEffect(getStatusID("StarChildren"))
+			) {
 				@customsOffice = pl.getCustomsOffice();
 				if(customsOffice is null) {
 					vec3d pos = pl.position;

@@ -1,0 +1,4 @@
+Status: OrbitalFTLProcessing
+	Visible To: Nobody
+
+	WhileConsumingCargo(FTLShards, 10, 10, AddFTLIncome(+1.0))

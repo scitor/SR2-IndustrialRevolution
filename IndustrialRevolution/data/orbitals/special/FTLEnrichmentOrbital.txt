@@ -1,0 +1,28 @@
+Module: FTLEnrichmentOrbital
+	Name: #ORB_FTL_ENRICHMENT_ORBITAL
+	Blurb: #ORB_FTL_ENRICHMENT_ORBITAL_DESC
+	Description: #ORB_FTL_ENRICHMENT_ORBITAL_DESC
+	Icon: GuiOrbitalIcons::13
+	Strategic Icon: OrbitalIcons::13
+
+	Build Cost: 140
+	Maintenance: 30
+	Labor Cost: 10
+	Size: 8
+
+	Health: 3000
+	Armor: 800
+
+	Model: FTLStorage
+	Material: GenericPBR_FTLStorage
+
+	RequireTrait(StarChildren)
+
+	AddParticleSystem(FTLDischargePerm, Size = 0.3)
+
+	AddFTLStorage(50)
+
+	LimitInOrbitStatus(OrbitalFTLProcessing, 99)
+
+	AddStatusToOrbitingPlanet(OrbitalFTLProcessing)
+	MatchOrbitingOwner(Destroy None = True)
