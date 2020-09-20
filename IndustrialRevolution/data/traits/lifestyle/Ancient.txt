@@ -14,10 +14,12 @@ Trait: Ancient
 
 	ForbidSubsystem(CrewControl)
 	ForbidSubsystem(CrewDeck)
+	ForbidSubsystem(CivilianCrewDeck)
 	ForbidSubsystem(FissionGen)
 	ForbidSubsystem(FusionGen)
 	UnlockSubsystem(AncientCore)
 	UnlockSubsystem(SupportAncientCore)
+	UnlockSubsystem(CivilianAncientCore)
 
 	AddStatusOwnedPlanets(AncientPlanet)
 

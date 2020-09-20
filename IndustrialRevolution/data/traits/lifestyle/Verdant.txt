@@ -21,6 +21,7 @@ Trait: Verdant
 
 	ForbidSubsystem(CrewControl)
 	ForbidSubsystem(CrewDeck)
+	ForbidSubsystem(CivilianCrewDeck)
 	UnlockSubsystem(VerdantSinew)
 	UnlockSubsystem(VerdantSupportSinew)
 
