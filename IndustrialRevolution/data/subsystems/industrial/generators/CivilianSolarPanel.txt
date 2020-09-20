@@ -1,6 +1,6 @@
 Subsystem: CivilianSolarPanel
-	Name: #S_SOLARPANEL
-	Description: #S_SOLARPANEL_DESC
+	Name: #S_CIV_SOLARPANEL
+	Description: #S_CIV_SOLARPANEL_DESC
 	BaseColor: #64fff9
 	Elevation: 3
 
@@ -11,14 +11,7 @@ Subsystem: CivilianSolarPanel
 
 	Size := HexSize * Hexes
 
-	Power := 7 * Size
-	SolarPower := 7 * Size
-
-	SolarEfficiencyLoss := 0.5
-	SolarEfficiencyMinBoost := 0.0
-	SolarEfficiencyMaxBoost := 1.0
-
-	Hook: SolarEfficiency(SolarEfficiencyLoss, SolarEfficiencyMinBoost, SolarEfficiencyMaxBoost, True)
+	Power := 4 * Size
 
 	Hex.Resistance := 0.01
 	Hex.HP := 10 * HexSize

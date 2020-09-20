@@ -16,6 +16,11 @@ Subsystem: CivilianVerdantSinew
 	Hex.HP := 40 * HexSize
 	Hex.Mass := HexSize * 1.5
 
+	SupplyCapacity := Size * 1000
+	SupplyRate := Size * 1
+
+	AddShipModifier: CargoStorageFactor(1.2)
+
 	Repair := 24 * HexSize
 
 	Hex.LaborCost := 0.035 * HexSize

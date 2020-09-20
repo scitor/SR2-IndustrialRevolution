@@ -14,7 +14,10 @@ Subsystem: CivilianCrewDeck
 	
 	Size := HexSize * Hexes
 	Crew := floor(40 * Size)
-	Command := Hexes * 4
+	Command := Hexes * 1
+
+	SupplyCapacity := Size * 1000
+	SupplyRate := Size * 1
 
 	Repair := 2 * HexSize * (Hexes-1)
 	RepairSupplyCost := 0.5 * Repair

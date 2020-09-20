@@ -1,6 +1,6 @@
 Subsystem: CivilianFusionGen
-	Name: #FUSIONGEN_NAME
-	Description: #FUSIONGEN_DESC
+	Name: #S_CIV_FUSIONGEN_NAME
+	Description: #S_CIV_FUSIONGEN_DESC
 	BaseColor: #db0083
 	Elevation: 1
 
@@ -9,9 +9,9 @@ Subsystem: CivilianFusionGen
 	Hull: Industrial
 
 	Size := HexSize * Hexes
-	Power := 30 * Size
+	Power := 16 * Size
 
-	SupplyRate := Size * 60
+	SupplyRate := Size * 16
 
 	Hex.Resistance := 0.5
 	Hex.HP := 18 * HexSize

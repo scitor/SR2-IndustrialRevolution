@@ -1,6 +1,6 @@
 Subsystem: CivilianFissionGen
-	Name: #FISSIONGEN_NAME
-	Description: #FISSIONGEN_DESC
+	Name: #S_CIV_FISSIONGEN_NAME
+	Description: #S_CIV_FISSIONGEN_DESC
 	BaseColor: #00a4db
 	Elevation: 1
 
@@ -9,9 +9,9 @@ Subsystem: CivilianFissionGen
 	Hull: Industrial
 
 	Size := HexSize * Hexes
-	Power := 15 * Size
+	Power := 8 * Size
 
-	SupplyRate := Size * 30
+	SupplyRate := Size * 8
 
 	Hex.Resistance := 0.5
 	Hex.HP := 18 * HexSize

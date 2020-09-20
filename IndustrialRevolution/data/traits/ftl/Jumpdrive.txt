@@ -12,6 +12,7 @@ Trait: Jumpdrive
 	Unique: FTL
 
 	UnlockSubsystem(Jumpdrive)
+	UnlockSubsystem(CivilianJumpdrive)
 
 	LoadDesigns(default)
 	LoadDesigns(jumpdrive)
