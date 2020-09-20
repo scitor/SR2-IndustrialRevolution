@@ -1,4 +1,4 @@
-Subsystem: FissionGen
+Subsystem: CivilianFissionGen
 	Name: #FISSIONGEN_NAME
 	Description: #FISSIONGEN_DESC
 	BaseColor: #00a4db
@@ -6,12 +6,11 @@ Subsystem: FissionGen
 
 	Tags: DefaultUnlock, IsReactor, Category:Control
 	Tags: Important, HasInternals
-	Hull: Flagship, Station
+	Hull: Industrial
 
 	Size := HexSize * Hexes
 	Power := 15 * Size
 
-	SupplyCapacity := Size * 500
 	SupplyRate := Size * 30
 
 	Hex.Resistance := 0.5
@@ -20,7 +19,6 @@ Subsystem: FissionGen
 	
 	Hex.LaborCost := 0.1 * HexSize + 0.1
 	Hex.BuildCost := 1 * HexSize + 0.6
-	Hex.MaintainCost := HexSize + 1
 	
 	Provides:
 		Power = Power
@@ -34,5 +32,3 @@ Subsystem: FissionGen
 		Hex.Mass := 5.0 * Hex.Mass
 		Sprite: FissionReactor
 
-	Modifier: SupplyCapacityFactor(factor)
-		SupplyCapacity := SupplyCapacity * factor

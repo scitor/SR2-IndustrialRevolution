@@ -18,3 +18,11 @@ Material: CivilianBridge
 Material: CivilianQuarters
 	Inherit: Subsystem
 	Texture: data/images/subsystems/civilian_quarters.png
+
+Material: CivAncientComputerCore
+	Inherit: Subsystem
+	Texture: data/images/subsystems/civ_control_core.png
+
+Material: CivSinew
+	Inherit: Subsystem
+	Texture: data/images/subsystems/civ_sinew.png

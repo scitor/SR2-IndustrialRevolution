@@ -13,6 +13,11 @@ Shipset: Bromma
 	Hull: BrommaTiny
 	Hull: BrommaStation
 	Hull: BrommaSatellite
+	Hull: BrommaMiner
+	Hull: BrommaMissionary
+	Hull: BrommaFreighter
+	Hull: BrommaColony
+	Hull: BrommaTractor
 
 	Skin: Miner
 		Model: BrommaMiner

@@ -153,3 +153,68 @@ Hull: MoiraiSatellite
 	Tags: Satellite
 	MinSize: 1
 	Subsystem: SatelliteHull
+
+Hull: MoiraiCivilianMiner
+	Name: Miner
+	Background: MoiraiBlueprint
+	BackgroundScale: 0.9
+	ModelScale: 1.0
+	Material: MoiraiGenericPBR
+	Model: MoiraiCivilianMiner
+	Shape: data/shipsets/moirai/support_tiny.shape.png
+
+	//Tags: Industrial
+	MinSize: 1
+	Subsystem: IndustrialHull
+
+Hull: MoiraiCivilianMissionary
+	Name: Missionary
+	Background: MoiraiBlueprint
+	BackgroundScale: 0.9
+	ModelScale: 1.0
+	Material: MoiraiGenericPBR
+	Model: MoiraiCivilianMissionary
+	Shape: data/shipsets/moirai/support_tiny.shape.png
+
+	Tags: Industrial
+	MinSize: 1
+	Subsystem: IndustrialHull
+
+Hull: MoiraiCivilianFreighter
+	Name: Freighter
+	Background: MoiraiBlueprint
+	BackgroundScale: 0.9
+	ModelScale: 1.0
+	Material: MoiraiGenericPBR
+	Model: MoiraiCivilianFreighter
+	Shape: data/shipsets/moirai/support_tiny.shape.png
+
+	Tags: Industrial
+	MinSize: 1
+	Subsystem: IndustrialHull
+
+Hull: MoiraiCivilianColony
+	Name: ColonyShip
+	Background: MoiraiBlueprint
+	BackgroundScale: 0.9
+	ModelScale: 1.0
+	Material: MoiraiGenericPBR
+	Model: MoiraiCivilianColony
+	Shape: data/shipsets/moirai/support_tiny.shape.png
+
+	Tags: Industrial
+	MinSize: 1
+	Subsystem: IndustrialHull
+
+Hull: MoiraiCivilianTractor
+	Name: Tractor
+	Background: MoiraiBlueprint
+	BackgroundScale: 0.9
+	ModelScale: 1.0
+	Material: MoiraiGenericPBR
+	Model: MoiraiCivilianTractor
+	Shape: data/shipsets/moirai/support_tiny.shape.png
+
+	//Tags: Industrial
+	MinSize: 1
+	Subsystem: IndustrialHull

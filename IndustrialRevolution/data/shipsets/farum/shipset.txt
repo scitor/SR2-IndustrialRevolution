@@ -13,6 +13,11 @@ Shipset: Farum
 	Hull: FarumTiny
 	Hull: FarumStation
 	Hull: FarumSatellite
+	Hull: FarumMiner
+	Hull: FarumMissionary
+	Hull: FarumFreighter
+	Hull: FarumColony
+	Hull: FarumTractor
 
 	Skin: Miner
 		Model: FarumMiner

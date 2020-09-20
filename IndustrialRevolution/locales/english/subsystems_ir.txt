@@ -1,3 +1,28 @@
+DESIGN_CIVILIAN: Civilian Ship
+ERROR_MAX_SIZE: $1 has maximum size $2.
+ERROR_NEEDS_CIVILIAN_HULL: $1 needs Civilian Hull.
+ERROR_CANNOT_HAVE_WEAPONS: $1 cannot have weapons.
+
+S_CIVILIAN_HULL: Civilian Hull
+S_CIVILIAN_HULL_DESC: <<
+	A non-military civilian ship hull used by traders, colonists and missionaries.
+
+	[img=MenuIcons::3;20][i][color=#aaa]Civilian Hulls can only be used on ships of size 8 or smaller.[/color][/i][/img]
+>>
+
+S_CIVILIAN_CREW_DECK: Civilian Crew Deck
+S_CIVILIAN_CREW_DECK_DESC: <<
+	Provides a deck and facilities for the crew to command a civilian ship.
+
+	[img=ActionBarIcons::0;22;#00ff80]Provides [b][color=#00ff80]Control[/color][/b] to operate other subsystems.[/img]
+	[img=Plus]Doubles engine efficiency[/img]
+	[img=Plus]Increased cargo capacity by x4[/img]
+	[img=Plus]Slowly repairs the vessel.[/img]
+	[img=Minus]Very limited support capacity.[/img]
+	[img=Minus]Can't have any weapons on the ship.[/img]
+	[img=Minus]Ship is destroyed if no control remains.[/img]
+>>
+
 STRUCTURAL_SCAFFOLDING: Structural scaffolding
 STRUCTURAL_SCAFFOLDING_DESC: <<
 	Structural scaffolding holds ships together.
@@ -13,4 +38,21 @@ S_JEFFERIES_TUBE_DESC: <<
 	Jefferies Tubes are narrow tunnels or corridors inside a starship. They can be vertically or horizontally oriented, and form a network that allows travel throughout large volumes of a starship.
 
 	[img=Plus]Increases ship repair rate.[/img]
+>>
+
+S_CIV_ANCIENT_CORE: Civilian Control Core
+S_CIV_ANCIENT_CORE_DESC: <<
+	Maintains the connection to the First network, provides power as well as control for the ship.
+
+	[img=AncientIcon;22][b][color=#8953f7]Only available when the 'Ancient' race option is chosen.[/color][/b][/img]
+>>
+
+S_CIV_VERDANT_SINEW: Civilian Sinew
+S_CIV_VERDANT_SINEW_DESC: <<
+	Sinew holds together, feeds and provides control for all mechanical parts of a civilian verdant ship.
+
+	[img=ActionBarIcons::0;22;#00ff80]Provides [b][color=#00ff80]Control[/color][/b] to operate other subsystems.[/img]
+	[img=ActionBarIcons::0;22]All interior and non-armor hexes in the ship must be adjacent to at least one Sinew hex.[/img]
+	[img=Minus]Ship is destroyed if more than 70% of all Sinew gets destroyed.[/img]
+	[img=Plantation;22][b][color=#5fb41c]Only available when the 'Verdant' race option is chosen.[/color][/b][/img]
 >>

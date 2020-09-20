@@ -236,6 +236,8 @@ string getHullTypeTag(const Hull@ hull) {
 		return "Satellite";
 	if(hull.hasTag("Station"))
 		return "Station";
+	if(hull.hasTag("Industrial"))
+		return "Industrial";
 	return "";
 }
 

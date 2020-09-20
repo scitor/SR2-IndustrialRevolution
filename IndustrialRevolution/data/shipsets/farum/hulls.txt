@@ -153,3 +153,68 @@ Hull: FarumSatellite
 	Tags: Satellite
 	MinSize: 1
 	Subsystem: SatelliteHull
+
+Hull: FarumMiner
+	Name: Miner
+	Background: VolkurBlueprint
+	BackgroundScale: 0.9
+	ModelScale: 1.0
+	Material: FarumGenericPBR
+	Model: FarumMiner
+	Shape: data/shipsets/farum/support_tiny.shape.png
+
+	//Tags: Industrial
+	MinSize: 1
+	Subsystem: IndustrialHull
+
+Hull: FarumMissionary
+	Name: Missionary
+	Background: VolkurBlueprint
+	BackgroundScale: 0.9
+	ModelScale: 1.0
+	Material: FarumGenericPBR
+	Model: FarumMissionary
+	Shape: data/shipsets/farum/support_tiny.shape.png
+
+	Tags: Industrial
+	MinSize: 1
+	Subsystem: IndustrialHull
+
+Hull: FarumFreighter
+	Name: Freighter
+	Background: VolkurBlueprint
+	BackgroundScale: 0.9
+	ModelScale: 1.0
+	Material: FarumGenericPBR
+	Model: FarumFreighter
+	Shape: data/shipsets/farum/support_tiny.shape.png
+
+	Tags: Industrial
+	MinSize: 1
+	Subsystem: IndustrialHull
+
+Hull: FarumColony
+	Name: ColonyShip
+	Background: VolkurBlueprint
+	BackgroundScale: 0.9
+	ModelScale: 1.0
+	Material: FarumGenericPBR
+	Model: FarumColony
+	Shape: data/shipsets/farum/support_tiny.shape.png
+
+	Tags: Industrial
+	MinSize: 1
+	Subsystem: IndustrialHull
+
+Hull: FarumTractor
+	Name: Tractor
+	Background: VolkurBlueprint
+	BackgroundScale: 0.9
+	ModelScale: 1.0
+	Material: FarumGenericPBR
+	Model: FarumTractor
+	Shape: data/shipsets/farum/support_tiny.shape.png
+
+	//Tags: Industrial
+	MinSize: 1
+	Subsystem: IndustrialHull

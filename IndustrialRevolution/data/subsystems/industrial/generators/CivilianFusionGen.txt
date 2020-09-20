@@ -1,4 +1,4 @@
-Subsystem: FusionGen
+Subsystem: CivilianFusionGen
 	Name: #FUSIONGEN_NAME
 	Description: #FUSIONGEN_DESC
 	BaseColor: #db0083
@@ -6,13 +6,12 @@ Subsystem: FusionGen
 
 	Tags: DefaultUnlock, IsReactor, Category:Control
 	Tags: Important, HasInternals
-	Hull: Flagship, Station
+	Hull: Industrial
 
 	Size := HexSize * Hexes
 	Power := 30 * Size
 
-	SupplyCapacity := Size * 1500
-	SupplyRate := Size * 80
+	SupplyRate := Size * 60
 
 	Hex.Resistance := 0.5
 	Hex.HP := 18 * HexSize
@@ -20,7 +19,6 @@ Subsystem: FusionGen
 	
 	Hex.LaborCost := 0.15 * HexSize + 0.18
 	Hex.BuildCost := 3 * HexSize + 0.8
-	Hex.MaintainCost := 5 * HexSize + 4
 	
 	Provides:
 		Power = Power
@@ -34,5 +32,3 @@ Subsystem: FusionGen
 		Hex.BuildCost := 0.9 * Hex.BuildCost
 		Hex.Mass := 0.9 * Hex.Mass
 
-	Modifier: SupplyCapacityFactor(factor)
-		SupplyCapacity := SupplyCapacity * factor

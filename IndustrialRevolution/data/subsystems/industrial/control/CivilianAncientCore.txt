@@ -1,12 +1,12 @@
-Subsystem: AncientCore
-	Name: #S_ANCIENT_CORE
-	Description: #S_ANCIENT_CORE_DESC
-	BaseColor: #c5f946
+Subsystem: CivilianAncientCore
+	Name: #S_CIV_ANCIENT_CORE
+	Description: #S_CIV_ANCIENT_CORE_DESC
+	BaseColor: #F980F0
 	
-	Tags: BaseCost, Category:Control, HeraldsDLC, BadFiller, RaceSpecial
+	Tags: Category:Control, HeraldsDLC, BadFiller, RaceSpecial
 	Tags: Crewed, Control, ControlCore, HasInternals, Important
 	Tags: NoBulkhead
-	Hull: Flagship, Station
+	Hull: Industrial
 	
 	EvaluationOrder: -10
 	
@@ -14,20 +14,18 @@ Subsystem: AncientCore
 	Command := Hexes * 3
 
 	Power := 20 * Size
-	SupplyCapacity := Size * 1000
 	SupplyRate := Size * 40
 
-	Repair := 3 * HexSize * (Hexes-1)
-	RepairSupplyCost := 3.0 * Repair
+	Repair := 4 * HexSize * (Hexes-1)
+	RepairSupplyCost := 0.5 * Repair
 	out SupplyDrain := RepairSupplyCost
-	
+
 	Hex.Resistance := 0.2
-	Hex.HP := 18 * HexSize
+	Hex.HP := 16 * HexSize
 	Hex.Mass := HexSize
 
-	Hex.LaborCost := 0.15 * HexSize + 0.18
-	Hex.BuildCost := 1.5 * HexSize + 0.8
-	Hex.MaintainCost := 3 * HexSize + 2
+	Hex.LaborCost := 0.06 * HexSize
+	Hex.BuildCost := 1.0 * HexSize
 
 	Effect: ControlCore
 	
@@ -38,7 +36,7 @@ Subsystem: AncientCore
 	Module: Default
 	
 	Module: Core
-		Sprite: AncientComputerCore
+		Sprite: CivAncientComputerCore
 		Hex.HP := 2 * Hex.HP
 		Hex.Resistance := 0.35
 

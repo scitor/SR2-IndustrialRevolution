@@ -166,3 +166,68 @@ Hull: GevronSatellite
 	Tags: Satellite
 	MinSize: 1
 	Subsystem: SatelliteHull
+
+Hull: GevronMiner
+	Name: Miner
+	Background: GevronBlueprint
+	BackgroundScale: 0.9
+	ModelScale: 1.0
+	Material: GevronGenericPBR
+	Model: GevronMiner
+	Shape: data/shipsets/gevron/support_tiny.shape.png
+
+	//Tags: Industrial
+	MinSize: 1
+	Subsystem: IndustrialHull
+
+Hull: GevronMissionary
+	Name: Missionary
+	Background: GevronBlueprint
+	BackgroundScale: 0.9
+	ModelScale: 1.0
+	Material: GevronGenericPBR
+	Model: GevronMissionary
+	Shape: data/shipsets/gevron/support_tiny.shape.png
+
+	Tags: Industrial
+	MinSize: 1
+	Subsystem: IndustrialHull
+
+Hull: GevronFreighter
+	Name: Freighter
+	Background: GevronBlueprint
+	BackgroundScale: 0.9
+	ModelScale: 1.0
+	Material: GevronGenericPBR
+	Model: GevronFreighter
+	Shape: data/shipsets/gevron/support_tiny.shape.png
+
+	Tags: Industrial
+	MinSize: 1
+	Subsystem: IndustrialHull
+
+Hull: GevronColony
+	Name: ColonyShip
+	Background: GevronBlueprint
+	BackgroundScale: 0.9
+	ModelScale: 1.0
+	Material: GevronGenericPBR
+	Model: GevronColony
+	Shape: data/shipsets/gevron/support_tiny.shape.png
+
+	Tags: Industrial
+	MinSize: 1
+	Subsystem: IndustrialHull
+
+Hull: GevronTractor
+	Name: Tractor
+	Background: GevronBlueprint
+	BackgroundScale: 0.9
+	ModelScale: 1.0
+	Material: GevronGenericPBR
+	Model: GevronTractor
+	Shape: data/shipsets/gevron/support_tiny.shape.png
+
+	//Tags: Industrial
+	MinSize: 1
+	Subsystem: IndustrialHull

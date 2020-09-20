@@ -1,0 +1,3 @@
+Template: var/CargoStorage
+	Modifier: CargoStorageFactor(factor)
+		CargoStorage := CargoStorage * factor

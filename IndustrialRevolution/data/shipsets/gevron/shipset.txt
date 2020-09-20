@@ -13,6 +13,11 @@ Shipset: Gevron
 	Hull: GevronTiny
 	Hull: GevronStation
 	Hull: GevronSatellite
+	Hull: GevronMiner
+	Hull: GevronMissionary
+	Hull: GevronFreighter
+	Hull: GevronColony
+	Hull: GevronTractor
 
 	Skin: Miner
 		Model: GevronMiner

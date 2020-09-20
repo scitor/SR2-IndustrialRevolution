@@ -1,4 +1,4 @@
-Subsystem: SolarPanel
+Subsystem: CivilianSolarPanel
 	Name: #S_SOLARPANEL
 	Description: #S_SOLARPANEL_DESC
 	BaseColor: #64fff9
@@ -7,7 +7,7 @@ Subsystem: SolarPanel
 	Tags: IsReactor, Category:Control
 	Tags: NonContiguous, NoCore
 	Tags: HeraldsDLC
-	Hull: Flagship, Station
+	Hull: Industrial
 
 	Size := HexSize * Hexes
 

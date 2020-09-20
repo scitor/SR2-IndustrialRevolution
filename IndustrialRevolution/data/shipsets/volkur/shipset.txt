@@ -13,6 +13,11 @@ Shipset: Volkur
 	Hull: VolkurTiny
 	Hull: VolkurStation
 	Hull: VolkurSatellite
+	Hull: VolkurMiner
+	Hull: VolkurMissionary
+	Hull: VolkurFreighter
+	Hull: VolkurColony
+	Hull: VolkurTractor
 
 	Skin: Miner
 		Model: VolkurMiner
