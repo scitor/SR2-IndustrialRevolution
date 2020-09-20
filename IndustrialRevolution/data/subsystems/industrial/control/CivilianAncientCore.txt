@@ -11,10 +11,12 @@ Subsystem: CivilianAncientCore
 	EvaluationOrder: -10
 	
 	Size := HexSize * Hexes
-	Command := Hexes * 3
+	Command := Hexes * 1
 
-	Power := 20 * Size
-	SupplyRate := Size * 40
+	Power := 5 * Size
+
+	SupplyCapacity := Size * 1000
+	SupplyRate := Size * 5
 
 	Repair := 4 * HexSize * (Hexes-1)
 	RepairSupplyCost := 0.5 * Repair

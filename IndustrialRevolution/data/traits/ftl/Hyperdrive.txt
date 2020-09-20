@@ -11,6 +11,7 @@ Trait: Hyperdrive
 	Unique: FTL
 
 	UnlockSubsystem(Hyperdrive)
+	UnlockSubsystem(CivilianHyperdrive)
 
 	LoadDesigns(default)
 	LoadDesigns(hyperdrive)
