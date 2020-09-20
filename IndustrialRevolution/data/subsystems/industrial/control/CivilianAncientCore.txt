@@ -1,6 +1,6 @@
 Subsystem: CivilianAncientCore
-	Name: #S_ANCIENT_CORE
-	Description: #S_ANCIENT_CORE_DESC
+	Name: #S_CIV_ANCIENT_CORE
+	Description: #S_CIV_ANCIENT_CORE_DESC
 	BaseColor: #F980F0
 	
 	Tags: Category:Control, HeraldsDLC, BadFiller, RaceSpecial
@@ -36,7 +36,7 @@ Subsystem: CivilianAncientCore
 	Module: Default
 	
 	Module: Core
-		Sprite: AncientComputerCore
+		Sprite: CivAncientComputerCore
 		Hex.HP := 2 * Hex.HP
 		Hex.Resistance := 0.35
 

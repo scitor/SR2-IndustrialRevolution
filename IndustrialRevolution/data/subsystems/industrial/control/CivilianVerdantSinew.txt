@@ -1,6 +1,6 @@
 Subsystem: CivilianVerdantSinew
-	Name: #S_VERDANT_SINEW
-	Description: #S_VERDANT_SINEW_DESC
+	Name: #S_CIV_VERDANT_SINEW
+	Description: #S_CIV_VERDANT_SINEW_DESC
 	Elevation: 0
 	BaseColor: #F980F0
 	EvaluationOrder: -10
@@ -30,4 +30,4 @@ Subsystem: CivilianVerdantSinew
 		Command = floor(Sum.HexLimit / 5)
 
 	Module: Default
-		Sprite: Sinew
+		Sprite: CivSinew

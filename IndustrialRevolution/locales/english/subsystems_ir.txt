@@ -39,3 +39,20 @@ S_JEFFERIES_TUBE_DESC: <<
 
 	[img=Plus]Increases ship repair rate.[/img]
 >>
+
+S_CIV_ANCIENT_CORE: Civilian Control Core
+S_CIV_ANCIENT_CORE_DESC: <<
+	Maintains the connection to the First network, provides power as well as control for the ship.
+
+	[img=AncientIcon;22][b][color=#8953f7]Only available when the 'Ancient' race option is chosen.[/color][/b][/img]
+>>
+
+S_CIV_VERDANT_SINEW: Civilian Sinew
+S_CIV_VERDANT_SINEW_DESC: <<
+	Sinew holds together, feeds and provides control for all mechanical parts of a civilian verdant ship.
+
+	[img=ActionBarIcons::0;22;#00ff80]Provides [b][color=#00ff80]Control[/color][/b] to operate other subsystems.[/img]
+	[img=ActionBarIcons::0;22]All interior and non-armor hexes in the ship must be adjacent to at least one Sinew hex.[/img]
+	[img=Minus]Ship is destroyed if more than 70% of all Sinew gets destroyed.[/img]
+	[img=Plantation;22][b][color=#5fb41c]Only available when the 'Verdant' race option is chosen.[/color][/b][/img]
+>>
