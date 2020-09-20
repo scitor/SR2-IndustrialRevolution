@@ -24,6 +24,7 @@ Trait: Verdant
 	ForbidSubsystem(CivilianCrewDeck)
 	UnlockSubsystem(VerdantSinew)
 	UnlockSubsystem(VerdantSupportSinew)
+	UnlockSubsystem(CivilianVerdantSinew)
 
 	ModAttribute(PopulationPerColonizer, Multiply, 16)
 	ModAttribute(ForbidCityConstruction, Add, 1)
