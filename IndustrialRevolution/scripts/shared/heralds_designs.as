@@ -26,13 +26,19 @@ bool checkRamjet(Design& design, Subsystem& sys) {
 	return false;
 }
 
+const string SINEW_SUBSYSTEM_TAG = "Sinew";
 bool checkSurroundedInSystem(Design& design, Subsystem& sys, const vec2u& hex) {
 	bool valid = true;
+	bool sinewConnection = false;
 	for(uint d = 0; d < 6; ++d) {
 		vec2u other = hex;
 		if(design.hull.active.advance(other, HexGridAdjacency(d))) {
 			auto@ otherSys = design.subsystem(other);
 			auto@ otherMod = design.module(other);
+			if(!sinewConnection && otherSys.type.hasTag(SINEW_SUBSYSTEM_TAG)) {
+				sinewConnection = true; // allow one sinew hex
+				continue;
+			}
 			if(otherSys !is sys || (otherMod !is sys.type.defaultModule && otherMod !is sys.type.coreModule)) {
 				design.addErrorHex(other);
 				valid = false;
