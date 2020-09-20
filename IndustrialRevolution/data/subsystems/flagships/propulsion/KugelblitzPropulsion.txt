@@ -1,0 +1,37 @@
+Subsystem: KugelblitzPropulsion
+	Name: #S_KUGELBLITZ_PROPULSION_NAME
+	Description: #S_KUGELBLITZ_PROPULSION_DESC
+	BaseColor: #5E5E75
+	TypeColor: #5E5E75
+	Elevation: 0
+
+	Tags: Category:Propulsion, NoBackWall, TurnToThrust
+	Tags: ExteriorCore, DefaultUnlock, Engine, HasInternals, SecondaryThrust
+	Hull: Flagship
+
+	OnCheckErrors: designs::checkCoreFacingBackwards
+
+	Size := HexSize * Hexes
+	Thrust := 50 * Size
+	TurnThrust := 10.0 * Size
+	PowerUse := 4.5 * Size
+	Hex.Mass := HexSize
+
+	Effect: VitalSubsystem
+
+	Hex.Resistance := 0.2
+	Hex.HP := 18 * HexSize
+
+	Hex.LaborCost := 0.1 * HexSize
+	Hex.BuildCost := 1.1 * HexSize
+
+	Requires:
+		Command = 1
+		Power = PowerUse
+
+	Module: Default
+
+	Module: Core
+		Sprite: KugelblitzPropulsion
+		Hex.Resistance := 0.35
+		Hex.BuildCost := 2 * Hex.BuildCost

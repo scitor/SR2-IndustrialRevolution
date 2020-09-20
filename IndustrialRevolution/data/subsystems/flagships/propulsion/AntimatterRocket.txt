@@ -1,0 +1,38 @@
+Subsystem: AntimatterRocket
+	Name: #S_ANTIMATTER_ROCKET_NAME
+	Description: #S_ANTIMATTER_ROCKET_DESC
+	BaseColor: #B745F9
+	TypeColor: #B745F9
+	Elevation: 0
+
+	Tags: Category:Propulsion, NoBackWall, TurnToThrust
+	Tags: ExteriorCore, DefaultUnlock, Engine, HasInternals, SecondaryThrust
+	Hull: Flagship
+
+	OnCheckErrors: designs::checkCoreFacingBackwards
+
+	Size := HexSize * Hexes
+	Thrust := 30 * Size
+	TurnThrust := 1.0 * Size
+	PowerUse := 4.5 * Size
+	Hex.Mass := HexSize
+
+	Effect: VitalSubsystem
+
+	Hex.Resistance := 0.2
+	Hex.HP := 18 * HexSize
+
+	Hex.LaborCost := 0.1 * HexSize
+	Hex.BuildCost := 1.1 * HexSize
+
+	Requires:
+		Command = 1
+		Power = PowerUse
+
+	Module: Default
+
+	Module: Core
+		Sprite: AntimatterRocket
+		Hex.HP := 1
+		Hex.Resistance := 0.35
+		Hex.BuildCost := 2 * Hex.BuildCost

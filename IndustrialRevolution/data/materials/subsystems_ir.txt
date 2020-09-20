@@ -26,3 +26,15 @@ Material: CivAncientComputerCore
 Material: CivSinew
 	Inherit: Subsystem
 	Texture: data/images/subsystems/civ_sinew.png
+
+Material: AntimatterRocket
+	Inherit: Subsystem
+	Texture: data/images/subsystems/thruster_antimatter.png
+
+Material: KugelblitzPropulsion
+	Inherit: Subsystem
+	Texture: data/images/subsystems/thruster_kugelblitz.png
+
+Material: PulsedPlasmaThruster
+	Inherit: Subsystem
+	Texture: data/images/subsystems/thruster_pulsed_plasma.png
