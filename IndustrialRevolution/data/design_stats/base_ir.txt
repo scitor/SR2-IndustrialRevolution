@@ -1,0 +1,8 @@
+
+SubsystemStat: SubsystemHexCount
+	Name: #HEX_COUNT
+	Description: #HEX_COUNT_DESC
+	Icon: TabDesigns
+	Color: #8080ff
+
+	Variable: HexCount

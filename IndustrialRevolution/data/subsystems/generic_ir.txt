@@ -1,0 +1,3 @@
+
+Template: var/Size
+	HexCount := Size / (ShipSize / Sum.HexLimit)
