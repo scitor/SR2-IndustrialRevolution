@@ -5,6 +5,7 @@ import elements.GuiTextbox;
 import elements.GuiBlueprint;
 import elements.MarkupTooltip;
 import elements.GuiSprite;
+import elements.GuiSkinElement;
 import dialogs.InputDialog;
 from dialogs.DesignImportDialog import DesignImportDialog, addDialog;
 import resources;
@@ -70,6 +71,7 @@ class DesignImporter : DesignImportDialog {
 
 class DesignOverview : Tab {
 	GuiPanel@ clsPanel;
+	GuiSkinElement@ uiPanel;
 	DesignClassElement@[] classes;
 	DesignElement@ selected;
 
@@ -78,24 +80,25 @@ class DesignOverview : Tab {
 	GuiButton@ showObsoleteButton;
 
 	uint prevDesignCount = 0;
+	bool first = true;
 
 	DesignOverview() {
 		super();
 		
-		@clsPanel = GuiPanel(this, recti());
-		@clsPanel.alignment = Alignment(Left+8, Top, Right-8, Bottom);
+		@clsPanel = GuiPanel(this, Alignment(Left+8, Top, Right-8, Bottom-52));
 
-		@createClassButton = GuiButton(clsPanel, recti(0, 0, 195, 47),
+		@uiPanel = GuiSkinElement(this, Alignment(Left+8, Bottom-52, Right-8, Bottom), SS_PlainBox);
+		@createClassButton = GuiButton(uiPanel, recti(0, 2, 195, 47),
 			locale::CREATE_DESIGN_CLASS);
 		createClassButton.font = FT_Medium;
 		createClassButton.buttonIcon = icons::Create.colorized(Color(0x8888ffff));
 
-		@importButton = GuiButton(clsPanel, recti(0, 0, 195, 47),
+		@importButton = GuiButton(uiPanel, recti(0, 2, 195, 47),
 			locale::IMPORT_DESIGNS);
 		importButton.font = FT_Medium;
 		importButton.buttonIcon = icons::Import;
 
-		@showObsoleteButton = GuiButton(clsPanel, recti(0, 0, 195, 47),
+		@showObsoleteButton = GuiButton(uiPanel, recti(0, 2, 195, 47),
 			locale::SHOW_OBSOLETE);
 		showObsoleteButton.tooltip = locale::TT_SHOW_OBSOLETE;
 		showObsoleteButton.font = FT_Medium;
@@ -186,6 +189,10 @@ class DesignOverview : Tab {
 				el.position = vec2i(0, y);
 				y += el.size.height;
 			}
+			if(i == 0 && first) {
+				first = false;
+				el.collapsed = false;
+			}
 		}
 
 		if(sel !is null) {
@@ -200,12 +207,12 @@ class DesignOverview : Tab {
 			}
 		}
 
-		createClassButton.position = vec2i(0, y + 4);
-		importButton.position = vec2i(205, y + 4);
+		createClassButton.position = vec2i(2, 2);
+		importButton.position = vec2i(205, 2);
 		if(!importButton.visible)
-			showObsoleteButton.position = vec2i(205, y + 4);
+			showObsoleteButton.position = vec2i(205, 2);
 		else
-			showObsoleteButton.position = vec2i(410, y + 4);
+			showObsoleteButton.position = vec2i(410, 2);
 		clsPanel.updateAbsolutePosition();
 		gui_root.updateHover();
 	}
@@ -254,6 +261,7 @@ class DesignOverview : Tab {
 					dsgEl.deselect();
 				}
 				else {
+					clsEl.collapsed = false;
 					dsgEl.select();
 					@selected = dsgEl;
 				}
@@ -284,6 +292,7 @@ class DesignOverview : Tab {
 				continue;
 
 			clsPanel.vertPosition = clsEl.position.y;
+			clsEl.collapsed = false;
 			break;
 		}
 	}
@@ -344,6 +353,9 @@ class DesignClassElement : BaseGuiElement {
 	const DesignClass@ cls;
 	DesignElement@[] designs;
 	GuiButton@ createButton;
+	bool collapsed = true;
+	bool hovered;
+	bool pressed;
 
 	DesignClassElement(BaseGuiElement@ pnl, DesignOverview@ ovw) {
 		@overview = ovw;
@@ -355,12 +367,14 @@ class DesignClassElement : BaseGuiElement {
 			locale::CREATE_DESIGN);
 		createButton.buttonIcon = icons::Create;
 		createButton.font = FT_Medium;
+		createButton.visible = false;
 	}
 
 	array<DesignSorter> sorter;
 	void refresh(const DesignClass@ Cls) {
 		@cls = Cls;
 
+		int height = 40;
 		int width = parent.size.width - 20;
 		int perRow = (width - 16) / (D_EL_WIDTH + D_EL_SPACING);
 
@@ -370,6 +384,14 @@ class DesignClassElement : BaseGuiElement {
 		uint cnt = cls.designCount;
 		for(uint i = cnt; i < designs.length; ++i)
 			designs[i].remove();
+
+		createButton.visible = !collapsed;
+		for(uint i = 0, cnt = designs.length; i < cnt; ++i)
+			designs[i].visible = !collapsed;
+		if(collapsed) {
+			size = vec2i(width, height);
+			return;
+		}
 
 		//Sort designs
 		sorter.length = cnt;
@@ -406,7 +428,7 @@ class DesignClassElement : BaseGuiElement {
 		designs.length = index;
 		cnt = index;
 		uint itemCount = cnt + 1;
-		int height = 40 + (itemCount / perRow) * (D_EL_HEIGHT + D_EL_SPACING);
+		height += (itemCount / perRow) * (D_EL_HEIGHT + D_EL_SPACING);
 		if(itemCount % perRow != 0 || cls.designCount == 0)
 			height += D_EL_HEIGHT + D_EL_SPACING;
 
@@ -431,10 +453,49 @@ class DesignClassElement : BaseGuiElement {
 		visible = designs.length != 0 || cls.designCount == 0;
 	}
 
-	bool onGuiEvent(const GuiEvent& event) {
-		if(event.caller is createButton && event.type == GUI_Clicked) {
-			overview.refresh(playerEmpire);
-			overview.showDesignEditor(null, cls, "", 1.0);
+	bool onMouseEvent(const MouseEvent& event, IGuiElement@ source) override {
+		if(cast<GuiButton>(source) is null) {
+			switch(event.type) {
+				case MET_Button_Down:
+					pressed = true;
+					return true;
+				case MET_Button_Up:
+					if(hovered && pressed) {
+						GuiEvent evt;
+						evt.type = GUI_Clicked;
+						evt.value = event.button;
+						@evt.caller = this;
+						onGuiEvent(evt);
+						pressed = false;
+						return true;
+					}
+					break;
+			}
+		}
+		return BaseGuiElement::onMouseEvent(event, source);
+	}
+
+	bool onGuiEvent(const GuiEvent& event) override {
+		if(event.type == GUI_Clicked) {
+			if(event.caller is createButton) {
+				overview.refresh(playerEmpire);
+				overview.showDesignEditor(null, cls, "", 1.0);
+			} else if(event.caller is this) {
+				collapsed = !collapsed;
+				overview.refresh(playerEmpire);
+				if(!collapsed)
+					this.refresh(cls);
+			}
+		}
+		if(event.caller is this) {
+			switch(event.type) {
+				case GUI_Mouse_Entered:
+					hovered = true;
+					break;
+				case GUI_Mouse_Left:
+					hovered = false;
+					break;
+			}
 		}
 		return BaseGuiElement::onGuiEvent(event);
 	}
