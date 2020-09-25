@@ -353,3 +353,17 @@ uint doPathing(array<Oddity@>& gates, Empire@ emp, const vec3d& from, const vec3
 
 	return 0;
 }
+
+export hasGateToNextRegion;
+bool hasGateToNextRegion(Region@& curRegion, Region@& nextRegion, Empire@& owner) {
+	if(hasOddityLink(curRegion, nextRegion))
+		return true;
+
+	if(owner.hasStargates()) {
+		Object@ thisGate = owner.getStargate(curRegion.position);
+		Object@ otherGate = owner.getStargate(nextRegion.position);
+		return thisGate !is null && thisGate.region is curRegion
+			&& otherGate !is null && otherGate.region is nextRegion;
+	}
+	return false;
+}

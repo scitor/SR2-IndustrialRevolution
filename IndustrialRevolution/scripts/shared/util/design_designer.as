@@ -76,6 +76,7 @@ enum DesignType {
 	DT_Flagship,
 	DT_Station,
 	DT_Satellite,
+	DT_Industrial
 };
 
 string[] autoSupportNames = {

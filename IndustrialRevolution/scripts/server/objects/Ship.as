@@ -271,6 +271,10 @@ tidy class ShipScript {
 		return ship.blueprint.design.hasTag(ST_Station);
 	}
 
+	bool get_isIndustrial(Ship& ship) {
+		return ship.blueprint.design.hasTag(ST_Industrial);
+	}
+
 	void setHoldFire(bool value) {
 		if(value)
 			holdFire += 1;

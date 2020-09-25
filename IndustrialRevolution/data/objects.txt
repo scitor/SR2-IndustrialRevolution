@@ -36,7 +36,8 @@ visible:
 	int lastHit = 0
 
 	local safe bool get_isStation();
-	
+	local safe bool get_isIndustrial();
+
 remote restricted:
 	void scuttle();
 

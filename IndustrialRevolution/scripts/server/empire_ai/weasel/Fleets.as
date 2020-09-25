@@ -520,12 +520,14 @@ class Fleets : AIComponent {
 		FleetAI@ flAI = getAI(obj);
 
 		if(flAI is null) {
+			uint designClass = designs.classify(obj);
+			if(designClass == DP_Industrial)
+				return null;
+
 			@flAI = FleetAI();
 			@flAI.obj = obj;
 			@flAI.stationed = obj.region;
 			obj.setHoldPosition(true);
-
-			uint designClass = designs.classify(obj);
 
 			if(designClass == DP_Scout)
 				flAI.fleetClass = FC_Scout;

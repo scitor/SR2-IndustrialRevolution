@@ -1,0 +1,6 @@
+Status: IndustrialShip
+	Name: #STATUS_INDUSTRIAL_SHIP
+	Description: #STATUS_INDUSTRIAL_SHIP_DESC
+	Icon: ActionBarIcons::4
+
+	industrials::IndustrialStatus()

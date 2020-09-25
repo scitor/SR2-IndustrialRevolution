@@ -18,6 +18,7 @@ enum DesignPurpose {
 	DP_Slipstream,
 	DP_Mothership,
 	DP_Miner,
+	DP_Industrial,
 
 	DP_COUNT,
 	DP_Unknown,
@@ -585,6 +586,8 @@ final class Designs : AIComponent {
 			return DP_Support;
 		if(dsg.hasTag(ST_Station))
 			return DP_Defense;
+		if(dsg.hasTag(ST_Industrial))
+			return DP_Industrial;
 
 		double dps = dsg.total(SV_DPS);
 		if(dsg.total(SV_MiningRate) > 0)

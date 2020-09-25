@@ -12,6 +12,10 @@ tidy class ShipScript {
 		return ship.blueprint.design.hasTag(ST_Station);
 	}
 
+	bool get_isIndustrial(Ship& ship) {
+		return ship.blueprint.design.hasTag(ST_Industrial);
+	}
+
 	void occasional_tick(Ship& ship, float time) {
 		if(ship.hasLeaderAI)
 			ship.updateFleetStrength();

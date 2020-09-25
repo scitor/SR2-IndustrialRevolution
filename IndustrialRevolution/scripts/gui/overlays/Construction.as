@@ -681,6 +681,8 @@ class ConstructionDisplay : DisplayBox {
 					continue;
 				if(dsg.hasTag(ST_Satellite))
 					continue;
+				if(dsg.hasTag(ST_Industrial))
+					continue;
 				hasShips = true;
 				break;
 			}
@@ -706,6 +708,8 @@ class ConstructionDisplay : DisplayBox {
 				if(dsg.hasTag(ST_Station) != stations)
 					continue;
 				if(dsg.hasTag(ST_Satellite))
+					continue;
+				if(dsg.hasTag(ST_Industrial))
 					continue;
 				list.addItem(BuildElement(this, dsg, obj));
 			}
@@ -997,6 +1001,8 @@ class ConstructionDisplay : DisplayBox {
 				if(dsg.hasTag(ST_Station))
 					continue;
 				if(dsg.hasTag(ST_Satellite))
+					continue;
+				if(dsg.hasTag(ST_Industrial))
 					continue;
 				menu.addOption(FlagshipDrydock(obj, dsg, forEmp));
 			}

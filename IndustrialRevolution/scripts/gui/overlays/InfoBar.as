@@ -544,7 +544,8 @@ class ActionBar : BaseGuiElement {
 		if(obj.hasLeaderAI) {
 			if(obj.SupplyCapacity > 0)
 				add(SupportsAction());
-			if(obj.hasMover && !obj.hasOrbit) {
+			Ship@ ship = cast<Ship>(obj);
+			if(obj.hasMover && !obj.hasOrbit && ship !is null && !ship.isIndustrial) {
 				add(AutoModeAction());
 				add(EngageBehaveAction());
 				add(EngageTypeAction());
@@ -553,9 +554,12 @@ class ActionBar : BaseGuiElement {
 				add(ConstructionAction());
 		}
 	}
-	
+
 	void addScouting(Object@ obj) {
-		if(obj.hasLeaderAI && obj.getFleetMaxStrength() < 5000.0 && obj.owner.ForbidDeepSpace == 0) {
+		Ship@ ship = cast<Ship>(obj);
+		if(obj.hasLeaderAI && obj.getFleetMaxStrength() < 5000.0 && obj.owner.ForbidDeepSpace == 0 &&
+			ship !is null && !ship.isIndustrial)
+		{
 			add(ScoutAction(ftl=false));
 			if(obj.owner.hasFlingBeacons || canHyperdrive(obj) || canJumpdrive(obj))
 				add(ScoutAction(ftl=true));

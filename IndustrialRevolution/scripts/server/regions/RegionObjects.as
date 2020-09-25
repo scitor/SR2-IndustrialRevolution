@@ -16,6 +16,7 @@ import hooks;
 import object_creation;
 import resources;
 import civilians;
+import industrials;
 import achievements;
 #section all
 
@@ -1228,14 +1229,14 @@ tidy class RegionObjects : Component_RegionObjects, Savable {
 				//if(!pl.nativeResourceUsable[i] && !pl.isBlockaded()) // dont spawn for unusable unless blockaded
 				//	continue;
 
-				double radius = CIV_SIZE_MERCHANT;
+				//double radius = CIV_SIZE_MERCHANT;
 				auto@ res = getResource(type);
 				auto@ ctype = getCargoType(res.cargoType);
-				double radiusHealth = CIV_RADIUS_HEALTH;
-				if(res.ident == "BaseMaterial" || res.ident == "BioMass" || res.ident == "Ore")
-					radiusHealth = CIV_RADIUS_FIRST;
+				//double radiusHealth = CIV_RADIUS_HEALTH;
+				//if(res.ident == "BaseMaterial" || res.ident == "BioMass" || res.ident == "Ore")
+				//	radiusHealth = CIV_RADIUS_FIRST;
 				if(ctype !is null) {
-					double cargoAmount = pl.getCargoStored(ctype.id);
+					/*double cargoAmount = pl.getCargoStored(ctype.id);
 					if(cargoAmount >= radiusHealth * CIV_SIZE_TRANSPORTER)
 						radius = CIV_SIZE_TRANSPORTER;
 					else if(cargoAmount >= radiusHealth * CIV_SIZE_FREIGHTER)
@@ -1247,15 +1248,21 @@ tidy class RegionObjects : Component_RegionObjects, Savable {
 					else
 						continue;
 
-					pl.removeCargo(ctype.id, round(radius * radiusHealth));
+					pl.removeCargo(ctype.id, round(radius * radiusHealth));*/
+
+					Ship@ civ = spawnIndustrialShip(cast<Object>(pl));
+					// dirty hack
+					@civ.RetrofittingAt = destination;
+					if(civ.cargoCapacity - civ.cargoStored > 0)
+						civ.addCargo(ctype.id, pl.consumeCargo(ctype.id, civ.cargoCapacity - civ.cargoStored, partial=true));
 				}
 
-				Civilian@ civ = createCivilian(spawnPos, owner, type=CiT_Freighter, radius=radius);
+				/*Civilian@ civ = createCivilian(spawnPos, owner, type=CiT_Freighter, radius=radius);
 				civ.pathTo(destination);
 				civ.name = destination.name;
 				civ.setOrigin(pl);
 				civ.setCargoResource(type);
-				pl.addAssignedCivilian(civ);
+				pl.addAssignedCivilian(civ);*/
 			}
 		}
 		// asteroids spawn civilians too
@@ -1269,6 +1276,8 @@ tidy class RegionObjects : Component_RegionObjects, Savable {
 			if(timer < CIV_TIMER)
 				continue;
 
+			as.setCivilianTimer(0.0);
+
 			uint cnt = as.nativeResourceCount;
 			for(uint i = 0; i < cnt; ++i) {
 				int type = as.nativeResourceType[i];
@@ -1279,33 +1288,14 @@ tidy class RegionObjects : Component_RegionObjects, Savable {
 				if(destination is null || (destination.owner !is null && destination.owner.id != owner.id))
 					continue;
 
-				double radius = CIV_SIZE_MERCHANT;
 				auto@ res = getResource(as.nativeResourceType[i]);
 				auto@ ctype = getCargoType(res.cargoType);
-				double radiusHealth = CIV_RADIUS_HEALTH;
-				if(res.ident == "BaseMaterial" || res.ident == "BioMass" || res.ident == "Ore")
-					radiusHealth = CIV_RADIUS_FIRST;
-				if(ctype !is null) {
-					uint cargoAmount = as.getCargoStored(ctype.id);
-					if(cargoAmount >= uint(radiusHealth * CIV_SIZE_TRANSPORTER))
-						radius = CIV_SIZE_TRANSPORTER;
-					else if(cargoAmount >= uint(radiusHealth * CIV_SIZE_FREIGHTER))
-						radius = CIV_SIZE_FREIGHTER;
-					else if(cargoAmount >= uint(radiusHealth * CIV_SIZE_CARAVAN))
-						radius = CIV_SIZE_CARAVAN;
-					else if(cargoAmount >= uint(radiusHealth * CIV_SIZE_MERCHANT))
-						radius = CIV_SIZE_MERCHANT;
-					else
-						continue;
-					as.removeCargo(ctype.id, radius * radiusHealth);
-				}
-				Civilian@ civ = createCivilian(as.position, owner, type=CiT_Freighter, radius = radius);
-				civ.setCargoResource(as.nativeResourceType[0]);
-				civ.pathTo(destination);
-				civ.name = destination.name;
-				civ.setOrigin(as);
-				as.addAssignedCivilian(civ);
-				as.setCivilianTimer(0.0);
+
+				Ship@ civ = spawnIndustrialShip(cast<Object>(as));
+				// dirty hack
+				@civ.RetrofittingAt = destination;
+				if(civ.cargoCapacity - civ.cargoStored > 0)
+					civ.addCargo(ctype.id, as.consumeCargo(ctype.id, civ.cargoCapacity - civ.cargoStored, partial=true));
 			}
 		}
 		if(gameTime >= tradeTimer) {
