@@ -1014,6 +1014,8 @@ class SpawnRandomRemnants : MapHook {
 
 		vec2d campPos = random2d(200.0, (system.radius - offset.decimal) * 0.95);
 		vec3d pos = system.position + vec3d(campPos.x, 0, campPos.y);
+		if(system.object !is null && system.object.planetCount > 0)
+			pos = system.object.planets[randomi(0, system.object.planetCount-1)].position;
 
 		spawnRemnantFleet(pos, sz, occupation.fromRange());
 	}
@@ -1054,6 +1056,8 @@ class MakeCreepCamp : MapHook {
 
 		vec2d campPos = random2d(200.0, (system.radius - offset.decimal) * 0.95);
 		vec3d pos = system.position + vec3d(campPos.x, 0, campPos.y);
+		if(system.object !is null && system.object.planetCount > 0)
+			pos = system.object.planets[randomi(0, system.object.planetCount-1)].position;
 
 		makeCreepCamp(pos, type, system.object);
 	}
@@ -1212,6 +1216,8 @@ class MakeAdjacentCreepCamp : MapHook {
 		}
 
 		vec3d pos = other.position + vec3d(campPos.x, 0, campPos.y);
+		if(other.object !is null && other.object.planetCount > 0)
+			pos = other.object.planets[randomi(0, other.object.planetCount-1)].position;
 
 		makeCreepCamp(pos, type);
 	}
