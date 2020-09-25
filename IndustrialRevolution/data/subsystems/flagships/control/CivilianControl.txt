@@ -6,7 +6,7 @@ Subsystem: CivilianControl
 	Elevation: 4
 	
 	Tags: BaseCost, Category:Control, BadFiller
-	Tags: DefaultUnlock, Crewed, Control, ControlCore, HasInternals
+	Tags: DefaultUnlock, Control, ControlCore, HasInternals
 	Tags: NoBulkhead, Important
 	Hull: Flagship, Station
 	

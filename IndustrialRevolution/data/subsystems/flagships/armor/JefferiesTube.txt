@@ -4,7 +4,7 @@ Subsystem: JefferiesTube
 	BaseColor: #a9a9a9
 	Elevation: 0
 
-	Tags: DefaultUnlock, NoCore, NoWall, Category:Defense, Defense
+	Tags: DefaultUnlock, NoCore, NoWall, Category:Armor, Defense
 	Hull: Flagship, Station
 
 	Size := HexSize * Hexes

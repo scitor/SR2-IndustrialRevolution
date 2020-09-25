@@ -6,7 +6,7 @@ Subsystem: Warhead
 	Elevation: 2
 
 	Tags: BaseCost, HeraldsDLC
-	Tags: WeaponBase, MissileBase, Category:Weapons, Rotatable, Warhead, SecondaryDPS
+	Tags: WeaponBase, MissileBase, Category:Missiles, Rotatable, Warhead, SecondaryDPS
 	Tags: ExteriorCore, Weapon, IsExplosiveWeapon, HasInternals, Homing
 	Hull: Flagship, Station
 

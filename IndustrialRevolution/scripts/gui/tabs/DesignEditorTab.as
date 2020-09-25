@@ -2064,6 +2064,8 @@ class Construction : BaseGuiElement {
 
 		//Create subsystem list
 		@syslist = GuiAccordion(this, Alignment(Left+4, Top, Left+254, Bottom-4));
+		syslist.animSpeed = 6.0;
+		syslist.spacing = -1;
 		updateSubsystems();
 
 		@paintTool.def = getSubsystemDef(0);
@@ -2263,10 +2265,17 @@ class Construction : BaseGuiElement {
 		selectors.length = 0;
 		selectors.insertLast(SubsystemSelector(this, "Hulls"));
 		selectors.insertLast(SubsystemSelector(this, "Control"));
-		selectors.insertLast(SubsystemSelector(this, "Weapons"));
+		selectors.insertLast(SubsystemSelector(this, "Energy"));
 		selectors.insertLast(SubsystemSelector(this, "Propulsion"));
-		selectors.insertLast(SubsystemSelector(this, "Defense"));
 		selectors.insertLast(SubsystemSelector(this, "FTL"));
+		selectors.insertLast(SubsystemSelector(this, "Turrets"));
+		selectors.insertLast(SubsystemSelector(this, "Missiles"));
+		selectors.insertLast(SubsystemSelector(this, "Weapons"));
+		selectors.insertLast(SubsystemSelector(this, "Armor"));
+		selectors.insertLast(SubsystemSelector(this, "Shields"));
+		selectors.insertLast(SubsystemSelector(this, "Defense"));
+		selectors.insertLast(SubsystemSelector(this, "Equipment"));
+		selectors.insertLast(SubsystemSelector(this, "Support"));
 		selectors.insertLast(SubsystemSelector(this, "Misc"));
 
 		SubsystemSelector modifiers(this, "Modifiers");

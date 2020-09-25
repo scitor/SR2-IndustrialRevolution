@@ -7,7 +7,7 @@ Subsystem: ShieldGen
 	DamageOrder: -100
 
 	Tags: BaseCost
-	Tags: IsShield, Defense, Category:Defense, HasInternals
+	Tags: IsShield, Defense, Category:Shields, HasInternals
 	Tags: SecondaryDefense, HighPowerUse
 	Hull: Flagship, Station
 
@@ -28,5 +28,8 @@ Subsystem: ShieldGen
 		Power = PowerUse
 	
 	Module: Core
-		Sprite: FissionReactor
+		Sprite: ShieldGeneratorCore
 		Hex.BuildCost := 2 * Hex.BuildCost
+
+	Module: Default
+		Sprite: ShieldGeneratorHex

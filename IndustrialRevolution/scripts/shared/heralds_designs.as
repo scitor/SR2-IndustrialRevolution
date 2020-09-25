@@ -76,3 +76,24 @@ bool checkSurroundedInSubsystems(Design& design, Subsystem& sys, const vec2u& he
 	}
 	return false;
 }
+
+bool checkNoTilesBehind(Design& design, Subsystem& sys, const vec2u& hex) {
+	bool valid = true;
+	for(uint x = 0; x < hex.x; ++x) {
+		for(int y = 0; y < design.hull.gridSize.y; ++y) {
+			const Subsystem@ sys = design.subsystem(vec2u(x, y));
+			if(sys !is null) {
+				design.addErrorHex(vec2u(x, y));
+				valid = false;
+			}
+		}
+	}
+
+	if(!valid) {
+		auto@ mod = design.module(hex.x, hex.y);
+		design.addErrorHex(hex);
+		design.addError(true, format(locale::ERROR_NO_TILES_BEHIND, sys.type.name, locale::SUBSYSTEM), null, mod, hex);
+		return true;
+	}
+	return false;
+}

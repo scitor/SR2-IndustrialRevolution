@@ -1,4 +1,4 @@
-Subsystem: CivilianPulsedPlasmaThruster
+Subsystem: PulsedPlasmaThruster
 	Name: #S_PULSED_PLASMA_NAME
 	Description: #S_PULSED_PLASMA_DESC
 	BaseColor: #C0C2F9
@@ -7,13 +7,12 @@ Subsystem: CivilianPulsedPlasmaThruster
 
 	Tags: Category:Propulsion, TurnToThrust, Rotatable
 	Tags: ExteriorCore, Engine, GivesThrust, HasInternals
-	Hull: Industrial
+	Hull: Flagship
 
 	Size := HexSize * Hexes
-	Thrust := 8 * Size
-	TurnThrust := 1.0 * Size
+	Thrust := 14 * Size
+	TurnThrust := 3.0 * Size
 	PowerUse := 0.5 * Size
-	Arc := 0.0
 
 	Hex.Mass := HexSize
 	Hex.Resistance := 0.2

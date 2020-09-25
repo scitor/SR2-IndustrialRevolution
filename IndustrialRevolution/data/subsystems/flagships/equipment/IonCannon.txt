@@ -5,7 +5,7 @@ Subsystem: IonCannon
 	TypeColor: #ff8d00
 	Elevation: 3
 	
-	Tags: BaseCost, Category:Equipment, HasInternals, ExteriorCore
+	Tags: BaseCost, Category:Weapons, HasInternals, ExteriorCore
 	Tags: Ability:IonCannon
 	Hull: Flagship
 	

@@ -4,7 +4,7 @@ Subsystem: NilingArmor
 	BaseColor: #9dffb9
 	Elevation: 1
 
-	Tags: LowMaint, Category:Defense, FauxExterior, HeraldsDLC
+	Tags: LowMaint, Category:Armor, FauxExterior, HeraldsDLC
 	Tags: NoCore, NonContiguous, Defense, ExternalSpace, AlwaysTakeDamage
 	Tags: SecondaryArmor
 	Hull: Flagship, Station

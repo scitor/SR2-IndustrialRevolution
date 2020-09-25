@@ -5,7 +5,7 @@ Subsystem: CivilianJumpdrive
 	TypeColor: #67ad85
 	Elevation: 0
 	
-	Tags: Category:Propulsion, Engine, Jumpdrive, HasInternals, Hyperengine
+	Tags: Category:FTL, Engine, Jumpdrive, HasInternals, Hyperengine
 	Hull: Industrial
 	
 	Size := HexSize * Hexes

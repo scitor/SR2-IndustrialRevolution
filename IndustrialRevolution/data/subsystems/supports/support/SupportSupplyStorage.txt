@@ -4,7 +4,7 @@ Subsystem: SupportSupplyStorage
 	BaseColor: #2fd6b3
 	Elevation: 3
 	
-	Tags: DefaultUnlock, NonContiguous, NoCore, HasInternals, Category:Support
+	Tags: DefaultUnlock, NonContiguous, NoCore, HasInternals, Category:Control
 	Tags: HasMaintenanceCost
 	Hull: Support
 	

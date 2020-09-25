@@ -5,7 +5,7 @@ Subsystem: SkipDrive
 	TypeColor: #fff980
 	Elevation: 3
 	
-	Tags: BaseCost, Category:Equipment, HasInternals
+	Tags: BaseCost, Category:FTL, HasInternals
 	Tags: Ability:Blink
 	Hull: Flagship
 	
@@ -21,4 +21,4 @@ Subsystem: SkipDrive
 		Command = 1
 
 	Module: Core
-		Sprite: HexagonSubsystems::10 * #fff980
+		Sprite: SkipDrive

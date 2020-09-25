@@ -6,30 +6,34 @@ Subsystem: AntimatterRocket
 	Elevation: 0
 
 	Tags: Category:Propulsion, NoBackWall, TurnToThrust
-	Tags: ExteriorCore, DefaultUnlock, Engine, HasInternals, SecondaryThrust
+	Tags: ExteriorCore, Engine, GivesThrust, HasInternals
 	Hull: Flagship
 
 	OnCheckErrors: designs::checkCoreFacingBackwards
 
 	Size := HexSize * Hexes
-	Thrust := 30 * Size
-	TurnThrust := 1.0 * Size
-	PowerUse := 4.5 * Size
+	Thrust := 50 * Size
+	TurnThrust := 1.5 * Size
 	Hex.Mass := HexSize
+	Power := 20 * Size
 
 	Effect: VitalSubsystem
 
 	Hex.Resistance := 0.2
 	Hex.HP := 18 * HexSize
 
-	Hex.LaborCost := 0.1 * HexSize
-	Hex.BuildCost := 1.1 * HexSize
+	Hex.LaborCost := 1.0 * HexSize
+	Hex.BuildCost := 2.0 * HexSize
+	Hex.MaintainCost := 8 * HexSize / ShipSize^0.5
 
 	Requires:
 		Command = 1
-		Power = PowerUse
+
+	Provides:
+		Power = Power
 
 	Module: Default
+		Sprite: AntimatterPod
 
 	Module: Core
 		Sprite: AntimatterRocket

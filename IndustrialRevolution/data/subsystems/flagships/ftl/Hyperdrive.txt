@@ -26,5 +26,5 @@ Subsystem: Hyperdrive
 	Module: Default
 	
 	Module: Core
-		Sprite: HexagonSubsystems::10
+		Sprite: Hyperdrive
 		Hex.BuildCost := 2 * Hex.BuildCost

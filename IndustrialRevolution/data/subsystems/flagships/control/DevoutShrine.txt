@@ -5,7 +5,7 @@ Subsystem: DevoutShrine
 	Elevation: 1
 
 	Tags: BaseCost, Prayer, RaceSpecial, Important
-	Tags: IsShield, Defense, Category:Control, HasInternals
+	Tags: IsShield, Defense, Category:Shields, HasInternals
 	Hull: Flagship, Station
 
 	Prayer := Hexes
@@ -26,5 +26,5 @@ Subsystem: DevoutShrine
 		Message: #ERROR_EQUAL_PRAYER
 	
 	Module: Core
-		Sprite: AntimatterReactor * #408fc1
+		Sprite: DevoutShrine
 		Hex.BuildCost := 2 * Hex.BuildCost

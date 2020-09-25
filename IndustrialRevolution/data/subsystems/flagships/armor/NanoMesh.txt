@@ -4,7 +4,7 @@ Subsystem: NanoMesh
 	BaseColor: #a9a9a9
 	Elevation: 1
 
-	Tags: LowMaint, Category:Defense, NoWall, PassExterior
+	Tags: LowMaint, Category:Armor, NoWall, PassExterior
 	Tags: NoCore, NonContiguous, Defense, IsArmor, TankArmor
 	Tags: SecondaryArmor, HeraldsDLC
 	Hull: Flagship, Station

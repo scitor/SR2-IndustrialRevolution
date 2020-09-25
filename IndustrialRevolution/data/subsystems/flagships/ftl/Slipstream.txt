@@ -1,8 +1,8 @@
 Subsystem: Slipstream
 	Name: #S_SLIPSTREAM_GENERATOR
 	Description: #S_SLIPSTREAM_GENERATOR_DESC
-	BaseColor: #67a7ad
-	TypeColor: #67a7ad
+	BaseColor: #a767ad
+	TypeColor: #a767ad
 	Picture: SubsystemButtonArt::10
 	Elevation: 0
 	
@@ -26,7 +26,7 @@ Subsystem: Slipstream
 		Command = 1
 	
 	Module: Core
-		Sprite: HexagonSubsystems::10
+		Sprite: SlipstreamGenerator
 
 	Module: Default
 		Hex.MaintainCost := 0.5 * Hex.MaintainCost

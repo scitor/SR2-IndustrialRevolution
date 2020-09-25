@@ -6,7 +6,7 @@ Subsystem: RocketEngine
 	Picture: RocketEngine
 	Elevation: 0
 
-	Tags: BaseCost, Category:Propulsion, NoBackWall, TurnToThrust
+	Tags: ScaledCost, Category:Propulsion, NoBackWall, TurnToThrust
 	Tags: ExteriorCore, DefaultUnlock, Engine, GivesThrust, HasInternals
 	Hull: Flagship
 

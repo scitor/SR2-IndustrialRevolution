@@ -5,7 +5,7 @@ Subsystem: BusterBeam
 	TypeColor: #e900ff
 	Elevation: 2
 	
-	Tags: BaseCost, Category:Equipment, HasInternals, ExteriorCore
+	Tags: BaseCost, Category:Weapons, HasInternals, ExteriorCore
 	Tags: Disabled, Ability:BusterBeam
 	Hull: Flagship
 	

@@ -4,7 +4,7 @@ Subsystem: ReactiveArmor
 	BaseColor: #b9a9a9
 	Elevation: 1
 
-	Tags: LowMaint, Category:Defense, FauxExterior
+	Tags: LowMaint, Category:Armor, FauxExterior
 	Tags: NoCore, NonContiguous, DefaultUnlock, Defense, IsArmor, BlockArmor, ExternalSpace
 	Tags: PrimaryArmor
 	Hull: Flagship, Station

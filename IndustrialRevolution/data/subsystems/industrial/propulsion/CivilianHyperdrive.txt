@@ -6,7 +6,7 @@ Subsystem: CivilianHyperdrive
 	Picture: SubsystemButtonArt::10
 	Elevation: 0
 	
-	Tags: Category:Propulsion, Engine, Hyperdrive, HasInternals, Hyperengine
+	Tags: Category:FTL, Engine, Hyperdrive, HasInternals, Hyperengine
 	Hull: Industrial
 	
 	Size := HexSize * Hexes
@@ -28,5 +28,5 @@ Subsystem: CivilianHyperdrive
 	Module: Default
 	
 	Module: Core
-		Sprite: HexagonSubsystems::10
+		Sprite: Hyperdrive
 		Hex.BuildCost := 2 * Hex.BuildCost

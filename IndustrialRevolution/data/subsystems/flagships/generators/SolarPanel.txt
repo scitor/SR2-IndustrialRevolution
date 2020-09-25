@@ -4,7 +4,7 @@ Subsystem: SolarPanel
 	BaseColor: #64fff9
 	Elevation: 3
 
-	Tags: IsReactor, Category:Control
+	Tags: IsReactor, Category:Energy
 	Tags: NonContiguous, NoCore
 	Tags: HeraldsDLC
 	Hull: Flagship, Station

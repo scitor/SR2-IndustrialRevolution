@@ -3,7 +3,6 @@ Subsystem: GravityEngine
 	Description: #GRAVITYENGINE_DESC
 	BaseColor: #e0f946
 	TypeColor: #e0f946
-	Picture: SubsystemButtonArt::9
 	Elevation: 0
 
 	Tags: BaseCost, Category:Propulsion, VectorThrust
@@ -27,5 +26,5 @@ Subsystem: GravityEngine
 		Hex.BuildCost := 2 * Hex.BuildCost
 
 	Module: Core
-		Sprite: HexagonSubsystems::5
+		Sprite: GravitonEngine
 		Hex.BuildCost := 3 * Hex.BuildCost

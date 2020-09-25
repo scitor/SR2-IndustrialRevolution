@@ -6,7 +6,7 @@ Subsystem: IonEngine
 	Picture: SubsystemButtonArt::9
 	Elevation: 0
 
-	Tags: BaseCost, Category:Propulsion, NoBackWall, TurnToThrust
+	Tags: LowMaint, Category:Propulsion, NoBackWall, TurnToThrust
 	Tags: ExteriorCore, DefaultUnlock, Engine, HasInternals, SecondaryThrust
 	Hull: Flagship
 

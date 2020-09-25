@@ -5,7 +5,7 @@ Subsystem: StructuralScaffolding
 	Elevation: -3
 
 	Tags: DefaultUnlock, NoCore, NoWall, NoFloor, NonContiguous
-	Tags: Category:Defense, Defense, PassExterior, ExternalSpace
+	Tags: Category:Armor, Defense, PassExterior, ExternalSpace
 	Hull: Flagship, Station
 
 	Size := HexSize * Hexes

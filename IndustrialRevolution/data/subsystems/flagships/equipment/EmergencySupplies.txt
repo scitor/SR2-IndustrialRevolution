@@ -5,7 +5,7 @@ Subsystem: EmergencySupplies
 	TypeColor: #b88b00
 	Elevation: 2
 	
-	Tags: BaseCost, Category:Equipment, HasInternals
+	Tags: BaseCost, Category:Storage, HasInternals
 	Tags: Ability:EmergencySupplies
 	Hull: Flagship, Station
 	

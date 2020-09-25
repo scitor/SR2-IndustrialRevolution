@@ -27,7 +27,7 @@ Subsystem: IndustrialHull
 	AddShipModifier: TurnThrustFactor(2.0)
 	AddShipModifier: CargoStorageFactor(5.0)
 
-	SupportCapacity := 3
+	SupportCapacity := min(ShipSize, 3)
 
 	Hex.Mass := 0
 	AddPostModifier: AddMass(ShipSize * (1.0 - max((ShipTotalHexes - Ship.ExternalHexes) / HexLimit, 0.0)))

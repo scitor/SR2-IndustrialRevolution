@@ -4,7 +4,7 @@ Subsystem: MareniumGen
 	BaseColor: #704e78
 	Elevation: 3
 
-	Tags: IsReactor, Category:Control
+	Tags: IsReactor, Category:Energy
 	Tags: DontList, HasInternals
 	Tags: HeraldsDLC
 	Tags: Important

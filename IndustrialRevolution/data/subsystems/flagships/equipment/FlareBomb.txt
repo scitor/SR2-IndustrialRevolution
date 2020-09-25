@@ -6,7 +6,7 @@ Subsystem: FlareBomb
 	TypeColor: #e45500
 	Elevation: 2
 
-	Tags: BaseCost, Category:Equipment, HasInternals, ExteriorCore
+	Tags: BaseCost, Category:Weapons, HasInternals, ExteriorCore
 	Tags: Disabled, Ability:FlareBomb, HeraldsDLC
 	Hull: Flagship
 

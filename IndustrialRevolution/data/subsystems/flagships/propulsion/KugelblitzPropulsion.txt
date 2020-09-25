@@ -6,15 +6,15 @@ Subsystem: KugelblitzPropulsion
 	Elevation: 0
 
 	Tags: Category:Propulsion, NoBackWall, TurnToThrust
-	Tags: ExteriorCore, DefaultUnlock, Engine, HasInternals, SecondaryThrust
+	Tags: ExteriorCore, Engine, HasInternals, SecondaryThrust
 	Hull: Flagship
 
 	OnCheckErrors: designs::checkCoreFacingBackwards
 
 	Size := HexSize * Hexes
-	Thrust := 50 * Size
+	Thrust := 100 * Size
 	TurnThrust := 10.0 * Size
-	PowerUse := 4.5 * Size
+	PowerUse := 20.0 * Size
 	Hex.Mass := HexSize
 
 	Effect: VitalSubsystem
@@ -22,8 +22,12 @@ Subsystem: KugelblitzPropulsion
 	Hex.Resistance := 0.2
 	Hex.HP := 18 * HexSize
 
-	Hex.LaborCost := 0.1 * HexSize
-	Hex.BuildCost := 1.1 * HexSize
+	Hex.LaborCost := 8.0 * HexSize
+	Hex.BuildCost := 4.0 * HexSize
+	Hex.MaintainCost := 16 * HexSize / ShipSize^0.5
+
+	Assert: Sum.SupportCapacity == 0
+		Message: #ERROR_CANNOT_HAVE_SUPPORT
 
 	Requires:
 		Command = 1
@@ -34,4 +38,5 @@ Subsystem: KugelblitzPropulsion
 	Module: Core
 		Sprite: KugelblitzPropulsion
 		Hex.Resistance := 0.35
-		Hex.BuildCost := 2 * Hex.BuildCost
+		Hex.BuildCost := 5 * Hex.BuildCost
+		OnCheckErrors: heralds_designs::checkNoTilesBehind

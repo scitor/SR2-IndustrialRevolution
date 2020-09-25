@@ -4,7 +4,7 @@ Subsystem: AntimatterGen
 	BaseColor: #5ade8b
 	Elevation: 1
 
-	Tags: IsReactor, Category:Control
+	Tags: IsReactor, Category:Energy
 	Tags: Important, HasInternals
 	Hull: Flagship, Station
 

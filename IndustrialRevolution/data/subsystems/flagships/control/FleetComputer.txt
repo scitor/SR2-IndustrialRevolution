@@ -6,7 +6,7 @@ Subsystem: FleetComputer
 	
 	Tags: HeraldsDLC
 	Tags: BaseCost, Category:Control, BadFiller
-	Tags: HasInternals
+	Tags: HasInternals, AICore
 	Hull: Flagship, Station
 	
 	Size := HexSize * Hexes

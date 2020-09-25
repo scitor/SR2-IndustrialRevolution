@@ -4,7 +4,7 @@ Subsystem: PlateArmor
 	BaseColor: #a9a9a9
 	Elevation: 1
 
-	Tags: LowMaint, Category:Defense, NoWall, FauxExterior
+	Tags: LowMaint, Category:Armor, NoWall, FauxExterior
 	Tags: NoCore, NonContiguous, DefaultUnlock, Defense, IsArmor, TankArmor, ExternalSpace
 	Tags: PrimaryArmor
 	Hull: Flagship, Station

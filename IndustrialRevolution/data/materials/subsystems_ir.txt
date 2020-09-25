@@ -39,6 +39,50 @@ Material: PulsedPlasmaThruster
 	Inherit: Subsystem
 	Texture: data/images/subsystems/thruster_pulsed_plasma.png
 
+Material: AntimatterPod
+	Inherit: Subsystem
+	Texture: data/images/subsystems/antimatter_pod.png
+
+Material: GravitonEngine
+	Inherit: Subsystem
+	Texture: data/images/subsystems/graviton_engine.png
+
+Material: DevoutShrine
+	Inherit: Subsystem
+	Texture: data/images/subsystems/shrine.png
+
+Material: Hyperdrive
+	Inherit: Subsystem
+	Texture: data/images/subsystems/hyperdrive.png
+
+Material: SlipstreamGenerator
+	Inherit: Subsystem
+	Texture: data/images/subsystems/slipstream_generator.png
+
+Material: FTLGate
+	Inherit: Subsystem
+	Texture: data/images/subsystems/gate.png
+
+Material: SkipDrive
+	Inherit: Subsystem
+	Texture: data/images/subsystems/skipdrive.png
+
+Material: ShieldGeneratorCore
+	Inherit: Subsystem
+	Texture: data/images/subsystems/shield_generator_core.png
+
+Material: ShieldGeneratorHex
+	Inherit: Subsystem
+	Texture: data/images/subsystems/shield_generator_hex.png
+
+Material: ShieldHardener
+	Inherit: Subsystem
+	Texture: data/images/subsystems/shield_hardener.png
+
+Material: ShieldHardenerHex
+	Inherit: Subsystem
+	Texture: data/images/subsystems/shield_hardener_hex.png
+
 Material: HexFloorVerdant
 	Inherit: Subsystem
 	Shader: MaskColored

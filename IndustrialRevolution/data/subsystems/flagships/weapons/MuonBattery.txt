@@ -5,7 +5,7 @@ Subsystem: MuonBattery
 	TypeColor: #f549f6
 	Elevation: 2
 
-	Tags: BaseCost, Category:Weapons
+	Tags: BaseCost, Category:Turrets
 	Tags: WeaponBase, Rotatable, HexLimitArc
 	Tags: ExteriorCore, Weapon, IsProjWeapon, IsRailgun, HasInternals, MainDPS
 	Hull: Flagship, Station

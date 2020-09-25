@@ -4,7 +4,7 @@ Subsystem: CrystalArmor
 	BaseColor: #ef45ff
 	Elevation: 2
 
-	Tags: LowMaint, Category:Defense, FauxExterior
+	Tags: LowMaint, Category:Armor, FauxExterior
 	Tags: NoCore, NonContiguous, Defense, IsArmor, ResistArmor, ExternalSpace
 	Tags: PrimaryArmor
 	Tags: HeraldsDLC

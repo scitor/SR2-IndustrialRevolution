@@ -8,7 +8,7 @@ Subsystem: ShieldHardener
 	DamageOrder: -200
 
 	Tags: BaseCost, HighPowerUse
-	Tags: Defense, Category:Defense, HasInternals
+	Tags: Defense, Category:Shields, HasInternals
 	Hull: Flagship, Station
 
 	Size := HexSize * Hexes
@@ -36,5 +36,8 @@ Subsystem: ShieldHardener
 		Message: #ERROR_ONLY_ONE
 	
 	Module: Core
-		Sprite: FissionReactor
+		Sprite: ShieldHardener
 		Hex.BuildCost := 2 * Hex.BuildCost
+
+	Module: Default
+		Sprite: ShieldHardenerHex

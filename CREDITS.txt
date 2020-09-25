@@ -45,10 +45,16 @@ Author: jcrown41
 Link: https://opengameart.org/content/powerup-animated-orb
 License: CC0
 
-##  Rocket Engines (3D Model)
-Link: https://sketchfab.com/3d-models/rocket-engines-6fba4dbbb9444e99ba68425bcb3a7f70
-Author: Pebegou
-License: CC Attribution
+## low-pixel school tileset and objects etc. (16x16px) (data/images)
+Author: Lasse Öörni, Olli Niemitalo (BOFH graphics team) (Submitted by qubodup)
+Link: https://opengameart.org/content/low-pixel-school-tileset-and-objects-etc-16x16px
+License: MIT
+
+## 2D Shooter Effects (Alpha version)
+Author: Tatermand
+Link: https://opengameart.org/content/2d-shooter-effects-alpha-version
+License: CC0
+
 
 # All other content created by myself
 ... if not mentioned otherwise, falls under the license found in LICENSE.txt
