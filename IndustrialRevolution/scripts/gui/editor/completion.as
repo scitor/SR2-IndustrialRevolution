@@ -45,6 +45,7 @@ void loadCompletions(array<Completion@>@ arr, const string& folder, const string
 				arr.insertLast(compl);
 				compl.ident = file.value;
 				compl.name = compl.ident;
+				compl.category = getBasename(path_up(list.path[i]));
 				indent = -1;
 			}
 			else if(compl is null) {

@@ -32,6 +32,9 @@ const uint T_OFF = 10;
 const uint T_IMG = 134 - T_OFF*2 - 30;
 const uint TT_WIDTH = 400;
 bool HeraldsUI = false;
+bool editorTab = false;
+const Completion@ lastUsedType;
+const TechnologyType@ lastClickedType;
 
 const array<double> ICON_PCT_TECH = {0.28, 0.3, 0.4, 0.4, 0.33, 0.33, 1.0};
 
@@ -468,7 +471,7 @@ class TechTooltip : BaseGuiElement {
 
 	GuiButton@ secondaryButton;
 	GuiMarkupText@ secondaryText;
-	
+
 	TechTooltip(IGuiElement@ parent) {
 		super(parent, recti());
 
@@ -606,6 +609,13 @@ class TechTooltip : BaseGuiElement {
 
 		if(tied.node.type.secret)
 			desc = locale::RESEARCH_SECRET+"\n\n"+desc;
+		if(editorTab)
+			desc = format("idt [b]$1[/b]\n" + "cls $3\n" + "cat $4\n" + "pos $2\n\n" + desc,
+				type.ident,
+				""+tied.node.position,
+				localize(format("TECH_CLASS_$1", type.cls)),
+				type.category.length > 0 ? type.category : "Vanilla"
+			);
 
 		for(uint i = 0, cnt = type.hooks.length; i < cnt; ++i)
 			type.hooks[i].addToDescription(tied.node, playerEmpire, desc);
@@ -669,7 +679,7 @@ class ResearchTab : Tab {
 		update();
 		Tab::show();
 	}
-	
+
 	Color get_activeColor() {
 		return Color(0xd482ffff);
 	}
@@ -680,7 +690,7 @@ class ResearchTab : Tab {
 
 	Color get_seperatorColor() {
 		return Color(0x75488dff);
-	}	
+	}
 
 	TabCategory get_category() {
 		return TC_Research;
@@ -977,6 +987,20 @@ class ResearchEditor : ResearchTab {
 			if(hovered.y % 2 != 0)
 				relPos.x -= T_SIZE.x / 2;
 			hovered.x = floor(double(relPos.x) / double(T_SIZE.x));
+		} else if(event.type == MET_Scrolled) {
+			//Keep position under cursor constant
+			vec2i mOff = mousePos - panel.absolutePosition.topLeft;
+
+			double prevZoom = zoom;
+			zoom = clamp(zoom + double(event.y) * 0.2, 0.2, 1.0);
+
+			panel.scrollOffset.x = (zoom * double(mOff.x + panel.scrollOffset.x)) / prevZoom - mOff.x;
+			panel.scrollOffset.y = (zoom * double(mOff.y + panel.scrollOffset.y)) / prevZoom - mOff.y;
+
+			updatePositions();
+			panel.updateAbsolutePosition();
+			panel.updateAbsolutePosition();
+			return true;
 		}
 		return BaseGuiElement::onMouseEvent(event, source);
 	}
@@ -1056,6 +1080,9 @@ class ResearchEditor : ResearchTab {
 		else if(event.type == GUI_Clicked) {
 			auto@ disp = cast<TechDisplay>(event.caller);
 			if(disp !is null) {
+				auto@ dnode = grid.getNode(disp.node.position);
+				if(dnode !is null)
+					@lastClickedType = dnode.type;
 				if(!panel.isDragging) {
 					if(event.value == 0) {
 						showChanger(disp.node.position);
@@ -1087,8 +1114,12 @@ class ResearchEditor : ResearchTab {
 
 	void showChanger(const vec2i& pos) {
 		GuiContextMenu menu(mousePos, width=300);
-		menu.itemHeight = 50;
+		menu.itemHeight = 30;
 
+		if(lastUsedType !is null)
+			menu.addOption(TechnologyCategory(this, format(locale::MENU_LAST_USED, lastUsedType.name), pos));
+		if(lastClickedType !is null)
+			menu.addOption(TechnologyCategory(this, format(locale::MENU_LAST_CLICKED, lastClickedType.name), pos));
 		array<string> cats;
 		for(uint i = 0, cnt = techCompletions.length; i < cnt; ++i) {
 			auto@ type = techCompletions[i];
@@ -1120,9 +1151,17 @@ class TechnologyCategory : GuiMarkupContextOption {
 
 	void call(GuiContextMenu@ prevMenu) {
 		prevMenu.remove();
-
+		if(category.substr(0,5) == "used ") {
+			if(lastUsedType !is null)
+				editor.setNode(pos, editor.makeType(lastUsedType));
+			return;
+		} else if(category.substr(0,8) == "clicked ") {
+			if(lastClickedType !is null)
+				editor.setNode(pos, lastClickedType);
+			return;
+		}
 		GuiContextMenu menu(mousePos, width=300);
-		menu.itemHeight = 50;
+		menu.itemHeight = 30;
 
 		for(uint i = 0, cnt = techCompletions.length; i < cnt; ++i) {
 			auto@ compl = techCompletions[i];
@@ -1144,17 +1183,20 @@ class TechnologyItem : GuiMarkupContextOption {
 		@this.type = type;
 		this.pos = pos;
 		@this.editor = editor;
-
 		string desc;
 		if(type.description.length < 30)
 			desc = type.description;
-		super(format("[img=$3;40][color=$4][b]$1[/b]\n[offset=20][i]$2[/i][/offset][/color][/img]",
+		super(format("[img=$3;32][color=$4][b]$1[/b] [font=Small]($5)[/font][offset=200][i]$2[/i][/offset][/color][/img]",
 				type.name, desc,
 				getSpriteDesc(type.icon),
-				toString(type.color)));
+				toString(type.color),
+				type.cls
+			)
+		);
 	}
 
 	void call(GuiContextMenu@ menu) {
+		@lastUsedType = type;
 		editor.setNode(pos, editor.makeType(type));
 	}
 }
@@ -1182,7 +1224,7 @@ class ResearchEditorCommand : ConsoleCommand {
 			fname = params[0];
 			ident = params[1];
 		}
-
+		editorTab = true;
 		Tab@ editor = ResearchEditor(fname, ident);
 		newTab(editor);
 		switchToTab(editor);
